@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin — Big Bang Workshops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+</head>
+<body class="bg-bbwblack text-white font-body">
+
+  <header class="sticky top-0 z-50 bg-bbwblack/95 backdrop-blur border-b border-bbwyellow/30">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <p class="font-display text-2xl tracking-widest text-bbwyellow">BBW <span class="text-white">ADMIN</span></p>
+      <div class="flex items-center gap-4 text-sm">
+        <span id="status" class="text-bbwgray"></span>
+        <a href="index.html" class="font-semibold hover:text-bbwyellow">← Ver tienda</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOGIN -->
+  <div id="login" class="max-w-md mx-auto px-4 py-24 text-center">
+    <p class="text-5xl mb-4">🔐</p>
+    <h1 class="font-display text-4xl tracking-wide">PANEL <span class="text-bbwyellow">ADMIN</span></h1>
+    <p class="text-bbwgray text-sm mt-3">Pega tu token de GitHub para administrar la tienda. Se guarda solo en este navegador.</p>
+    <input id="tok" type="password" placeholder="ghp_…" class="mt-6 w-full bg-[#151515] border border-white/15 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
+    <button onclick="login()" class="mt-4 w-full bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.02] transition">ENTRAR</button>
+    <p id="loginErr" class="hidden text-red-400 text-sm mt-3"></p>
+    <p class="text-xs text-bbwgray mt-6">Crear token: github.com → Settings → Developer settings → Tokens (classic) → scope <b>repo</b></p>
+  </div>
+
+  <!-- APP -->
+  <main id="app" class="hidden max-w-6xl mx-auto px-4 py-10">
+    <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+      <h1 class="font-display text-4xl tracking-wide">PRODUCTOS <span id="count" class="text-bbwyellow"></span></h1>
+      <div class="flex gap-2">
+        <button onclick="nuevo()" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:scale-105 transition">+ NUEVO PRODUCTO</button>
+        <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwmagenta hover:text-bbwmagenta">Salir</button>
+      </div>
+    </div>
+    <input id="q" placeholder="Buscar producto…" oninput="renderList()" class="w-full bg-[#151515] border border-white/10 rounded-lg px-4 py-3 text-sm mb-6 focus:outline-none focus:border-bbwyellow">
+    <div id="list" class="space-y-2"></div>
+    <div class="flex justify-center mt-6"><button id="more" onclick="shown+=50;renderList()" class="hidden border border-white/20 rounded-lg px-8 py-2 text-sm hover:border-bbwyellow">Cargar más</button></div>
+  </main>
+
+  <!-- EDITOR -->
+  <div id="editor" class="hidden fixed inset-0 z-50 bg-black/80 overflow-y-auto">
+    <div class="max-w-2xl mx-auto my-10 bg-[#151515] border border-bbwyellow/30 rounded-2xl p-6">
+      <div class="flex justify-between items-center mb-5">
+        <h2 id="edTitle" class="font-display text-3xl tracking-wide text-bbwyellow"></h2>
+        <button onclick="closeEd()" class="text-bbwgray hover:text-white text-xl px-2">✕</button>
+      </div>
+      <div class="space-y-3">
+        <input id="f-title" placeholder="Nombre del producto *" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
+        <div class="grid grid-cols-2 gap-3">
+          <select id="f-type" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none">
+            <option>T-Shirt</option><option>Graphic Tee</option><option>Playera Oversize</option>
+            <option>Playera Regular Fit</option><option>Pack Digital</option><option>Custom Apparel</option><option>TOPPER</option>
+          </select>
+          <input id="f-price" type="number" step="0.01" placeholder="Precio USD *" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
+        </div>
+        <input id="f-tags" placeholder="Etiquetas separadas por coma (JJK, anime, oversize…)" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
+        <textarea id="f-desc" rows="3" placeholder="Descripción" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none"></textarea>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Tallas (mismo precio)</p>
+          <div id="f-sizes" class="flex gap-2 flex-wrap"></div>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Imágenes (la 1ª es la principal — frente; añade espalda/detalles)</p>
+          <div id="f-imgs" class="flex gap-2 flex-wrap"></div>
+          <label class="mt-2 inline-block cursor-pointer border border-dashed border-bbwyellow/60 rounded-lg px-4 py-2 text-sm text-bbwyellow hover:bg-white/5">
+            + Añadir imagen <input id="f-file" type="file" accept="image/*" multiple class="hidden">
+          </label>
+        </div>
+        <p id="edErr" class="hidden text-red-400 text-sm"></p>
+        <div class="flex gap-3 pt-2">
+          <button id="saveBtn" onclick="save()" class="flex-1 bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.01] transition">GUARDAR Y PUBLICAR</button>
+          <button id="delBtn" onclick="borrar()" class="hidden border border-red-500/50 text-red-400 rounded-lg px-5 text-sm hover:bg-red-500/10">Eliminar</button>
+        </div>
+        <p class="text-xs text-bbwgray">Al guardar, los cambios se publican en la web en ~1-2 minutos.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const REPO = "ZidPix/bigbangworkshops", API = "https://api.github.com/repos/" + REPO + "/contents/";
+    const SIZES = ["S","M","L","XL","XXL"];
+    let TOK = localStorage.getItem("bbw_admin_token") || "";
+    let PRODUCTS = [], SHA = "", cur = null, curImgs = [], newFiles = [], shown = 50;
+    const $ = id => document.getElementById(id);
+    const gh = (path, opt={}) => fetch(API + path + (opt.method ? "" : "?ref=main&t=" + Date.now()), {
+      ...opt, headers: { Authorization: "Bearer " + TOK, Accept: "application/vnd.github+json", ...(opt.headers||{}) }
+    });
+
+    async function login() {
+      TOK = $("tok").value.trim() || TOK;
+      const r = await gh("assets/data/products.json");
+      if (!r.ok) { $("loginErr").textContent = "Token inválido o sin permiso (status " + r.status + ")"; $("loginErr").classList.remove("hidden"); return; }
+      localStorage.setItem("bbw_admin_token", TOK);
+      const d = await r.json();
+      SHA = d.sha;
+      PRODUCTS = JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,"")))));
+      $("login").classList.add("hidden"); $("app").classList.remove("hidden");
+      $("status").textContent = "conectado ✓";
+      renderList();
+    }
+    function logout(){ localStorage.removeItem("bbw_admin_token"); location.reload(); }
+
+    function renderList() {
+      const q = $("q").value.toLowerCase();
+      const f = PRODUCTS.filter(p => !q || p.title.toLowerCase().includes(q) || (p.tags||[]).join(" ").toLowerCase().includes(q));
+      $("count").textContent = "(" + f.length + ")";
+      $("list").innerHTML = f.slice(0, shown).map(p => `
+        <div class="flex items-center gap-4 bg-[#151515] border border-white/5 rounded-xl p-3 hover:border-bbwyellow/40 cursor-pointer" onclick="editar('${p.id}')">
+          <img src="${p.img}" class="w-14 h-14 rounded-lg object-cover bg-[#101010]" onerror="this.src='https://placehold.co/100/151515/FFD400?text=BBW'">
+          <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">${p.title}</p><p class="text-xs text-bbwgray">${p.type} · ${(p.variants||[]).length} variantes</p></div>
+          <p class="text-bbwyellow font-bold">$${p.price.toFixed(2)}</p>
+        </div>`).join("");
+      $("more").classList.toggle("hidden", shown >= f.length);
+    }
+
+    function renderEd() {
+      $("f-sizes").innerHTML = SIZES.map(s => {
+        const on = cur.variants && cur.variants.some(v => v.t === s || v.t.endsWith("/ " + s));
+        return `<button data-s="${s}" onclick="this.classList.toggle('sel');this.classList.toggle('border-bbwyellow');this.classList.toggle('text-bbwyellow')" class="${on?'sel border-bbwyellow text-bbwyellow':''} border border-white/20 rounded-lg px-4 py-2 text-sm font-bold">${s}</button>`;
+      }).join("");
+      $("f-imgs").innerHTML = curImgs.map((u,i) => `
+        <div class="relative group">
+          <img src="${u.preview||u}" class="w-20 h-20 rounded-lg object-cover ${i===0?'ring-2 ring-bbwyellow':''}">
+          <button onclick="curImgs.splice(${i},1);renderEd()" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white w-5 h-5 rounded-full text-xs leading-none hidden group-hover:block">✕</button>
+        </div>`).join("");
+    }
+
+    function nuevo() {
+      cur = { id: "bbw" + Date.now(), handle: "", title: "", type: "T-Shirt", tags: [], desc: "", price: 20, variants: [] };
+      curImgs = []; newFiles = [];
+      $("edTitle").textContent = "NUEVO PRODUCTO";
+      $("f-title").value = ""; $("f-type").value = "T-Shirt"; $("f-price").value = "20.00"; $("f-tags").value = ""; $("f-desc").value = "";
+      $("delBtn").classList.add("hidden"); $("editor").classList.remove("hidden"); renderEd();
+    }
+    function editar(id) {
+      cur = PRODUCTS.find(p => String(p.id) === String(id));
+      curImgs = (cur.imgs && cur.imgs.length ? [...cur.imgs] : (cur.img ? [cur.img] : [])); newFiles = [];
+      $("edTitle").textContent = "EDITAR";
+      $("f-title").value = cur.title; $("f-type").value = cur.type; $("f-price").value = cur.price.toFixed(2);
+      $("f-tags").value = (cur.tags||[]).join(", "); $("f-desc").value = cur.desc || "";
+      $("delBtn").classList.remove("hidden"); $("editor").classList.remove("hidden"); renderEd();
+    }
+    function closeEd(){ $("editor").classList.add("hidden"); }
+
+    document.addEventListener("change", e => {
+      if (e.target.id !== "f-file") return;
+      Array.from(e.target.files).forEach(f => {
+        const preview = URL.createObjectURL(f);
+        const entry = { file: f, preview };
+        newFiles.push(entry); curImgs.push(entry);
+      });
+      renderEd(); e.target.value = "";
+    });
+
+    async function toWebp(file) {
+      const bmp = await createImageBitmap(file);
+      const sc = Math.min(1, 800 / Math.max(bmp.width, bmp.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(bmp.width*sc); c.height = Math.round(bmp.height*sc);
+      c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+      const blob = await new Promise(r => c.toBlob(r, "image/webp", 0.82));
+      return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(",")[1]); fr.readAsDataURL(blob); });
+    }
+    async function putFile(path, b64, msg) {
+      let sha;
+      const g = await gh(path); if (g.ok) sha = (await g.json()).sha;
+      const r = await gh(path, { method: "PUT", body: JSON.stringify({ message: msg, content: b64, ...(sha?{sha}:{}) }) });
+      if (!r.ok) throw new Error("PUT " + path + " → " + r.status);
+    }
+
+    async function save() {
+      const t = $("f-title").value.trim(), pr = parseFloat($("f-price").value);
+      if (!t || !(pr > 0)) { err("Nombre y precio son obligatorios"); return; }
+      if (!curImgs.length) { err("Añade al menos una imagen"); return; }
+      const btn = $("saveBtn"); btn.disabled = true; btn.textContent = "PUBLICANDO…";
+      try {
+        // 1) subir imágenes nuevas
+        for (const nf of newFiles) {
+          if (!curImgs.includes(nf)) continue; // fue quitada
+          const idx = curImgs.indexOf(nf);
+          const path = "assets/img/" + cur.id + (idx === 0 ? "" : "_" + (idx+1)) + ".webp";
+          const b64 = await toWebp(nf.file);
+          await putFile(path, b64, "admin img: " + path);
+          curImgs[idx] = path;
+        }
+        // 2) armar producto
+        cur.title = t; cur.price = pr; cur.type = $("f-type").value;
+        cur.tags = $("f-tags").value.split(",").map(x=>x.trim()).filter(Boolean);
+        cur.desc = $("f-desc").value.trim();
+        if (!cur.handle) cur.handle = t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+        const sizes = Array.from(document.querySelectorAll("#f-sizes .sel")).map(b=>b.dataset.s);
+        if (sizes.length) cur.variants = sizes.map(s => ({ t: s, p: pr }));
+        else if (!cur.variants || !cur.variants.length) cur.variants = [{ t: "Default Title", p: pr }];
+        else cur.variants = cur.variants.map(v => ({ ...v, p: pr }));
+        cur.img = typeof curImgs[0] === "string" ? curImgs[0] : cur.img;
+        cur.imgs = curImgs.filter(x => typeof x === "string");
+        if (cur.imgs.length < 2) delete cur.imgs;
+        if (!PRODUCTS.some(p => String(p.id) === String(cur.id))) PRODUCTS.unshift(cur);
+        // 3) publicar catálogo
+        await pushCatalog("admin: " + t);
+        closeEd(); renderList();
+        alert("✅ Publicado. La web se actualiza en ~1-2 minutos.");
+      } catch(e) { err(e.message); }
+      btn.disabled = false; btn.textContent = "GUARDAR Y PUBLICAR";
+    }
+
+    async function borrar() {
+      if (!confirm("¿Eliminar \"" + cur.title + "\" de la tienda?")) return;
+      PRODUCTS = PRODUCTS.filter(p => String(p.id) !== String(cur.id));
+      await pushCatalog("admin: eliminar " + cur.title);
+      closeEd(); renderList();
+    }
+
+    async function pushCatalog(msg) {
+      // refrescar sha por si cambió
+      const g = await gh("assets/data/products.json"); const d = await g.json(); SHA = d.sha;
+      const body = btoa(unescape(encodeURIComponent(JSON.stringify(PRODUCTS))));
+      const r = await gh("assets/data/products.json", { method: "PUT", body: JSON.stringify({ message: msg, content: body, sha: SHA }) });
+      if (!r.ok) throw new Error("No se pudo publicar el catálogo (status " + r.status + ")");
+      SHA = (await r.json()).content.sha;
+    }
+
+    function err(m){ $("edErr").textContent = "⚠️ " + m; $("edErr").classList.remove("hidden"); setTimeout(()=>$("edErr").classList.add("hidden"), 5000); }
+    if (TOK) { $("tok").value = TOK; login(); }
+  </script>
+</body>
+</html>
