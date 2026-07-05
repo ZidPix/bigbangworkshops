@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificador DTF — Big Bang Workshops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+  <style>
+    body { margin:0; background:#0B0B0B; color:#fff; font-family:Montserrat,sans-serif; }
+    .bbw-nav { position:sticky; top:0; z-index:50; background:rgba(11,11,11,.92); backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.1); }
+    .bbw-nav-inner { max-width:80rem; margin:0 auto; padding:0 16px; height:64px; display:flex; align-items:center; justify-content:space-between; }
+    .bbw-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:3px; color:#FFD400; text-decoration:none; }
+    .bbw-logo span { color:#fff; }
+    .bbw-links a { color:#fff; text-decoration:none; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-left:24px; }
+    .bbw-links a:hover { color:#FFD400; }
+  </style>
+</head>
+<body>
+  <header class="bbw-nav"><div class="bbw-nav-inner">
+    <a href="index.html" class="bbw-logo">BIG BANG <span>WORKSHOPS</span></a>
+    <nav class="bbw-links">
+      <a href="tienda.html">Tienda</a>
+      <a href="herramientas.html" style="color:#FFD400">Herramientas</a>
+      <a href="carrito.html">Carrito</a>
+    </nav>
+  </div></header>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700&display=swap');
+
+  .bb-tool { background:#0B0B0B; min-height:100vh; color:#fff; font-family:'Poppins',sans-serif; padding:40px 20px; }
+  .bb-tool * { box-sizing:border-box; }
+
+  .bb-head { text-align:center; margin-bottom:40px; }
+  .bb-head h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,5vw,4rem); color:#FFD400; letter-spacing:3px; margin:0 0 8px; line-height:1; }
+  .bb-head p { color:#BFBFBF; font-size:.95rem; margin:0; }
+  .badge-pro { display:inline-block; background:#00E5FF; color:#0B0B0B; font-weight:700; font-size:.7rem; letter-spacing:2px; padding:3px 10px; border-radius:20px; margin-left:10px; vertical-align:middle; }
+
+  .bb-container { max-width:1000px; margin:0 auto; display:grid; gap:24px; }
+
+  .bb-card { background:#1A1A1A; border:1px solid #2a2a2a; border-radius:16px; padding:28px; }
+  .bb-card h2 { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:#FFD400; letter-spacing:2px; margin:0 0 20px; }
+
+  .upload-zone { border:2px dashed #FFD400; border-radius:12px; padding:50px 20px; text-align:center; cursor:pointer; transition:all .3s; position:relative; }
+  .upload-zone:hover,.upload-zone.drag-over { background:rgba(255,212,0,.05); border-color:#fff; }
+  .upload-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .upload-icon { font-size:3rem; margin-bottom:12px; }
+  .upload-zone p { color:#BFBFBF; margin:4px 0; font-size:.9rem; }
+  .upload-zone strong { color:#FFD400; }
+
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 22px; border-radius:8px; font-family:'Poppins',sans-serif; font-size:.85rem; font-weight:700; border:none; cursor:pointer; transition:all .2s; text-transform:uppercase; letter-spacing:1px; width:100%; }
+  .btn-yellow { background:#FFD400; color:#0B0B0B; }
+  .btn-yellow:hover { background:#e6bf00; transform:translateY(-1px); }
+  .btn-cyan { background:#00E5FF; color:#0B0B0B; }
+  .btn-cyan:hover { background:#00c8e0; transform:translateY(-1px); }
+  .btn-ghost { background:transparent; color:#fff; border:1px solid #444; }
+  .btn-ghost:hover { border-color:#FFD400; color:#FFD400; }
+  .btn:disabled { opacity:.35; cursor:not-allowed; transform:none !important; }
+  .btn-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+
+  .status { padding:14px 16px; border-radius:10px; font-size:.85rem; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .status-info { background:rgba(0,229,255,.08); border:1px solid rgba(0,229,255,.3); color:#00E5FF; }
+  .status-warn { background:rgba(255,45,149,.1); border:1px solid rgba(255,45,149,.35); color:#FF2D95; }
+
+  .progress-bar-wrap { background:#333; border-radius:4px; height:7px; margin-top:14px; overflow:hidden; }
+  .progress-bar-fill { height:100%; width:0%; background:linear-gradient(90deg,#FFD400,#00E5FF); border-radius:4px; transition:width .3s; }
+
+  .spinner { width:16px; height:16px; border:2px solid rgba(255,255,255,.2); border-top-color:#00E5FF; border-radius:50%; animation:bbspin 0.8s linear infinite; flex-shrink:0; }
+  @keyframes bbspin { to { transform:rotate(360deg); } }
+
+  .canvas-tabs { display:flex; gap:4px; margin-bottom:14px; background:#0B0B0B; padding:4px; border-radius:10px; width:fit-content; flex-wrap:wrap; }
+  .canvas-tab { padding:7px 16px; border-radius:7px; font-size:.75rem; font-weight:700; cursor:pointer; border:none; background:transparent; color:#BFBFBF; text-transform:uppercase; letter-spacing:1px; transition:all .2s; }
+  .canvas-tab.active { background:#FFD400; color:#0B0B0B; }
+  .canvas-wrap { background:repeating-conic-gradient(#222 0% 25%,#1a1a1a 0% 50%) 0 0/20px 20px; border-radius:10px; overflow:hidden; min-height:180px; display:flex; align-items:center; justify-content:center; }
+  .canvas-wrap img { max-width:100%; max-height:480px; display:none; }
+  .canvas-wrap img.active { display:block; }
+  .canvas-placeholder { color:#444; font-size:.9rem; text-align:center; padding:60px; }
+
+  .hidden { display:none !important; }
+</style>
+
+<div class="bb-tool">
+  <div class="bb-head">
+    <h1>✂️ ELIMINAR FONDO IA <span class="badge-pro">IA</span>
+</h1>
+    <p>Recorta el fondo automáticamente con inteligencia artificial · todo en tu navegador, sin subir nada a un servidor</p>
+  </div>
+
+  <div class="bb-container">
+
+    <!-- Upload -->
+    <div class="bb-card">
+      <h2>📁 Subir Imagen</h2>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp">
+        <div class="upload-icon">🖼️</div>
+        <p><strong>Haz clic o arrastra tu imagen aquí</strong></p>
+        <p>PNG, JPG o WEBP · La primera vez se descarga el modelo de IA (~20MB)</p>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="bb-card hidden" id="processCard">
+      <h2>🤖 Procesar</h2>
+      <div id="statusBox" class="status status-info">
+        <span id="statusIcon">ℹ️</span>
+        <span id="statusText">Imagen lista. Pulsa el botón para eliminar el fondo con IA.</span>
+      </div>
+      <div class="progress-bar-wrap hidden" id="progressWrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <button class="btn btn-cyan" id="btnRemove" style="margin-top:6px;">✂️ Eliminar Fondo con IA</button>
+      <div class="btn-actions">
+        <button class="btn btn-yellow" id="btnDownload" style="max-width:300px;" disabled>⬇️ Descargar PNG</button>
+        <button class="btn btn-ghost" id="btnReset" style="max-width:180px;">↩ Reiniciar</button>
+      </div>
+    </div>
+
+    <!-- Viewer -->
+    <div class="bb-card hidden" id="viewerCard">
+      <h2>👁️ Vista Previa</h2>
+      <div class="canvas-tabs">
+        <button class="canvas-tab active" data-tab="original">Original</button>
+        <button class="canvas-tab" data-tab="resultado">Sin Fondo</button>
+      </div>
+      <div class="canvas-wrap">
+        <img id="imgOriginal" class="active" alt="Original">
+        <img id="imgResultado" alt="Resultado">
+        <div class="canvas-placeholder" id="canvasPlaceholder">Carga una imagen para ver la vista previa</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+  import { removeBackground } from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.8/+esm';
+
+  var $ = function(id){ return document.getElementById(id); };
+  var fileInput=$('fileInput'), uploadZone=$('uploadZone');
+  var processCard=$('processCard'), viewerCard=$('viewerCard'), canvasPlaceholder=$('canvasPlaceholder');
+  var statusBox=$('statusBox'), statusIcon=$('statusIcon'), statusText=$('statusText');
+  var progressWrap=$('progressWrap'), progressFill=$('progressFill');
+  var btnRemove=$('btnRemove'), btnDownload=$('btnDownload'), btnReset=$('btnReset');
+  var imgOriginal=$('imgOriginal'), imgResultado=$('imgResultado');
+
+  var currentFile=null, resultUrl=null, fileName='';
+
+  function setStatus(text, type, spinner){
+    statusBox.className = 'status ' + (type==='warn' ? 'status-warn' : 'status-info');
+    statusIcon.innerHTML = spinner ? '<span class="spinner"></span>' : (type==='warn' ? '⚠️' : 'ℹ️');
+    statusText.textContent = text;
+  }
+
+  uploadZone.addEventListener('dragover', function(e){ e.preventDefault(); this.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', function(){ this.classList.remove('drag-over'); });
+  uploadZone.addEventListener('drop', function(e){ e.preventDefault(); this.classList.remove('drag-over'); if(e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
+  fileInput.addEventListener('change', function(){ if(this.files[0]) loadFile(this.files[0]); });
+
+  function loadFile(file){
+    if(!/image\/(png|jpeg|webp)/.test(file.type)){ alert('⚠️ Solo PNG, JPG o WEBP.'); return; }
+    if(file.size > 52428800){ alert('⚠️ El archivo excede 50MB.'); return; }
+    currentFile = file;
+    fileName = file.name.replace(/\.[^.]+$/,'');
+    if(resultUrl){ URL.revokeObjectURL(resultUrl); resultUrl=null; }
+    imgOriginal.src = URL.createObjectURL(file);
+    imgResultado.removeAttribute('src');
+    processCard.classList.remove('hidden');
+    viewerCard.classList.remove('hidden');
+    canvasPlaceholder.style.display='none';
+    btnDownload.disabled = true;
+    setStatus('Imagen lista. Pulsa el botón para eliminar el fondo con IA.', 'info', false);
+    switchTab('original');
+  }
+
+  btnRemove.addEventListener('click', async function(){
+    if(!currentFile) return;
+    btnRemove.disabled = true;
+    btnDownload.disabled = true;
+    progressWrap.classList.remove('hidden');
+    progressFill.style.width = '5%';
+    setStatus('Procesando con IA… la primera vez descarga el modelo, puede tardar un momento.', 'info', true);
+    try {
+      var blob = await removeBackground(currentFile, {
+        progress: function(key, current, total){
+          var pct = total ? Math.round((current/total)*100) : 0;
+          progressFill.style.width = Math.max(5, pct) + '%';
+          if(/fetch|download|data/i.test(key)){
+            setStatus('Descargando modelo de IA… ' + pct + '%', 'info', true);
+          } else {
+            setStatus('Recortando el fondo… ' + pct + '%', 'info', true);
+          }
+        }
+      });
+      if(resultUrl) URL.revokeObjectURL(resultUrl);
+      resultUrl = URL.createObjectURL(blob);
+      imgResultado.src = resultUrl;
+      progressFill.style.width = '100%';
+      setStatus('✅ Fondo eliminado. Revisa la pestaña "Sin Fondo" y descarga tu PNG.', 'info', false);
+      btnDownload.disabled = false;
+      switchTab('resultado');
+    } catch(err){
+      console.error(err);
+      setStatus('No se pudo procesar la imagen. Revisa tu conexión (el modelo se descarga de internet) e inténtalo de nuevo.', 'warn', false);
+    } finally {
+      btnRemove.disabled = false;
+      setTimeout(function(){ progressWrap.classList.add('hidden'); progressFill.style.width='0%'; }, 800);
+    }
+  });
+
+  btnDownload.addEventListener('click', function(){
+    if(!resultUrl) return;
+    var a=document.createElement('a');
+    a.href=resultUrl; a.download=fileName+'_sin_fondo.png'; a.click();
+  });
+
+  btnReset.addEventListener('click', function(){
+    fileInput.value=''; currentFile=null;
+    if(resultUrl){ URL.revokeObjectURL(resultUrl); resultUrl=null; }
+    imgOriginal.removeAttribute('src'); imgResultado.removeAttribute('src');
+    processCard.classList.add('hidden'); viewerCard.classList.add('hidden');
+    btnDownload.disabled=true; canvasPlaceholder.style.display='';
+  });
+
+  document.querySelectorAll('.canvas-tab').forEach(function(tab){ tab.addEventListener('click', function(){ switchTab(this.dataset.tab); }); });
+  function switchTab(name){
+    document.querySelectorAll('.canvas-tab').forEach(function(t){ t.classList.remove('active'); });
+    var btn=document.querySelector('[data-tab="'+name+'"]'); if(btn) btn.classList.add('active');
+    imgOriginal.classList.toggle('active', name==='original');
+    imgResultado.classList.toggle('active', name==='resultado');
+  }
+</script>
+
+  <footer style="max-width:80rem;margin:0 auto;padding:48px 16px;font-size:13px;color:#BFBFBF;text-align:center">© Big Bang Workshops · Panamá</footer>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Pedidos — Big Bang Workshops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+  <style>
+    body { margin:0; background:#0B0B0B; color:#fff; font-family:Montserrat,sans-serif; }
+    .bbw-nav { position:sticky; top:0; z-index:50; background:rgba(11,11,11,.92); backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.1); }
+    .bbw-nav-inner { max-width:80rem; margin:0 auto; padding:0 16px; height:64px; display:flex; align-items:center; justify-content:space-between; }
+    .bbw-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:3px; color:#FFD400; text-decoration:none; }
+    .bbw-logo span { color:#fff; }
+    .bbw-links a { color:#fff; text-decoration:none; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-left:24px; }
+    .bbw-links a:hover { color:#FFD400; }
+  </style>
+</head>
+<body>
+  <header class="bbw-nav"><div class="bbw-nav-inner">
+    <a href="index.html" class="bbw-logo">BIG BANG <span>WORKSHOPS</span></a>
+    <nav class="bbw-links">
+      <a href="tienda.html">Tienda</a>
+      <a href="herramientas.html" style="color:#FFD400">Herramientas</a>
+      <a href="carrito.html">Carrito</a>
+    </nav>
+  </div></header>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #0B0B0B; --yellow: #FFD400; --white: #FFFFFF; --gray: #BFBFBF;
+  --neon: #00E5FF; --mag: #FF2D95; --surface: #161616; --surface2: #1E1E1E;
+  --border: #2C2C2C; --r: 12px;
+}
+body { background: var(--black); color: var(--white); font-family: 'Montserrat', sans-serif; min-height: 100vh; padding: 20px; }
+.header { text-align: center; padding: 40px 20px 28px; }
+.brand { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,9vw,76px); letter-spacing: 5px; color: var(--yellow); line-height: 1; text-shadow: 0 0 40px rgba(255,212,0,.25); }
+.brand span { color: var(--white); }
+.divider { width: 60px; height: 3px; background: var(--yellow); margin: 14px auto; border-radius: 2px; }
+.subtitle { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--gray); text-transform: uppercase; }
+.wrap { max-width: 860px; margin: 0 auto; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 26px; margin-bottom: 18px; }
+.ctitle { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--yellow); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+.slabel { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-bottom: 12px; }
+.colors { display: flex; flex-wrap: wrap; gap: 20px; padding-bottom: 22px; }
+.cbtn { position: relative; width: 52px; height: 52px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; background: none; padding: 0; transition: all .2s; }
+.cbtn::after { content: attr(data-label); position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--gray); white-space: nowrap; }
+.cbtn.active { border-color: var(--yellow); box-shadow: 0 0 14px rgba(255,212,0,.5); transform: scale(1.1); }
+.cbtn.active::after { color: var(--yellow); }
+.swatch { width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(255,255,255,.1); }
+.sw-blk{background:#444444!important}.sw-wht{background:#F5F5F0!important;border:2px solid #aaa!important}
+.sw-blu{background:#3B82F6!important}.sw-nvy{background:#1E3A5F!important}
+.sw-crm{background:#F5E6C8!important;border:2px solid #d4c8a8!important}
+.sw-red{background:#CC2222!important}.sw-pink{background:#E879A0!important}
+.stype-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.stype-btn { background: var(--surface2); border: 2px solid var(--border); border-radius: var(--r); padding: 20px 16px; cursor: pointer; transition: all .2s; text-align: center; color: var(--white); }
+.stype-btn:hover { border-color: #555; }
+.stype-btn.active { border-color: var(--yellow); background: rgba(255,212,0,.06); }
+.stype-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+.stype-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; }
+.stype-btn.active .stype-name { color: var(--yellow); }
+.stype-price { font-size: 11px; color: var(--gray); margin-top: 5px; font-weight: 700; letter-spacing: 1px; }
+.stype-btn.active .stype-price { color: var(--neon); }
+.stype-tag { display: inline-block; background: rgba(0,229,255,.1); border: 1px solid rgba(0,229,255,.3); border-radius: 20px; padding: 3px 10px; font-size: 9px; font-weight: 700; color: var(--neon); letter-spacing: 1px; margin-top: 8px; }
+.prints { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 12px; margin-bottom: 24px; }
+.pbtn { background: var(--surface2); border: 2px solid var(--border); border-radius: var(--r); padding: 14px 10px; cursor: pointer; transition: all .2s; text-align: center; color: var(--white); }
+.pbtn:hover { border-color: #555; }
+.pbtn.active { border-color: var(--yellow); background: rgba(255,212,0,.06); }
+.pbtn.active .pname { color: var(--yellow); }
+.pbtn.fullback-btn.active { border-color: var(--mag); background: rgba(255,45,149,.06); }
+.pbtn.fullback-btn.active .pname { color: var(--mag); }
+.picon { font-size: 26px; margin-bottom: 6px; display: block; }
+.pname { font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1.5px; }
+.pdesc { font-size: 10px; color: var(--gray); margin-top: 4px; font-weight: 500; }
+.pbtn .ptag { display:inline-block; background:rgba(255,45,149,.15); border:1px solid rgba(255,45,149,.4); border-radius:20px; padding:2px 8px; font-size:9px; font-weight:700; color:var(--mag); letter-spacing:1px; margin-top:6px; }
+.mockup-row { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; padding: 8px 0 4px; }
+.mockup-side { text-align: center; }
+.mockup-label { font-size: 9px; letter-spacing: 2px; color: var(--gray); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+.mockup-side svg { width: 120px; height: 144px; filter: drop-shadow(0 6px 18px rgba(0,0,0,.6)); transition: filter .3s; }
+.mockup-side svg:hover { filter: drop-shadow(0 8px 24px rgba(255,212,0,.2)); }
+.qty-wrap { display: flex; align-items: center; border: 2px solid var(--border); border-radius: var(--r); overflow: hidden; max-width: 210px; }
+.qbtn { background: var(--surface2); border: none; color: var(--white); font-size: 22px; font-weight: 700; width: 52px; height: 52px; cursor: pointer; transition: background .15s; display: flex; align-items: center; justify-content: center; }
+.qbtn:hover { background: var(--yellow); color: var(--black); }
+.qinp { flex: 1; background: var(--surface2); border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border); color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 800; text-align: center; height: 52px; outline: none; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.preset { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; color: var(--gray); font-size: 12px; font-weight: 700; padding: 5px 14px; cursor: pointer; transition: all .15s; }
+.preset:hover, .preset.active { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+.size-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+.size-item { background: var(--surface2); border: 2px solid var(--border); border-radius: var(--r); padding: 14px 8px; text-align: center; transition: border-color .2s; }
+.size-item:focus-within { border-color: var(--yellow); }
+.size-tag { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--yellow); line-height: 1; margin-bottom: 6px; }
+.size-num { width: 100%; background: transparent; border: none; border-top: 1px solid var(--border); color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 800; text-align: center; padding: 8px 0 4px; outline: none; }
+.size-btns { display: flex; justify-content: center; gap: 6px; margin-top: 6px; }
+.s-pm { background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 22px; height: 22px; color: var(--white); cursor: pointer; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.s-pm:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+.size-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 10px 14px; background: rgba(255,212,0,.05); border-radius: 8px; border: 1px solid rgba(255,212,0,.2); }
+.size-bar-lbl { font-size: 11px; color: var(--gray); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.size-bar-val { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); }
+.size-hint { font-size: 10px; font-weight: 700; margin-left: 8px; }
+.results { background: linear-gradient(135deg,#1a1400 0%,#0d0d0d 100%); border: 2px solid var(--yellow); border-radius: var(--r); padding: 28px; margin-bottom: 18px; position: relative; overflow: hidden; }
+.results::before { content: ''; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle,rgba(255,212,0,.07) 0%,transparent 70%); pointer-events: none; }
+.rhead { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--yellow); margin-bottom: 22px; }
+.price-hero { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding: 16px; background: rgba(255,255,255,.03); border-radius: 10px; }
+.pblk { text-align: center; }
+.plbl { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--gray); text-transform: uppercase; margin-bottom: 6px; }
+.pval { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; line-height: 1; }
+.pval.unit { font-size: 50px; color: var(--yellow); } .pval.total { font-size: 58px; color: var(--white); }
+.pval sup { font-size: 55%; vertical-align: super; opacity: .8; }
+.pdivider { width: 1px; height: 70px; background: var(--border); }
+.bdown { background: rgba(0,0,0,.3); border-radius: 10px; padding: 16px; }
+.btitle { font-size: 10px; letter-spacing: 2px; color: var(--gray); font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+.brow { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; }
+.brow:last-child { border-bottom: none; } .brow .lbl { color: var(--gray); } .brow .val { font-weight: 700; color: var(--white); }
+.brow.hl .val { color: var(--yellow); }
+.brow.ship-row .lbl { color: var(--neon); font-size: 12px; } .brow.ship-row .val { color: var(--neon); }
+.brow.ttl { border-top: 2px solid var(--border); margin-top: 6px; padding-top: 10px; font-size: 15px; font-weight: 800; }
+.brow.ttl .val { color: var(--yellow); font-size: 17px; }
+.eff-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,229,255,.08); border: 1px solid rgba(0,229,255,.25); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 700; color: var(--neon); margin-top: 14px; }
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--r); padding: 32px 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--surface2); position: relative; }
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--yellow); background: rgba(255,212,0,.04); }
+.u-icon { font-size: 38px; margin-bottom: 10px; }
+.u-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; margin-bottom: 5px; }
+.u-sub { font-size: 11px; color: var(--gray); font-weight: 500; } .u-sub strong { color: var(--yellow); }
+.u-dpi { font-size: 10px; color: var(--neon); font-weight: 700; margin-top: 8px; }
+.u-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.file-list { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.ftag { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 600; color: var(--white); display: flex; align-items: center; gap: 6px; }
+.ftag .rm { cursor: pointer; color: var(--gray); } .ftag .rm:hover { color: var(--mag); }
+.upload-status-bar { display:none; margin-top:12px; padding:10px 14px; border-radius:8px; font-size:12px; font-weight:700; }
+.upload-status-bar.uploading { display:flex; align-items:center; gap:8px; background:rgba(0,229,255,.08); border:1px solid rgba(0,229,255,.3); color:var(--neon); }
+.upload-status-bar.done { display:flex; align-items:center; gap:8px; background:rgba(0,197,102,.1); border:1px solid rgba(0,197,102,.4); color:#00C566; }
+.upload-status-bar.fail { display:flex; align-items:center; gap:8px; background:rgba(255,45,149,.1); border:1px solid rgba(255,45,149,.4); color:var(--mag); }
+.spin { display:inline-block; width:14px; height:14px; border:2px solid rgba(0,229,255,.3); border-top-color:var(--neon); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+@keyframes spin{to{transform:rotate(360deg);}}
+.note-inp { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 13px; padding: 12px; resize: vertical; min-height: 80px; outline: none; margin-top: 4px; transition: border-color .2s; }
+.note-inp:focus { border-color: var(--yellow); } .note-inp::placeholder { color: var(--gray); }
+.deposit-notice { display: flex; align-items: flex-start; gap: 10px; background: rgba(255,212,0,.08); border: 2px solid rgba(255,212,0,.5); border-radius: var(--r); padding: 14px 18px; margin-bottom: 14px; }
+.deposit-notice .dn-icon { font-size: 22px; flex-shrink: 0; }
+.deposit-notice .dn-text { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.5; }
+.deposit-notice .dn-text span { color: var(--black); font-weight: 600; }
+.cta { width: 100%; background: var(--yellow); color: var(--black); border: none; border-radius: var(--r); padding: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; cursor: pointer; transition: all .2s; margin-top: 4px; }
+.cta:hover { background: #ffe033; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(255,212,0,.3); }
+.cta:disabled { opacity: .7; cursor: not-allowed; transform: none; }
+.cta-footer { margin-top: 12px; text-align: center; font-size: 11px; color: var(--gray); font-weight: 600; line-height: 1.7; }
+.cta-footer strong { color: var(--neon); }
+.footer { text-align: center; padding: 24px; color: var(--gray); font-size: 10px; font-weight: 600; letter-spacing: 1px; }
+.footer a { color: var(--yellow); text-decoration: none; }
+.min-notice { display:none; align-items:center; gap:8px; background:rgba(255,45,149,.1); border:1px solid rgba(255,45,149,.4); border-radius:8px; padding:10px 14px; margin-top:12px; font-size:12px; font-weight:700; color:#FF2D95; }
+.min-notice.show { display:flex; }
+.contact-grid { display:grid; grid-template-columns:1fr; gap:14px; }
+@media(min-width:580px){ .contact-grid { grid-template-columns:1fr 1fr; } }
+.field-wrap { display:flex; flex-direction:column; gap:6px; }
+.inp-contact { width:100%; background:var(--surface2); border:2px solid var(--border); border-radius:8px; color:var(--white); font-family:'Montserrat',sans-serif; font-size:14px; padding:13px 14px; outline:none; transition:border-color .2s; }
+.inp-contact:focus { border-color:var(--yellow); }
+.inp-contact::placeholder { color:var(--gray); }
+.inp-contact.err { border-color:var(--mag)!important; box-shadow:0 0 0 3px rgba(255,45,149,.15); }
+.req { color:var(--mag); margin-left:2px; }
+@media(max-width:500px){ .price-hero{flex-direction:column;} .pdivider{width:60px;height:1px;} .size-grid{grid-template-columns:repeat(3,1fr);} .stype-grid{grid-template-columns:1fr;} }
+</style>
+
+<div class="header">
+  <div class="brand">BIG BANG <span>WORKSHOPS</span>
+</div>
+  <div class="divider"></div>
+  <div class="subtitle">Calculadora de pedidos mayoristas — T-Shirts personalizados</div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="ctitle">
+<span>🎨</span> 1. Color de camiseta</div>
+    <div class="slabel">Colores disponibles</div>
+    <div class="colors">
+      <button class="cbtn active" data-color="black" data-label="NEGRO" onclick="selColor(this)"><div class="swatch sw-blk"></div></button>
+      <button class="cbtn" data-color="white" data-label="BLANCO" onclick="selColor(this)"><div class="swatch sw-wht"></div></button>
+      <button class="cbtn" data-color="blue" data-label="AZUL" onclick="selColor(this)"><div class="swatch sw-blu"></div></button>
+      <button class="cbtn" data-color="navy" data-label="MARINO" onclick="selColor(this)"><div class="swatch sw-nvy"></div></button>
+      <button class="cbtn" data-color="cream" data-label="CREMA" onclick="selColor(this)"><div class="swatch sw-crm"></div></button>
+      <button class="cbtn" data-color="red" data-label="ROJO" onclick="selColor(this)"><div class="swatch sw-red"></div></button>
+      <button class="cbtn" data-color="pink" data-label="ROSADO" onclick="selColor(this)"><div class="swatch sw-pink"></div></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">
+<span>👕</span> 2. Tipo de prenda</div>
+    <div class="slabel">Las mismas bases que en Sube tu diseño</div>
+    <div class="stype-grid">
+      <button class="stype-btn active" onclick="selShirt(this,'regular','UNICRESE Prime 155g')"><span class="stype-icon">👕</span><div class="stype-name">Prime 155g</div>
+<div class="stype-price">UNICRESE · Regular</div></button>
+      <button class="stype-btn" onclick="selShirt(this,'regular','UNICRESE Heavy Cotton 180g')"><span class="stype-icon">👕</span><div class="stype-name">Heavy Cotton 180g</div>
+<div class="stype-price">UNICRESE · Regular</div></button>
+      <button class="stype-btn" onclick="selShirt(this,'regular','GILDAN Softstyle 64000')"><span class="stype-icon">👕</span><div class="stype-name">Softstyle 64000</div>
+<div class="stype-price">GILDAN · Regular</div></button>
+      <button class="stype-btn" onclick="selShirt(this,'regular','GILDAN Heavy Cotton 5000')"><span class="stype-icon">👕</span><div class="stype-name">Heavy Cotton 5000</div>
+<div class="stype-price">GILDAN · Regular</div></button>
+      <button class="stype-btn" onclick="selShirt(this,'over','SHAKA WEAR Oversize Regular')"><span class="stype-icon">🧥</span><div class="stype-name">Oversize Regular</div>
+<div class="stype-price">SHAKA WEAR · Oversize</div>
+<div class="stype-tag">OVERSIZE FIT</div></button>
+      <button class="stype-btn" onclick="selShirt(this,'over','SHAKA WEAR Oversize Cropped')"><span class="stype-icon">🧥</span><div class="stype-name">Oversize Cropped</div>
+<div class="stype-price">SHAKA WEAR · Oversize</div>
+<div class="stype-tag">OVERSIZE FIT</div></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">
+<span>⚡</span> 3. Tipo de impresion</div>
+    <div class="prints">
+      <button class="pbtn active" data-type="back" onclick="selPrint(this)"><span class="picon">👕</span><div class="pname">Solo Trasera</div>
+<div class="pdesc">30x30 cm atras</div></button>
+      <button class="pbtn" data-type="front30" onclick="selPrint(this)"><span class="picon">🔥</span><div class="pname">Solo Frontal</div>
+<div class="pdesc">30x30 cm al frente</div></button>
+      <button class="pbtn" data-type="both30" onclick="selPrint(this)"><span class="picon">💥</span><div class="pname">Trasera + Frontal</div>
+<div class="pdesc">30x30 cm en ambos</div></button>
+      <button class="pbtn" data-type="both" onclick="selPrint(this)"><span class="picon">✨</span><div class="pname">Trasera + Logo</div>
+<div class="pdesc">30x30 atras + 10x10 frente</div></button>
+      <button class="pbtn" data-type="front" onclick="selPrint(this)"><span class="picon">🎯</span><div class="pname">Solo Logo</div>
+<div class="pdesc">Logo bolsillo 10x10 cm</div></button>
+      <button class="pbtn fullback-btn" data-type="fullback" onclick="selPrint(this)"><span class="picon">🕺</span><div class="pname">Full Back</div>
+<div class="pdesc">35x45 cm trasera</div>
+<div class="ptag">PREMIUM</div></button>
+      <button class="pbtn fullback-btn" data-type="fullback_logo" onclick="selPrint(this)"><span class="picon">🔥</span><div class="pname">Full Back + Logo</div>
+<div class="pdesc">35x45 trasera + 10x10 frente</div>
+<div class="ptag">PREMIUM</div></button>
+    </div>
+    <div class="mockup-row">
+      <div class="mockup-side">
+<div class="mockup-label">Frente</div>
+        <svg id="mockFront" viewbox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <lineargradient id="gF" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" id="gF1" stop-color="#2a2a2a"></stop><stop offset="100%" id="gF2" stop-color="#141414"></stop></lineargradient>
+            <lineargradient id="gFs" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" id="gFs1" stop-color="#222222"></stop><stop offset="100%" id="gFs2" stop-color="#111111"></stop></lineargradient>
+            <filter id="ds"><fedropshadow dx="0" dy="3" stddeviation="4" flood-color="rgba(0,0,0,0.7)"></fedropshadow></filter>
+          </defs>
+          <path d="M34 20 L10 40 L22 46 L22 116 L98 116 L98 46 L110 40 L86 20 Q74 6 60 6 Q46 6 34 20Z" fill="url(#gF)" stroke="rgba(255,255,255,0.07)" stroke-width="1.2" filter="url(#ds)"></path>
+          <path d="M34 20 L10 40 L22 46 L32 38Z" fill="url(#gFs)" opacity="0.6"></path>
+          <path d="M86 20 L110 40 L98 46 L88 38Z" fill="url(#gFs)" opacity="0.6"></path>
+          <path d="M46 20 Q60 30 74 20" fill="none" stroke="rgba(255,255,255,0.13)" stroke-width="1.8" stroke-linecap="round"></path>
+          <g id="frontFull" opacity="0" style="transition:opacity .3s"><rect x="22" y="36" width="76" height="76" rx="5" fill="#FFD400" opacity="0.95"></rect><text x="60" y="70" text-anchor="middle" font-size="8.5" fill="#0B0B0B" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="92" text-anchor="middle" font-size="5" fill="rgba(0,0,0,0.4)" font-family="serif">30 x 30 cm</text></g>
+          <g id="frontLogo" opacity="0" style="transition:opacity .3s"><rect x="36" y="42" width="26" height="26" rx="3" fill="#FFD400"></rect><text x="49" y="53" text-anchor="middle" font-size="5.5" fill="#0B0B0B" font-family="serif" font-weight="700">BIG</text><text x="49" y="62" text-anchor="middle" font-size="5.5" fill="#0B0B0B" font-family="serif" font-weight="700">BANG</text></g>
+          <g id="noFront" opacity="1" style="transition:opacity .3s"><text x="60" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.1)" font-family="serif">sin impresion</text></g>
+        </svg>
+      </div>
+      <div class="mockup-side">
+<div class="mockup-label">Trasera</div>
+        <svg id="mockBack" viewbox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <lineargradient id="gB" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" id="gB1" stop-color="#2a2a2a"></stop><stop offset="100%" id="gB2" stop-color="#141414"></stop></lineargradient>
+            <lineargradient id="gBs" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" id="gBs1" stop-color="#222222"></stop><stop offset="100%" id="gBs2" stop-color="#111111"></stop></lineargradient>
+            <lineargradient id="pGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD400"></stop><stop offset="100%" stop-color="#FFC000"></stop></lineargradient>
+            <lineargradient id="fbGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF2D95"></stop><stop offset="100%" stop-color="#c01070"></stop></lineargradient>
+          </defs>
+          <path d="M34 20 L10 40 L22 46 L22 116 L98 116 L98 46 L110 40 L86 20 Q74 6 60 6 Q46 6 34 20Z" fill="url(#gB)" stroke="rgba(255,255,255,0.07)" stroke-width="1.2" filter="url(#ds)"></path>
+          <path d="M34 20 L10 40 L22 46 L32 38Z" fill="url(#gBs)" opacity="0.6"></path>
+          <path d="M86 20 L110 40 L98 46 L88 38Z" fill="url(#gBs)" opacity="0.6"></path>
+          <g id="backPrint" opacity="1" style="transition:opacity .3s"><rect x="22" y="36" width="76" height="76" rx="5" fill="url(#pGrad)" opacity="0.95"></rect><text x="60" y="68" text-anchor="middle" font-size="8.5" fill="#0B0B0B" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="78" text-anchor="middle" font-size="5.5" fill="#0B0B0B" font-family="serif" font-weight="700">WORKSHOPS</text><text x="60" y="92" text-anchor="middle" font-size="5" fill="rgba(0,0,0,0.4)" font-family="serif">30 x 30 cm</text></g>
+          <g id="backFullPrint" opacity="0" style="transition:opacity .3s"><rect x="16" y="24" width="88" height="92" rx="5" fill="url(#fbGrad)" opacity="0.95"></rect><text x="60" y="60" text-anchor="middle" font-size="8.5" fill="#fff" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="72" text-anchor="middle" font-size="5.5" fill="rgba(255,255,255,0.8)" font-family="serif" font-weight="700">WORKSHOPS</text><text x="60" y="96" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="serif">35 x 45 cm</text></g>
+          <g id="noBack" opacity="0" style="transition:opacity .3s"><text x="60" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.1)" font-family="serif">sin impresion</text></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">
+<span>📦</span> 4. Cantidad total de prendas</div>
+    <div class="slabel">Ingresa o elige cantidad</div>
+    <div class="qty-wrap">
+<button class="qbtn" onclick="changeQty(-1)">−</button><input type="number" class="qinp" id="qtyInput" value="12" min="1" max="9999" oninput="calc();updateSizeHint();"><button class="qbtn" onclick="changeQty(1)">+</button>
+</div>
+    <div class="presets">
+<button class="preset active" onclick="setQty(12,this)">12 pcs</button><button class="preset" onclick="setQty(24,this)">24 pcs</button><button class="preset" onclick="setQty(36,this)">36 pcs</button><button class="preset" onclick="setQty(48,this)">48 pcs</button><button class="preset" onclick="setQty(72,this)">72 pcs</button><button class="preset" onclick="setQty(100,this)">100 pcs</button>
+</div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">
+<span>📏</span> 5. Distribucion de tallas</div>
+    <div class="slabel">Indica cuantas piezas de cada talla</div>
+    <div class="size-grid">
+      <div class="size-item">
+<div class="size-tag">S</div>
+<input type="number" class="size-num" id="sz_S" value="0" min="0" oninput="updateSizeFromInput('S')"><div class="size-btns">
+<button class="s-pm" onclick="changeSize('S',-1)">−</button><button class="s-pm" onclick="changeSize('S',1)">+</button>
+</div>
+</div>
+      <div class="size-item">
+<div class="size-tag">M</div>
+<input type="number" class="size-num" id="sz_M" value="0" min="0" oninput="updateSizeFromInput('M')"><div class="size-btns">
+<button class="s-pm" onclick="changeSize('M',-1)">−</button><button class="s-pm" onclick="changeSize('M',1)">+</button>
+</div>
+</div>
+      <div class="size-item">
+<div class="size-tag">L</div>
+<input type="number" class="size-num" id="sz_L" value="0" min="0" oninput="updateSizeFromInput('L')"><div class="size-btns">
+<button class="s-pm" onclick="changeSize('L',-1)">−</button><button class="s-pm" onclick="changeSize('L',1)">+</button>
+</div>
+</div>
+      <div class="size-item">
+<div class="size-tag">XL</div>
+<input type="number" class="size-num" id="sz_XL" value="0" min="0" oninput="updateSizeFromInput('XL')"><div class="size-btns">
+<button class="s-pm" onclick="changeSize('XL',-1)">−</button><button class="s-pm" onclick="changeSize('XL',1)">+</button>
+</div>
+</div>
+      <div class="size-item">
+<div class="size-tag">XXL</div>
+<input type="number" class="size-num" id="sz_XXL" value="0" min="0" oninput="updateSizeFromInput('XXL')"><div class="size-btns">
+<button class="s-pm" onclick="changeSize('XXL',-1)">−</button><button class="s-pm" onclick="changeSize('XXL',1)">+</button>
+</div>
+</div>
+    </div>
+    <div class="size-bar">
+<div>
+<span class="size-bar-lbl">Total tallas</span><span class="size-hint" id="sizeHint"></span>
+</div>
+<span class="size-bar-val"><span id="sizeTotal">0</span> pcs</span>
+</div>
+  </div>
+
+  <div class="results">
+    <div class="rhead">💥 TU COTIZACION BIGBANG</div>
+    <div class="price-hero">
+      <div class="pblk">
+<div class="plbl">Precio por unidad</div>
+<div class="pval unit">
+<sup>$</sup><span id="priceUnit">0.00</span>
+</div>
+</div>
+      <div class="pdivider"></div>
+      <div class="pblk">
+<div class="plbl">Total del pedido (<span id="qtyDisplay">12</span> pcs)</div>
+<div class="pval total">
+<sup>$</sup><span id="priceTotal">0.00</span>
+</div>
+</div>
+    </div>
+    <div class="bdown">
+      <div class="btitle">📋 Desglose de costos</div>
+      <div class="brow">
+<span class="lbl" id="shirtTypeLabel">UNICRESE Prime 155g</span><span class="val" id="shirtCostDisplay">$4.50 / u</span>
+</div>
+      <div class="brow ship-row">
+<span class="lbl">📦 Envio (cargo unico por pedido)</span><span class="val">$3.50</span>
+</div>
+      <div class="brow hl" id="surchargeRow" style="display:none">
+<span class="lbl">⚠️ Precio especial pedido pequeño</span><span class="val" id="surchargeVal">—</span>
+</div>
+      <div class="brow ttl">
+<span class="lbl">💰 Total del pedido</span><span class="val" id="bdTotal">—</span>
+</div>
+    </div>
+    <div class="eff-tag">⚡ <span id="effText"></span>
+</div>
+    <div class="min-notice" id="minNotice">
+<span>⚠️</span> 1-2 piezas: precio fijo · 3-5 piezas: precio fijo</div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">
+<span>📁</span> 6. Sube tu diseno</div>
+    <div class="slabel">PNG · JPG · PDF · AI · PSD — Hasta 50MB · Se sube automaticamente y llega como link en el correo</div>
+    <div class="upload-zone" id="uploadZone" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+      <input type="file" class="u-input" id="fileInput" multiple accept=".png,.jpg,.jpeg,.pdf,.ai,.psd,.svg,.zip,.eps" onchange="handleFiles(this.files)">
+      <div class="u-icon">🚀</div>
+      <div class="u-title">Arrastra tu diseno aqui</div>
+      <div class="u-sub">o <strong>haz clic para seleccionar archivos</strong>
+</div>
+      <div class="u-dpi">📐 Minimo 300 DPI · El archivo se sube y llega como enlace de descarga en tu cotizacion</div>
+    </div>
+    <div class="upload-status-bar" id="uploadStatusBar"></div>
+    <div class="file-list" id="fileList"></div>
+    <div style="margin-top:18px">
+<div class="slabel">Notas adicionales</div>
+<textarea class="note-inp" id="orderNotes" placeholder="Pantone, medidas especiales, referencias de color..."></textarea>
+</div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">
+<span>👤</span> 7. Tus datos de contacto</div>
+    <div class="contact-grid">
+      <div class="field-wrap">
+<div class="slabel">NOMBRE COMPLETO <span class="req">*</span>
+</div>
+<input type="text" class="inp-contact" id="clientName" placeholder="Ej. Juan Pérez" autocomplete="name">
+</div>
+      <div class="field-wrap">
+<div class="slabel">EMAIL <span class="req">*</span>
+</div>
+<input type="email" class="inp-contact" id="clientEmail" placeholder="tucorreo@email.com" autocomplete="email">
+</div>
+      <div class="field-wrap" style="grid-column:1/-1">
+<div class="slabel">TELÉFONO / WHATSAPP <span class="req">*</span>
+</div>
+<input type="tel" class="inp-contact" id="clientPhone" placeholder="+507 6000-0000" autocomplete="tel">
+</div>
+    </div>
+  </div>
+
+  <div class="deposit-notice">
+<div class="dn-icon">💳</div>
+<div class="dn-text">IMPORTANTE: Todos los pedidos requieren un <strong>abono del 50%</strong> para ser procesados.<br><span>Sin el abono correspondiente, el pedido no sera iniciado. Te contactaremos para coordinar el pago.</span>
+</div>
+</div>
+
+  <button class="cta" onclick="sendOrder()">✉️ SOLICITAR COTIZACION POR EMAIL</button>
+  <div class="cta-footer">
+<strong>Te contactaremos en un periodo no mayor a 72 horas</strong> para coordinar los detalles adicionales de tu pedido.<br>Pedido minimo: 6 piezas · Respondemos a: Impresiones246@outlook.com</div>
+  <div class="footer">
+<p>Yarda: 58.5 cm x 90 cm · Estándar: 30x30 cm · Full Back: 35x45 cm · Logo: 10x10 cm</p>
+<p style="margin-top:6px">© 2026 <a href="#">Big Bang Workshops</a></p>
+</div>
+</div>
+
+<script>
+var YARD=11.50,PROFIT=5.00,PROFIT_OVR=8.00,PROFIT_HOD=8.00,SHIP=3.50;
+var SHIRT_REG=4.50,SHIRT_OVR=12.75,SHIRT_HOD=12.00;
+var SHIRT=SHIRT_REG;
+var YA=5265,BPPY=3,FPPY=45;
+var CMAP={black:['#2a2a2a','#141414','#222222','#111111'],white:['#EFEFEB','#D0D0CC','#E0E0DC','#C8C8C4'],blue:['#4A90D9','#2E6DB4','#3A80C9','#1E5DA4'],navy:['#1E3A5F','#122340','#183050','#0E1E38'],cream:['#F0E0C0','#D8C8A8','#E4D4B4','#CCC09C'],red:['#8B1A1A','#5C0F0F','#7A1515','#4A0C0C'],pink:['#C4547A','#8B3055','#B04A6A','#7A2545']};
+var curColor='black',curPrint='back',curShirt='regular',files=[],sizes={S:0,M:0,L:0,XL:0,XXL:0};
+var curShirtModel='UNICRESE Prime 155g';
+var _yardsN=0,_unitCost=0,_unitPrice=0,_qty=12;
+var uploadedLinks=[];
+var isUploading=false;
+
+function g(id){return document.getElementById(id);}
+
+function setUploadStatus(type,msg){
+  var bar=g('uploadStatusBar');
+  bar.className='upload-status-bar '+type;
+  bar.innerHTML=(type==='uploading'?'<div class="spin"></div>':type==='done'?'✅':'⚠️')+' '+msg;
+}
+function clearUploadStatus(){
+  var bar=g('uploadStatusBar');
+  bar.className='upload-status-bar';
+  bar.innerHTML='';
+}
+
+function uploadToGoFile(file){
+  return fetch('https://api.gofile.io/servers')
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var server=data.data.servers[0].name;
+      var fd=new FormData();
+      fd.append('file',file);
+      return fetch('https://'+server+'.gofile.io/contents/uploadfile',{method:'POST',body:fd});
+    })
+    .then(function(r){return r.json();})
+    .then(function(resp){
+      if(resp.status==='ok') return resp.data.downloadPage;
+      throw new Error('upload failed');
+    });
+}
+
+function handleFiles(fs){
+  Array.from(fs).forEach(function(f){
+    if(files.find(function(x){return x.name===f.name;})) return;
+    files.push(f);
+    var ftag=document.createElement('div');
+    ftag.className='ftag';
+    ftag.id='ftag_'+f.name.replace(/[^a-z0-9]/gi,'_');
+    ftag.innerHTML='📎 <span>'+f.name+'</span> <span style="color:var(--neon);font-size:10px" id="fstatus_'+f.name.replace(/[^a-z0-9]/gi,'_')+'">subiendo...</span> <span class="rm" onclick="removeFile(\''+f.name+'\',this.parentElement)">✕</span>';
+    g('fileList').appendChild(ftag);
+    isUploading=true;
+    setUploadStatus('uploading','🚀 Subiendo '+f.name+' a la nube...');
+    uploadToGoFile(f).then(function(link){
+      uploadedLinks.push({name:f.name,url:link});
+      var fst=g('fstatus_'+f.name.replace(/[^a-z0-9]/gi,'_'));
+      if(fst){fst.textContent='✅ listo';fst.style.color='#00C566';}
+      isUploading=false;
+      setUploadStatus('done','✅ '+f.name+' subido correctamente · el link llegará en el correo');
+    }).catch(function(){
+      var fst=g('fstatus_'+f.name.replace(/[^a-z0-9]/gi,'_'));
+      if(fst){fst.textContent='⚠️ fallo';fst.style.color='var(--mag)';}
+      isUploading=false;
+      setUploadStatus('fail','⚠️ No se pudo subir '+f.name+'. Adjuntalo manualmente a tu respuesta.');
+    });
+  });
+}
+
+function removeFile(n,el){
+  files=files.filter(function(f){return f.name!==n;});
+  uploadedLinks=uploadedLinks.filter(function(l){return l.name!==n;});
+  el.remove();
+  if(files.length===0) clearUploadStatus();
+}
+
+function onDragOver(e){e.preventDefault();g('uploadZone').classList.add('drag-over');}
+function onDragLeave(){g('uploadZone').classList.remove('drag-over');}
+function onDrop(e){e.preventDefault();g('uploadZone').classList.remove('drag-over');handleFiles(e.dataTransfer.files);}
+
+function selColor(btn){document.querySelectorAll('.cbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');curColor=btn.dataset.color;applyColor();}
+function applyColor(){var c=CMAP[curColor];if(!c)return;[['gF1',c[0]],['gF2',c[1]],['gFs1',c[2]],['gFs2',c[3]],['gB1',c[0]],['gB2',c[1]],['gBs1',c[2]],['gBs2',c[3]]].forEach(function(p){var n=document.getElementById(p[0]);if(n)n.setAttribute('stop-color',p[1]);});}
+function selShirt(btn,type,modelName){document.querySelectorAll('.stype-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');curShirt=type;SHIRT=(type==='over'?SHIRT_OVR:type==='hoodie'?SHIRT_HOD:SHIRT_REG);if(modelName)curShirtModel=modelName;var lbl=g('shirtTypeLabel'),cst=g('shirtCostDisplay');if(lbl)lbl.textContent=(modelName?modelName:(type==='over'?'Camiseta oversize':type==='hoodie'?'Hoodie':'Camiseta regular'));if(cst)cst.textContent='$'+SHIRT.toFixed(2)+' / u';calc();}
+function selPrint(btn){document.querySelectorAll('.pbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');curPrint=btn.dataset.type;applyMockup();calc();}
+
+function applyMockup(){
+  var ff=(curPrint==='front30'||curPrint==='both30');
+  var fl=(curPrint==='front'||curPrint==='both'||curPrint==='fullback_logo');
+  var b=(curPrint==='back'||curPrint==='both'||curPrint==='both30');
+  var fb=(curPrint==='fullback'||curPrint==='fullback_logo');
+  g('frontFull').setAttribute('opacity',ff?'1':'0');
+  g('frontLogo').setAttribute('opacity',fl?'1':'0');
+  g('noFront').setAttribute('opacity',(ff||fl)?'0':'1');
+  g('backPrint').setAttribute('opacity',b?'1':'0');
+  g('backFullPrint').setAttribute('opacity',fb?'1':'0');
+  g('noBack').setAttribute('opacity',(b||fb)?'0':'1');
+}
+
+function changeQty(d){var i=g('qtyInput');i.value=Math.max(1,(parseInt(i.value)||1)+d);calc();updateSizeHint();}
+function setQty(q,btn){document.querySelectorAll('.preset').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');g('qtyInput').value=q;calc();updateSizeHint();}
+function changeSize(sz,d){sizes[sz]=Math.max(0,(sizes[sz]||0)+d);g('sz_'+sz).value=sizes[sz];updateSizeHint();}
+function updateSizeFromInput(sz){sizes[sz]=Math.max(0,parseInt(g('sz_'+sz).value)||0);updateSizeHint();}
+function updateSizeHint(){var t=0;['S','M','L','XL','XXL'].forEach(function(s){t+=sizes[s];});g('sizeTotal').textContent=t;var q=parseInt(g('qtyInput').value)||0,h=g('sizeHint');if(t===0){h.textContent='';}else if(t===q){h.textContent='✓ coincide';h.style.color='var(--neon)';}else{h.textContent='⚠ '+t+' vs '+q+' pedido';h.style.color='var(--mag)';}}
+
+function calc(){
+  var q=parseInt(g('qtyInput').value)||1;
+  _qty=q;
+  g('qtyDisplay').textContent=q;
+  document.querySelectorAll('.preset').forEach(function(b){b.classList.toggle('active',parseInt(b.textContent)===q);});
+  var eff='',yardsN=1;
+  if(curPrint==='back'||curPrint==='front30'){
+    yardsN=Math.ceil(q*900/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · 30x30cm';
+  }else if(curPrint==='both30'){
+    yardsN=Math.ceil(q*1800/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · T+F 30x30';
+  }else if(curPrint==='front'){
+    yardsN=Math.ceil(q*100/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · logo 10x10';
+  }else if(curPrint==='both'){
+    yardsN=Math.ceil(q*900/YA)+Math.ceil(q*100/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · tras+logo';
+  }else if(curPrint==='fullback'){
+    yardsN=Math.ceil(q*1575/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · Full Back 35x45cm';
+  }else if(curPrint==='fullback_logo'){
+    yardsN=Math.ceil(q*1575/YA)+Math.ceil(q*100/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · Full Back + Logo';
+  }
+  _yardsN=yardsN;
+  var yardCostPerUnit=yardsN*YARD/q;
+  var currentProfit=(curShirt==='over'||curShirt==='hoodie'?PROFIT_OVR:PROFIT);
+  var u,internalCost;
+  if(q<=2){u=SHIRT+yardCostPerUnit+currentProfit+2;internalCost=SHIRT+yardCostPerUnit;}
+  else if(q<=5){u=SHIRT+yardCostPerUnit+currentProfit+1;internalCost=SHIRT+yardCostPerUnit;}
+  else{u=yardCostPerUnit+SHIRT+currentProfit;internalCost=SHIRT+yardCostPerUnit;}
+  _unitPrice=u;_unitCost=internalCost;
+  var tot=u*q+SHIP;
+  g('priceUnit').textContent=u.toFixed(2);
+  g('priceTotal').textContent=tot.toFixed(2);
+  g('bdTotal').textContent='$'+tot.toFixed(2);
+  g('effText').textContent=eff;
+  var mn=g('minNotice'),sr=g('surchargeRow'),sv=g('surchargeVal');
+  if(q<=5){mn.classList.add('show');sr.style.display='flex';if(sv)sv.textContent='precio especial pedido pequeño';}else{mn.classList.remove('show');sr.style.display='none';}
+}
+
+function showToast(msg,type){
+  var t=g('bbToast');
+  if(!t){t=document.createElement('div');t.id='bbToast';t.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%);padding:13px 22px;border-radius:12px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:700;z-index:9999;transition:opacity .5s;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.4);';document.body.appendChild(t);}
+  t.textContent=msg;
+  t.style.background=type==='ok'?'#00C566':type==='err'?'#FF2D95':'#FFD400';
+  t.style.color=type==='err'?'#fff':'#0B0B0B';
+  t.style.opacity='1';
+  clearTimeout(t._tmr);
+  t._tmr=setTimeout(function(){t.style.opacity='0';},5000);
+}
+
+function sendOrder(){
+  if(isUploading){showToast('⏳ Espera, el archivo se esta subiendo...','warn');return;}
+  var name=(g('clientName').value||'').trim();
+  var email=(g('clientEmail').value||'').trim();
+  var phone=(g('clientPhone').value||'').trim();
+  if(!name){showToast('⚠️ Ingresa tu nombre completo','err');g('clientName').classList.add('err');g('clientName').scrollIntoView({behavior:'smooth',block:'center'});g('clientName').focus();return;}
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('⚠️ Ingresa un email válido','err');g('clientEmail').classList.add('err');g('clientEmail').scrollIntoView({behavior:'smooth',block:'center'});g('clientEmail').focus();return;}
+  if(!phone){showToast('⚠️ Ingresa tu teléfono o WhatsApp','err');g('clientPhone').classList.add('err');g('clientPhone').scrollIntoView({behavior:'smooth',block:'center'});g('clientPhone').focus();return;}
+  ['clientName','clientEmail','clientPhone'].forEach(function(id){g(id).classList.remove('err');});
+  var q=parseInt(g('qtyInput').value)||1;
+  var unit=g('priceUnit').textContent;
+  var total=g('priceTotal').textContent;
+  var notes=g('orderNotes').value;
+  var CN={black:'Negro',white:'Blanco',blue:'Azul',navy:'Azul Marino',cream:'Crema',red:'Rojo',pink:'Rosado'};
+  var PN={back:'Solo Trasera (30x30)',front30:'Solo Frontal (30x30)',both30:'Trasera+Frontal (30x30 c/u)',both:'Trasera (30x30) + Logo Frontal (10x10)',front:'Solo Logo (10x10)',fullback:'Full Back (35x45 cm)',fullback_logo:'Full Back (35x45) + Logo Frontal (10x10)'};
+  var shirtLabel=(curShirtModel?curShirtModel+' — ':'')+(curShirt==='over'?'Oversize ($12.75/u)':curShirt==='hoodie'?'Hoodie ($12.00/u)':'Regular ($4.50/u)');
+  var tot=0;['S','M','L','XL','XXL'].forEach(function(s){tot+=sizes[s];});
+  var sl='';if(tot>0){['S','M','L','XL','XXL'].forEach(function(s){if(sizes[s]>0)sl+='  '+s+': '+sizes[s]+' pcs\n';});}else{sl='  (no especificadas)\n';}
+  var yl='';
+  if(curPrint==='back'||curPrint==='front30'){var y=Math.ceil(q/BPPY);yl=y+(y>1?' yardas':' yarda')+' ('+BPPY+' impr/yarda)';}
+  else if(curPrint==='both30'){var y=Math.ceil(q/BPPY);yl=(y*2)+' yardas — '+y+' trasera + '+y+' frontal';}
+  else if(curPrint==='front'){var y=Math.ceil(q/FPPY);yl=y+(y>1?' yardas':' yarda')+' ('+FPPY+' logos/yarda)';}
+  else if(curPrint==='fullback'){var ppy=Math.floor(YA/1575);var y=Math.ceil(q/ppy);yl=y+(y>1?' yardas':' yarda')+' Full Back ('+ppy+'/yarda)';}
+  else if(curPrint==='fullback_logo'){var ppy=Math.floor(YA/1575);var yFB=Math.ceil(q/ppy);var yL=Math.ceil(q/FPPY);yl=yFB+' yardas Full Back + '+yL+' yardas logo';}
+  else{var yB=Math.ceil(q/BPPY),yL=Math.ceil(q/FPPY);yl=yB+' trasera + '+yL+' logo';}
+  var totalRevenue=parseFloat(total);
+  var yardsCost=_yardsN*YARD;
+  var shirtsCost=SHIRT*q;
+  var totalCost=yardsCost+shirtsCost+SHIP;
+  var netProfit=totalRevenue-totalCost;
+  var abonoRequerido=totalRevenue*0.5;
+  var linksSection='';
+  if(uploadedLinks.length>0){
+    linksSection='\n--- ARCHIVOS DE DISENO ---\n';
+    uploadedLinks.forEach(function(l,i){linksSection+=(i+1)+'. '+l.name+'\n   Descargar: '+l.url+'\n';});
+  } else if(files.length>0){
+    linksSection='\nArchivos mencionados (sin subir): '+files.map(function(f){return f.name;}).join(', ')+'\n';
+  }
+  var subj='[BBW] Cotizacion: '+q+' '+shirtLabel.split(' ')[0]+' '+CN[curColor]+' — '+PN[curPrint]+' — '+name;
+  var lines=[];
+  lines.push('=== COTIZACION BIG BANG WORKSHOPS ===');
+  lines.push('Cliente  : '+name);
+  lines.push('Email    : '+email);
+  lines.push('Telefono : '+phone);
+  lines.push('');
+  lines.push('Camiseta : '+shirtLabel);
+  lines.push('Color    : '+CN[curColor]);
+  lines.push('Impresion: '+PN[curPrint]);
+  lines.push('Cantidad : '+q+' pcs');
+  lines.push('Precio/u : $'+unit+' | Total: $'+total);
+  lines.push('');
+  lines.push('TALLAS:');
+  lines.push(sl.trim());
+  if(notes){lines.push('');lines.push('Notas: '+notes);}
+  lines.push(linksSection);
+  lines.push('--- PRODUCCION ---');
+  lines.push('Yardas: '+yl);
+  lines.push('Costo yardas: $'+yardsCost.toFixed(2));
+  lines.push('Camisetas: $'+shirtsCost.toFixed(2)+' ('+q+' x $'+SHIRT.toFixed(2)+')');
+  lines.push('Envio: $'+SHIP.toFixed(2));
+  lines.push('TOTAL COSTO: $'+totalCost.toFixed(2));
+  lines.push('Ganancia neta: $'+netProfit.toFixed(2));
+  lines.push('ABONO 50%: $'+abonoRequerido.toFixed(2));
+  var reportText=lines.join('\n');
+  var btn=document.querySelector('.cta');
+  if(btn){btn.disabled=true;btn.textContent='Enviando...';}
+  var form=document.createElement('form');
+  form.action='https://formsubmit.co/impresiones246@outlook.com';
+  form.method='POST';
+  form.style.display='none';
+  function addHidden(n,v){var i=document.createElement('input');i.type='hidden';i.name=n;i.value=v;form.appendChild(i);}
+  addHidden('_subject',subj);
+  addHidden('_captcha','false');
+  addHidden('_template','table');
+  addHidden('_next',window.location.href);
+  addHidden('1_Cliente',name);
+  addHidden('2_Email',email);
+  addHidden('3_Telefono',phone);
+  addHidden('4_Camiseta',shirtLabel);
+  addHidden('5_Color',CN[curColor]);
+  addHidden('6_Impresion',PN[curPrint]);
+  addHidden('7_Cantidad',q+' pcs');
+  addHidden('8_Precio_unitario','$'+unit);
+  addHidden('9_Total','$'+total);
+  addHidden('10_Tallas',sl.trim());
+  addHidden('11_Notas',notes||'sin notas');
+  if(uploadedLinks.length>0){
+    var linksTxt=uploadedLinks.map(function(l,i){return (i+1)+'. '+l.name+': '+l.url;}).join('\n');
+    addHidden('12_Archivos_Diseno',linksTxt);
+  } else {
+    addHidden('12_Archivos_Diseno',files.length>0?files.map(function(f){return f.name;}).join(', '):'(sin archivos)');
+  }
+  addHidden('13_Reporte_Produccion',reportText);
+  document.body.appendChild(form);
+  form.submit();
+  showToast('✅ Cotizacion enviada! Te contactamos en max. 72 horas.','ok');
+  if(btn){btn.textContent='✅ COTIZACION ENVIADA';btn.style.background='#00C566';btn.style.color='#fff';}
+}
+
+(function(){
+  var SC={black:'#444444',white:'#F5F5F0',blue:'#3B82F6',navy:'#1E3A5F',cream:'#F5E6C8',red:'#CC2222',pink:'#E879A0'};
+  var SB={white:'2px solid #aaa',cream:'2px solid #d4c8a8'};
+  document.querySelectorAll('.cbtn').forEach(function(btn){
+    var c=SC[btn.dataset.color];var sw=btn.querySelector('.swatch');
+    if(c&&sw){sw.style.cssText='background:'+c+';border-radius:50%;width:100%;height:100%;display:block;box-sizing:border-box;'+(SB[btn.dataset.color]?'border:'+SB[btn.dataset.color]+';':'');}
+  });
+})();
+calc();applyMockup();applyColor();
+</script>
+
+  <footer style="max-width:80rem;margin:0 auto;padding:48px 16px;font-size:13px;color:#BFBFBF;text-align:center">© Big Bang Workshops · Panamá</footer>
+</body>
+</html>

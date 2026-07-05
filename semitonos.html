@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semitonos — Big Bang Workshops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+  <style>
+    body { margin:0; background:#0B0B0B; color:#fff; font-family:Montserrat,sans-serif; }
+    .bbw-nav { position:sticky; top:0; z-index:50; background:rgba(11,11,11,.92); backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.1); }
+    .bbw-nav-inner { max-width:80rem; margin:0 auto; padding:0 16px; height:64px; display:flex; align-items:center; justify-content:space-between; }
+    .bbw-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:3px; color:#FFD400; text-decoration:none; }
+    .bbw-logo span { color:#fff; }
+    .bbw-links a { color:#fff; text-decoration:none; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-left:24px; }
+    .bbw-links a:hover { color:#FFD400; }
+  </style>
+</head>
+<body>
+  <header class="bbw-nav"><div class="bbw-nav-inner">
+    <a href="index.html" class="bbw-logo">BIG BANG <span>WORKSHOPS</span></a>
+    <nav class="bbw-links">
+      <a href="tienda.html">Tienda</a>
+      <a href="herramientas.html" style="color:#FFD400">Herramientas</a>
+      <a href="carrito.html">Carrito</a>
+    </nav>
+  </div></header>
+
+<style>.bb-tool{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;}</style><style>@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700&display=swap');.bb-tool{background:#0B0B0B;min-height:100vh;color:#fff;font-family:'Poppins',sans-serif;padding:40px 20px;}.bb-tool *{box-sizing:border-box;}.bb-head{text-align:center;margin-bottom:40px;}.bb-head h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,4rem);color:#FFD400;letter-spacing:3px;margin:0 0 8px;line-height:1;}.bb-head p{color:#BFBFBF;font-size:.95rem;margin:0;}.badge-free{display:inline-block;background:#FFD400;color:#0B0B0B;font-weight:700;font-size:.7rem;letter-spacing:2px;padding:3px 10px;border-radius:20px;margin-left:10px;vertical-align:middle;}.bb-container{max-width:1000px;margin:0 auto;display:grid;gap:24px;}.bb-card{background:#1A1A1A;border:1px solid #2a2a2a;border-radius:16px;padding:28px;}.bb-card h2{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#FFD400;letter-spacing:2px;margin:0 0 20px;}.upload-zone{border:2px dashed #FFD400;border-radius:12px;padding:50px 20px;text-align:center;cursor:pointer;transition:all .3s;position:relative;}.upload-zone:hover,.upload-zone.drag-over{background:rgba(255,212,0,.05);border-color:#fff;}.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}.upload-icon{font-size:3rem;margin-bottom:12px;}.upload-zone p{color:#BFBFBF;margin:4px 0;font-size:.9rem;}.upload-zone strong{color:#FFD400;}.controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}@media(max-width:700px){.controls-grid{grid-template-columns:1fr;}}.control-group{margin-bottom:16px;}.control-group label{display:block;font-size:.75rem;color:#BFBFBF;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:600;}select{width:100%;background:#0B0B0B;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:.85rem;cursor:pointer;appearance:none;}input[type=range]{width:100%;-webkit-appearance:none;background:#333;height:6px;border-radius:3px;outline:none;}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#FFD400;cursor:pointer;}.range-row{display:flex;align-items:center;gap:10px;}.range-row input[type=range]{flex:1;}.range-val{font-size:.85rem;color:#FFD400;font-weight:700;min-width:42px;text-align:right;}.color-row{display:flex;align-items:center;gap:10px;}.color-row input[type=color]{width:40px;height:36px;border:none;background:none;cursor:pointer;border-radius:6px;padding:2px;}.color-row span{font-size:.8rem;color:#BFBFBF;}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:.85rem;font-weight:700;border:none;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:1px;width:100%;}.btn-yellow{background:#FFD400;color:#0B0B0B;}.btn-yellow:hover{background:#e6bf00;transform:translateY(-1px);}.btn-cyan{background:#00E5FF;color:#0B0B0B;}.btn-cyan:hover{background:#00c8e0;transform:translateY(-1px);}.btn-ghost{background:transparent;color:#fff;border:1px solid #444;}.btn-ghost:hover{border-color:#FFD400;color:#FFD400;}.btn:disabled{opacity:.35;cursor:not-allowed;transform:none !important;}.btn-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}.canvas-tabs{display:flex;gap:4px;margin-bottom:14px;background:#0B0B0B;padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap;}.canvas-tab{padding:7px 16px;border-radius:7px;font-size:.75rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:#BFBFBF;text-transform:uppercase;letter-spacing:1px;transition:all .2s;}.canvas-tab.active{background:#FFD400;color:#0B0B0B;}.canvas-wrap{background:repeating-conic-gradient(#222 0% 25%,#1a1a1a 0% 50%) 0 0/20px 20px;border-radius:10px;overflow:hidden;min-height:180px;display:flex;align-items:center;justify-content:center;}.canvas-wrap canvas{max-width:100%;max-height:480px;display:none;}.canvas-wrap canvas.active{display:block;}.canvas-placeholder{color:#444;font-size:.9rem;text-align:center;padding:60px;}.hint{color:#666;font-size:.72rem;margin-top:5px;}.hidden{display:none !important;}</style><div class="bb-tool">
+<div class="bb-head">
+<h1>🟡 SEMITONOS <span class="badge-free">GRATIS</span>
+</h1>
+<p>Convierte tu imagen en patrón de puntos halftone · perfecto para degradados en DTF y serigrafía</p>
+</div>
+<div class="bb-container">
+<!-- Upload --><div class="bb-card">
+<h2>📁 Subir Imagen</h2>
+<div class="upload-zone" id="uploadZone">
+<input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp"><div class="upload-icon">🖼️</div>
+<p><strong>Haz clic o arrastra tu imagen aquí</strong></p>
+<p>PNG, JPG o WEBP · Máx 50MB · Todo se procesa en tu navegador</p>
+</div>
+</div>
+<!-- Controls --><div class="bb-card hidden" id="controlsCard">
+<h2>🎛️ Ajustes de Semitono</h2>
+<div class="controls-grid">
+<div>
+<div class="control-group">
+<label>Tamaño de celda (puntos): <span id="cellLabel">8</span> px</label><div class="range-row"><input type="range" id="cellSlider" min="3" max="30" value="8"></div>
+<p class="hint">Más pequeño = más detalle y más puntos</p>
+</div>
+<div class="control-group">
+<label>Ángulo de trama: <span id="angleLabel">45</span>°</label><div class="range-row"><input type="range" id="angleSlider" min="0" max="90" value="45"></div>
+</div>
+<div class="control-group">
+<label>Contraste: <span id="contrastLabel">0</span></label><div class="range-row"><input type="range" id="contrastSlider" min="-100" max="100" value="0"></div>
+</div>
+</div>
+<div>
+<div class="control-group">
+<label>Forma del punto</label><select id="shapeSelect"><option value="circle">Círculo (clásico)</option>
+<option value="square">Cuadrado</option>
+<option value="diamond">Diamante</option></select>
+</div>
+<div class="control-group">
+<label>Color de los puntos</label><div class="color-row">
+<input type="color" id="dotColor" value="#000000"><span>Usa negro para DTF estándar</span>
+</div>
+</div>
+<div class="control-group">
+<label>Fondo</label><select id="bgSelect"><option value="transparent">Transparente (recomendado DTF)</option>
+<option value="white">Blanco</option></select>
+</div>
+<div class="control-group">
+<label>Color de origen</label><select id="srcSelect"><option value="lum">Luminancia (escala de grises)</option>
+<option value="color">Mantener color original por punto</option></select>
+</div>
+</div>
+</div>
+<button class="btn btn-yellow" id="btnApply">🟡 Generar Semitono</button><div class="btn-actions">
+<button class="btn btn-cyan" id="btnDownload" style="max-width:300px;" disabled>⬇️ Descargar PNG</button><button class="btn btn-ghost" id="btnReset" style="max-width:180px;">↩ Reiniciar</button>
+</div>
+</div>
+<!-- Viewer --><div class="bb-card hidden" id="viewerCard">
+<h2>👁️ Vista Previa</h2>
+<div class="canvas-tabs">
+<button class="canvas-tab" data-tab="original">Original</button><button class="canvas-tab active" data-tab="resultado">Semitono</button>
+</div>
+<div class="canvas-wrap">
+<canvas id="canvasOriginal"></canvas><canvas id="canvasResultado" class="active"></canvas><div class="canvas-placeholder" id="canvasPlaceholder">Carga una imagen para ver la vista previa</div>
+</div>
+</div>
+</div>
+</div><script>(function(){
+var $ = function(id){ return document.getElementById(id); };
+var fileInput=$('fileInput'), uploadZone=$('uploadZone');
+var cellSlider=$('cellSlider'), cellLabel=$('cellLabel');
+var angleSlider=$('angleSlider'), angleLabel=$('angleLabel');
+var contrastSlider=$('contrastSlider'), contrastLabel=$('contrastLabel');
+var shapeSelect=$('shapeSelect'), dotColor=$('dotColor'), bgSelect=$('bgSelect'), srcSelect=$('srcSelect');
+var btnApply=$('btnApply'), btnDownload=$('btnDownload'), btnReset=$('btnReset');
+var controlsCard=$('controlsCard'), viewerCard=$('viewerCard'), canvasPlaceholder=$('canvasPlaceholder');
+var canvasOriginal=$('canvasOriginal'), canvasResultado=$('canvasResultado');
+var srcImageData=null, imgW=0, imgH=0, fileName='';
+cellSlider.addEventListener('input', function(){ cellLabel.textContent=this.value; });
+angleSlider.addEventListener('input', function(){ angleLabel.textContent=this.value; });
+contrastSlider.addEventListener('input', function(){ contrastLabel.textContent=this.value; });
+uploadZone.addEventListener('dragover', function(e){ e.preventDefault(); this.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', function(){ this.classList.remove('drag-over'); });
+uploadZone.addEventListener('drop', function(e){ e.preventDefault(); this.classList.remove('drag-over'); if(e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', function(){ if(this.files[0]) loadFile(this.files[0]); });
+function loadFile(file){
+if(!/image\/(png|jpeg|webp)/.test(file.type)){ alert('⚠️ Solo PNG, JPG o WEBP.'); return; }
+if(file.size > 52428800){ alert('⚠️ El archivo excede 50MB.'); return; }
+fileName = file.name.replace(/\.[^.]+$/,'');
+var reader = new FileReader();
+reader.onload = function(e){
+var img = new Image();
+img.onload = function(){
+var maxDim = 2000, scale = Math.min(1, maxDim/Math.max(img.width,img.height));
+imgW = Math.round(img.width*scale); imgH = Math.round(img.height*scale);
+canvasOriginal.width=imgW; canvasOriginal.height=imgH;
+var ctx = canvasOriginal.getContext('2d');
+ctx.clearRect(0,0,imgW,imgH);
+ctx.drawImage(img,0,0,imgW,imgH);
+srcImageData = ctx.getImageData(0,0,imgW,imgH);
+controlsCard.classList.remove('hidden');
+viewerCard.classList.remove('hidden');
+canvasPlaceholder.style.display='none';
+applyHalftone();
+};
+img.src = e.target.result;
+};
+reader.readAsDataURL(file);
+}
+function applyHalftone(){
+if(!srcImageData) return;
+var cell = parseInt(cellSlider.value);
+var angle = parseInt(angleSlider.value) * Math.PI/180;
+var contrast = parseInt(contrastSlider.value);
+var cf = (259*(contrast+255))/(255*(259-contrast));
+var shape = shapeSelect.value;
+var dot = dotColor.value;
+var keepColor = srcSelect.value === 'color';
+canvasResultado.width=imgW; canvasResultado.height=imgH;
+var ctx = canvasResultado.getContext('2d');
+if(bgSelect.value==='white'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,imgW,imgH); }
+else { ctx.clearRect(0,0,imgW,imgH); }
+var data = srcImageData.data;
+var cos = Math.cos(angle), sin = Math.sin(angle);
+var diag = Math.ceil(Math.sqrt(imgW*imgW + imgH*imgH));
+ctx.fillStyle = dot;
+for(var gy=-diag; gy<diag; gy+=cell){
+for(var gx=-diag; gx<diag; gx+=cell){
+var cx = gx*cos - gy*sin + imgW/2;
+var cy = gx*sin + gy*cos + imgH/2;
+var ix = Math.round(cx), iy = Math.round(cy);
+if(ix<0||iy<0||ix>=imgW||iy>=imgH) continue;
+var idx = (iy*imgW+ix)*4;
+var a = data[idx+3];
+if(a===0) continue;
+var r=data[idx], g=data[idx+1], b=data[idx+2];
+var lum = 0.299*r + 0.587*g + 0.114*b;
+lum = cf*(lum-128)+128;
+lum = Math.max(0, Math.min(255, lum));
+var darkness = 1 - (lum/255);
+if(darkness <= 0.01) continue;
+var radius = (cell/2) * Math.sqrt(darkness) * (a/255);
+if(radius < 0.3) continue;
+if(keepColor) ctx.fillStyle = 'rgb('+r+','+g+','+b+')';
+ctx.save();
+ctx.translate(cx, cy);
+ctx.rotate(angle);
+if(shape==='circle'){
+ctx.beginPath(); ctx.arc(0,0,radius,0,Math.PI*2); ctx.fill();
+} else if(shape==='square'){
+ctx.fillRect(-radius,-radius,radius*2,radius*2);
+} else {
+ctx.beginPath(); ctx.moveTo(0,-radius); ctx.lineTo(radius,0); ctx.lineTo(0,radius); ctx.lineTo(-radius,0); ctx.closePath(); ctx.fill();
+}
+ctx.restore();
+}
+}
+btnDownload.disabled = false;
+switchTab('resultado');
+}
+btnApply.addEventListener('click', applyHalftone);
+btnDownload.addEventListener('click', function(){
+canvasResultado.toBlob(function(blob){
+var a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download=fileName+'_semitono.png';
+a.click();
+});
+});
+btnReset.addEventListener('click', function(){
+fileInput.value=''; srcImageData=null;
+controlsCard.classList.add('hidden'); viewerCard.classList.add('hidden');
+btnDownload.disabled=true; canvasPlaceholder.style.display='';
+[canvasOriginal,canvasResultado].forEach(function(c){ c.width=0; c.height=0; });
+});
+document.querySelectorAll('.canvas-tab').forEach(function(tab){ tab.addEventListener('click', function(){ switchTab(this.dataset.tab); }); });
+function switchTab(name){
+document.querySelectorAll('.canvas-tab').forEach(function(t){ t.classList.remove('active'); });
+var btn=document.querySelector('[data-tab="'+name+'"]'); if(btn) btn.classList.add('active');
+canvasOriginal.classList.toggle('active', name==='original');
+canvasResultado.classList.toggle('active', name==='resultado');
+}
+})();</script>
+
+  <footer style="max-width:80rem;margin:0 auto;padding:48px 16px;font-size:13px;color:#BFBFBF;text-align:center">© Big Bang Workshops · Panamá</footer>
+</body>
+</html>

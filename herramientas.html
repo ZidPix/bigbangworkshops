@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herramientas — Big Bang Workshops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body class="bg-bbwblack text-white font-body">
+
+  <header class="sticky top-0 z-50 bg-bbwblack/90 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display text-2xl tracking-widest text-bbwyellow">BIG BANG <span class="text-white">WORKSHOPS</span></a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-wide">
+        <a href="tienda.html" class="hover:text-bbwyellow transition">Tienda</a>
+        <a href="herramientas.html" class="text-bbwyellow">Herramientas</a>
+        <a href="producto.html?h=diseno-personalizado-sube-tu-arte" class="hover:text-bbwmagenta transition">Personaliza</a>
+      </nav>
+      <a href="carrito.html" class="relative p-2" aria-label="Carrito">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 0 0 .9 1.4H19M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+        <span data-cart-count class="absolute -top-1 -right-1 bg-bbwyellow text-bbwblack text-xs font-bold w-5 h-5 rounded-full items-center justify-center hidden flex">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-14">
+    <h1 class="font-display text-5xl md:text-6xl tracking-wide">HERRAMIENTAS <span class="text-bbwyellow">BBW</span></h1>
+    <p class="text-bbwgray mt-3 max-w-2xl">Prepara tu diseño como un pro antes de ordenar. Todo corre en tu navegador — nada se sube a ningún servidor sin que tú lo decidas.</p>
+
+    <div class="grid md:grid-cols-3 gap-5 mt-10">
+      <a href="calculadora.html" class="group bg-[#151515] border border-white/5 rounded-2xl p-6 hover:border-bbwyellow/60 transition hover:-translate-y-1">
+        <p class="text-4xl">🧮</p>
+        <h2 class="font-display text-2xl tracking-wide mt-3 group-hover:text-bbwyellow">CALCULADORA DE PEDIDOS</h2>
+        <p class="text-bbwgray text-sm mt-2">Cotiza tu pedido al instante: prendas, tallas, cantidades y sube tu archivo de diseño.</p>
+      </a>
+      <a href="producto.html?h=diseno-personalizado-sube-tu-arte" class="group bg-[#151515] border border-white/5 rounded-2xl p-6 hover:border-bbwmagenta/60 transition hover:-translate-y-1">
+        <p class="text-4xl">📁</p>
+        <h2 class="font-display text-2xl tracking-wide mt-3 group-hover:text-bbwmagenta">SUBE TU DISEÑO</h2>
+        <p class="text-bbwgray text-sm mt-2">Convierte tu arte, meme o referencia geek en una prenda lista para stories.</p>
+      </a>
+      <a href="verificador-dtf.html" class="group bg-[#151515] border border-white/5 rounded-2xl p-6 hover:border-bbwcyan/60 transition hover:-translate-y-1">
+        <p class="text-4xl">🔥</p>
+        <h2 class="font-display text-2xl tracking-wide mt-3 group-hover:text-bbwcyan">VERIFICADOR DTF</h2>
+        <p class="text-bbwgray text-sm mt-2">Revisa si tu archivo tiene la resolución y el formato correctos para impresión DTF.</p>
+      </a>
+      <a href="eliminar-fondo.html" class="group bg-[#151515] border border-white/5 rounded-2xl p-6 hover:border-bbwyellow/60 transition hover:-translate-y-1">
+        <p class="text-4xl">✂️</p>
+        <h2 class="font-display text-2xl tracking-wide mt-3 group-hover:text-bbwyellow">ELIMINAR FONDO IA</h2>
+        <p class="text-bbwgray text-sm mt-2">Quita el fondo de tu imagen con IA, directo en tu navegador. Gratis.</p>
+      </a>
+      <a href="semitonos.html" class="group bg-[#151515] border border-white/5 rounded-2xl p-6 hover:border-bbwmagenta/60 transition hover:-translate-y-1">
+        <p class="text-4xl">🟡</p>
+        <h2 class="font-display text-2xl tracking-wide mt-3 group-hover:text-bbwmagenta">SEMITONOS</h2>
+        <p class="text-bbwgray text-sm mt-2">Convierte tus fotos a semitonos estilo serigrafía / retro comic.</p>
+      </a>
+      <a href="umbral.html" class="group bg-[#151515] border border-white/5 rounded-2xl p-6 hover:border-bbwcyan/60 transition hover:-translate-y-1">
+        <p class="text-4xl">⚫</p>
+        <h2 class="font-display text-2xl tracking-wide mt-3 group-hover:text-bbwcyan">UMBRAL</h2>
+        <p class="text-bbwgray text-sm mt-2">Blanco y negro puro de alto contraste para vinil y una sola tinta.</p>
+      </a>
+      <a href="tabla-medidas.html" class="group bg-[#151515] border border-white/5 rounded-2xl p-6 hover:border-bbwyellow/60 transition hover:-translate-y-1 md:col-span-3 md:max-w-md">
+        <p class="text-4xl">📏</p>
+        <h2 class="font-display text-2xl tracking-wide mt-3 group-hover:text-bbwyellow">TABLA DE MEDIDAS</h2>
+        <p class="text-bbwgray text-sm mt-2">Guía de tallas de nuestras prendas para que aciertes a la primera.</p>
+      </a>
+    </div>
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 py-12 text-sm text-bbwgray text-center">© Big Bang Workshops · Panamá</footer>
+</body>
+</html>
