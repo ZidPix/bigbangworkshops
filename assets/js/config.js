@@ -9,11 +9,16 @@ window.BBW = {
   // Contacto
   whatsapp: "50763832139",
   email: "impresiones246@outlook.com",
+  orderEmail: "impresiones246@outlook.com", // adonde llegan los pedidos
   instagram: "https://instagram.com/bigbangworkshops",
 
-  // Envío (Panamá)
-  shippingFlat: 4.00,
-  freeShippingMin: 60.00,
+  // Zonas de envío (Panamá)
+  shippingZones: [
+    { id: "norte",    label: "Panamá Norte · San Antonio · Villa Lucre",        price: 0.00 },
+    { id: "condado",  label: "Condado del Rey · Tumba Muerto · Betania",        price: 3.50 },
+    { id: "centro",   label: "Panamá Centro · Punta Pacífica · Costa del Este", price: 5.00 },
+    { id: "interior", label: "Interior del País",                               price: 6.50 }
+  ],
 
   // Analytics (opcional)
   gaId: "",

@@ -86,7 +86,7 @@
       const upd = () => { priceEl.textContent = bbwFmt(variants[vi].p); };
       upd();
       const sn = document.getElementById("shipnote");
-      if (sn) sn.textContent = `Envío ${bbwFmt(window.BBW.shippingFlat)} en Panamá · GRATIS desde ${bbwFmt(window.BBW.freeShippingMin)}`;
+      if (sn) sn.textContent = "Envío en Panamá: GRATIS a $6.50 según tu zona — se elige en el carrito";
 
       document.querySelectorAll(".var-btn").forEach(b => b.addEventListener("click", () => {
         vi = Number(b.dataset.i);

@@ -156,7 +156,7 @@
       $("summary").textContent = `${qty}× ${G.n} · ${COLORS[col].n} · Talla ${SIZES[size]}`;
       $("total").textContent = "$" + tot.toFixed(2);
       const C = window.BBW || {};
-      $("shipnote").textContent = tot >= (C.freeShippingMin||60) ? "Envío GRATIS 🎉" : `+ envío $${(C.shippingFlat||4).toFixed(2)} en Panamá · gratis desde $${(C.freeShippingMin||60).toFixed(0)}`;
+      $("shipnote").textContent = "+ envío según zona (GRATIS a $6.50) — se elige en el carrito";
       updateWA();
     }
 

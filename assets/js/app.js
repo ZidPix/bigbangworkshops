@@ -75,13 +75,27 @@
     },
     clear() { saveCart([]); },
     subtotal() { return getCart().reduce((s, i) => s + i.price * i.qty, 0); },
+    zones() {
+      return C.shippingZones || [
+        { id: "norte",    label: "Panamá Norte · San Antonio · Villa Lucre",        price: 0.00 },
+        { id: "condado",  label: "Condado del Rey · Tumba Muerto · Betania",        price: 3.50 },
+        { id: "centro",   label: "Panamá Centro · Punta Pacífica · Costa del Este", price: 5.00 },
+        { id: "interior", label: "Interior del País",                               price: 6.50 }
+      ];
+    },
+    zone() {
+      const id = localStorage.getItem("bbw_zone");
+      return this.zones().find(z => z.id === id) || null;
+    },
+    setZone(id) { localStorage.setItem("bbw_zone", id); },
     shipping() {
       const sub = this.subtotal();
       const digitalOnly = getCart().every(i => i.digital);
       if (digitalOnly || sub === 0) return 0;
-      return sub >= (C.freeShippingMin || 60) ? 0 : (C.shippingFlat || 4);
+      const z = this.zone();
+      return z ? z.price : null; // null = falta elegir zona
     },
-    total() { return this.subtotal() + this.shipping(); },
+    total() { const s = this.shipping(); return this.subtotal() + (s || 0); },
     count() { return getCart().reduce((s, i) => s + i.qty, 0); }
   };
 
