@@ -107,7 +107,7 @@
           <p class="text-xs text-bbwgray mt-1" id="shipnote"></p>
         </div>
         <div class="flex flex-col gap-2">
-          <button id="send" class="bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest px-10 py-3 rounded-lg hover:scale-[1.02] transition shadow-[0_0_40px_rgba(255,212,0,0.3)]">ENVIAR PEDIDO 💥</button>
+          <button id="send" class="bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest px-10 py-3 rounded-lg hover:scale-[1.02] transition shadow-[0_0_40px_rgba(255,212,0,0.3)]">AÑADIR AL CARRITO Y PAGAR 💥</button>
           <a id="waBtn" href="#" target="_blank" class="text-center border border-white/20 rounded-lg py-2.5 text-sm font-semibold hover:border-bbwcyan hover:text-bbwcyan transition">📱 O envíalo por WhatsApp</a>
         </div>
       </div>
@@ -197,37 +197,55 @@
       });
     }
 
-    /* ---- envío ---- */
+    /* ---- envío: email + carrito + pago ---- */
     function send() {
       const name = $("name").value.trim(), phone = $("phone").value.trim();
       const email = $("email").value.trim(), notes = $("notes").value.trim();
-      const err = $("err");
-      err.classList.add("hidden");
+      $("err").classList.add("hidden");
       if (!theFile) return showErr("Sube tu diseño primero (paso 1) 📁");
       if (uploading) return showErr("Espera un momento — tu diseño se está subiendo ⏳");
       if (!name || !phone) return showErr("Necesitamos tu nombre y WhatsApp para contactarte");
       const G = GARMENTS[g], tot = (G.price*qty).toFixed(2);
-      const btn = $("send"); btn.disabled = true; btn.textContent = "ENVIANDO…";
-      const form = document.createElement("form");
-      form.action = "https://formsubmit.co/impresiones246@outlook.com";
-      form.method = "POST"; form.style.display = "none";
-      const add = (n,v)=>{ const i=document.createElement("input"); i.type="hidden"; i.name=n; i.value=v; form.appendChild(i); };
-      add("_subject", `[BBW] SUBE TU DISENO: ${G.n} ${COLORS[col].n} T-${SIZES[size]} x${qty} — ${name}`);
-      add("_captcha","false"); add("_template","table");
-      add("_next", location.origin + location.pathname + "?enviado=1");
-      add("1_Cliente", name);
-      add("2_WhatsApp", phone);
-      add("3_Email", email || "no dio email");
-      add("4_Prenda", `${G.n} (${G.b})`);
-      add("5_Color", COLORS[col].n);
-      add("6_Talla", SIZES[size]);
-      add("7_Cantidad", qty + " pcs");
-      add("8_Precio_unitario", "$" + G.price.toFixed(2));
-      add("9_Total", "$" + tot);
-      add("10_Archivo_diseno", fileLink || ("NO SUBIDO — pedir por WhatsApp: " + theFile.name));
-      add("11_Notas", notes || "sin notas");
-      document.body.appendChild(form);
-      form.submit();
+      const btn = $("send"); btn.disabled = true; btn.textContent = "PROCESANDO…";
+
+      // 1) Email con todos los parámetros (en segundo plano, no bloquea el pago)
+      const payload = {
+        _subject: `[BBW] SUBE TU DISENO: ${G.n} ${COLORS[col].n} T-${SIZES[size]} x${qty} — ${name}`,
+        _template: "table", _captcha: "false",
+        "1_Cliente": name,
+        "2_WhatsApp": phone,
+        "3_Email": email || "no dio email",
+        "4_Prenda": `${G.n} (${G.b})`,
+        "5_Color": COLORS[col].n,
+        "6_Talla": SIZES[size],
+        "7_Cantidad": qty + " pcs",
+        "8_Precio_unitario": "$" + G.price.toFixed(2),
+        "9_Total": "$" + tot,
+        "10_Archivo_diseno": fileLink || ("NO SUBIDO — pedir por WhatsApp: " + theFile.name),
+        "11_Notas": notes || "sin notas",
+        "12_Estado": "Cliente enviado al carrito para pagar con PayPal"
+      };
+      fetch("https://formsubmit.co/ajax/impresiones246@outlook.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      }).catch(()=>{});
+
+      // 2) Añadir el ítem personalizado al carrito
+      bbwCart.add({
+        id: "custom-" + Date.now(),
+        handle: "diseno-personalizado-sube-tu-arte",
+        title: `🎨 Personalizado: ${G.n} · ${COLORS[col].n}`,
+        variant: "Talla " + SIZES[size],
+        price: G.price,
+        img: "https://placehold.co/300x300/151515/FFD400?text=TU+DISE%C3%91O",
+        digital: false,
+        custom: { link: fileLink, cliente: name, whatsapp: phone, notas: notes },
+        qty
+      });
+
+      // 3) Directo a pagar
+      setTimeout(()=>{ location.href = "carrito.html"; }, 600);
     }
     function showErr(m){ const e=$("err"); e.textContent="⚠️ "+m; e.classList.remove("hidden"); }
 
