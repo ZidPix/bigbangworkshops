@@ -38,7 +38,7 @@
   window.bbwProducts = async function () {
     if (PRODUCTS) return PRODUCTS;
     const base = location.pathname.includes("/") ? "" : "";
-    const res = await fetch("assets/data/products.json?v=2");
+    const res = await fetch("assets/data/products.json?v=3");
     PRODUCTS = await res.json();
     return PRODUCTS;
   };
