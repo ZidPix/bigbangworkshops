@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Producto — Big Bang Workshops</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <style>.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}</style>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body class="bg-bbwblack text-white font-body">
+
+  <header class="sticky top-0 z-50 bg-bbwblack/90 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display text-2xl tracking-widest text-bbwyellow">BIG BANG <span class="text-white">WORKSHOPS</span></a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-wide">
+        <a href="tienda.html" class="hover:text-bbwyellow transition">Tienda</a>
+        <a href="tienda.html?tipo=Pack%20Digital" class="hover:text-bbwcyan transition">Packs Digitales</a>
+        <a href="producto.html?h=diseno-personalizado-sube-tu-arte" class="hover:text-bbwmagenta transition">Personaliza</a>
+      </nav>
+      <a href="carrito.html" class="relative p-2" aria-label="Carrito">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 0 0 .9 1.4H19M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+        <span data-cart-count class="absolute -top-1 -right-1 bg-bbwyellow text-bbwblack text-xs font-bold w-5 h-5 rounded-full items-center justify-center hidden flex">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="pd" class="max-w-6xl mx-auto px-4 py-12">
+    <p class="text-bbwgray">Cargando…</p>
+  </main>
+
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <h2 class="font-display text-3xl tracking-wide mb-6">TAMBIÉN TE PUEDE <span class="text-bbwyellow">GUSTAR</span></h2>
+    <div id="related" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+  </section>
+
+  <footer class="max-w-7xl mx-auto px-4 py-12 text-sm text-bbwgray text-center">© Big Bang Workshops · Panamá</footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const all = await bbwProducts();
+      const h = new URLSearchParams(location.search).get("h");
+      const p = all.find(x => x.handle === h) || all[0];
+      document.title = p.title + " — Big Bang Workshops";
+      const isDigital = p.type === "Pack Digital";
+      const variants = (p.variants && p.variants.length) ? p.variants : [{ t: "Default Title", p: p.price }];
+      const single = variants.length === 1 && variants[0].t === "Default Title";
+
+      document.getElementById("pd").innerHTML = `
+      <div class="grid md:grid-cols-2 gap-10">
+        <div class="rounded-2xl overflow-hidden bg-[#151515] border border-white/5">
+          <img src="${p.img}" alt="${bbwEsc(p.title)}" class="w-full object-cover"
+               onerror="this.src='https://placehold.co/800x800/151515/FFD400?text=BBW'">
+        </div>
+        <div>
+          <p class="text-bbwcyan text-xs font-semibold uppercase tracking-[0.25em] mb-2">${bbwEsc(p.type)}</p>
+          <h1 class="font-display text-4xl md:text-5xl tracking-wide leading-tight">${bbwEsc(p.title)}</h1>
+          <p id="price" class="text-bbwyellow text-3xl font-bold mt-4"></p>
+          <p class="text-bbwgray mt-4 leading-relaxed">${bbwEsc(p.desc)}…</p>
+
+          ${single ? "" : `
+          <p class="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide">Talla / Variante</p>
+          <div id="vars" class="flex flex-wrap gap-2">
+            ${variants.map((v, i) => `<button data-i="${i}" class="var-btn border ${i === 0 ? "border-bbwyellow text-bbwyellow" : "border-white/20"} rounded-lg px-4 py-2 text-sm font-semibold hover:border-bbwyellow transition">${bbwEsc(v.t)}</button>`).join("")}
+          </div>`}
+
+          <div class="flex items-center gap-4 mt-8">
+            <div class="flex items-center border border-white/20 rounded-lg">
+              <button id="minus" class="px-4 py-3 text-xl">−</button>
+              <span id="qty" class="w-8 text-center font-bold">1</span>
+              <button id="plus" class="px-4 py-3 text-xl">+</button>
+            </div>
+            <button id="add" class="flex-1 bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.02] transition shadow-[0_0_40px_rgba(255,212,0,0.3)]">AÑADIR AL CARRITO</button>
+          </div>
+          ${isDigital ? '<p class="mt-4 text-xs text-bbwcyan">⚡ Producto digital: recibes el archivo por email tras el pago. Sin costo de envío.</p>' : '<p id="shipnote" class="mt-4 text-xs text-bbwgray"></p>'}
+        </div>
+      </div>`;
+
+      let vi = 0, qty = 1;
+      const priceEl = document.getElementById("price");
+      const upd = () => { priceEl.textContent = bbwFmt(variants[vi].p); };
+      upd();
+      const sn = document.getElementById("shipnote");
+      if (sn) sn.textContent = `Envío ${bbwFmt(window.BBW.shippingFlat)} en Panamá · GRATIS desde ${bbwFmt(window.BBW.freeShippingMin)}`;
+
+      document.querySelectorAll(".var-btn").forEach(b => b.addEventListener("click", () => {
+        vi = Number(b.dataset.i);
+        document.querySelectorAll(".var-btn").forEach(x => x.className = x.className.replace("border-bbwyellow text-bbwyellow", "border-white/20"));
+        b.classList.remove("border-white/20"); b.classList.add("border-bbwyellow", "text-bbwyellow");
+        upd();
+      }));
+      document.getElementById("minus").addEventListener("click", () => { qty = Math.max(1, qty - 1); document.getElementById("qty").textContent = qty; });
+      document.getElementById("plus").addEventListener("click", () => { qty++; document.getElementById("qty").textContent = qty; });
+      document.getElementById("add").addEventListener("click", () => {
+        bbwCart.add({ id: p.id, handle: p.handle, title: p.title, variant: variants[vi].t, price: variants[vi].p, img: p.img, digital: isDigital, qty });
+      });
+
+      // Relacionados
+      const rel = all.filter(x => x.type === p.type && x.id !== p.id).sort(() => Math.random() - 0.5).slice(0, 4);
+      document.getElementById("related").innerHTML = rel.map(bbwCard).join("");
+    });
+  </script>
+</body>
+</html>

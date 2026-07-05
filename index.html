@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Bang Workshops — Explosión Creativa Geek</title>
+  <meta name="description" content="Camisetas geek, anime y cultura pop + packs digitales para eventos. Diseños que la gente quiere subir a stories. Panamá.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <style>.line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}</style>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body class="bg-bbwblack text-white font-body">
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 bg-bbwblack/90 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display text-2xl tracking-widest text-bbwyellow">BIG BANG <span class="text-white">WORKSHOPS</span></a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-wide">
+        <a href="tienda.html" class="hover:text-bbwyellow transition">Tienda</a>
+        <a href="tienda.html?tipo=Pack%20Digital" class="hover:text-bbwcyan transition">Packs Digitales</a>
+        <a href="producto.html?h=diseno-personalizado-sube-tu-arte" class="hover:text-bbwmagenta transition">Personaliza</a>
+      </nav>
+      <a href="carrito.html" class="relative p-2" aria-label="Carrito">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 0 0 .9 1.4H19M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+        <span data-cart-count class="absolute -top-1 -right-1 bg-bbwyellow text-bbwblack text-xs font-bold w-5 h-5 rounded-full items-center justify-center hidden flex">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,212,0,0.12),transparent_60%),radial-gradient(ellipse_at_bottom_left,rgba(0,229,255,0.08),transparent_60%)]"></div>
+    <div class="relative max-w-7xl mx-auto px-4 py-24 md:py-36 text-center">
+      <p class="text-bbwcyan font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cultura pop · Anime · Streetwear</p>
+      <h1 class="font-display text-6xl md:text-8xl leading-none tracking-wide">EXPLOSIÓN CREATIVA <span class="text-bbwyellow">GEEK</span></h1>
+      <p class="mt-6 text-bbwgray max-w-xl mx-auto text-lg">Camisetas y packs digitales que la gente quiere subir a stories. Diseños llamativos, limpios y 100% instagrammeables.</p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href="tienda.html" class="bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest px-10 py-3 rounded-lg hover:scale-105 transition shadow-[0_0_40px_rgba(255,212,0,0.35)]">VER TIENDA</a>
+        <a href="producto.html?h=diseno-personalizado-sube-tu-arte" class="border border-white/20 font-display text-2xl tracking-widest px-10 py-3 rounded-lg hover:border-bbwmagenta hover:text-bbwmagenta transition">SUBE TU ARTE</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORÍAS -->
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <h2 class="font-display text-4xl tracking-wide mb-8">EXPLORA <span class="text-bbwyellow">COLECCIONES</span></h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a href="tienda.html?q=JJK" class="group relative rounded-xl overflow-hidden aspect-[4/5] bg-[#151515] border border-white/5 hover:border-bbwyellow/60 transition">
+        <div class="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent z-10"><span class="font-display text-2xl tracking-wider">JUJUTSU KAISEN</span></div>
+        <img src="https://cdn.shopify.com/s/files/1/0806/9949/0559/files/JJK-PackDigitalBigBangWorkshops_9.png?v=1779673638" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="JJK" onerror="this.style.display='none'">
+      </a>
+      <a href="tienda.html?q=Demon%20Slayer" class="group relative rounded-xl overflow-hidden aspect-[4/5] bg-[#151515] border border-white/5 hover:border-bbwcyan/60 transition">
+        <div class="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent z-10"><span class="font-display text-2xl tracking-wider">DEMON SLAYER</span></div>
+        <div class="w-full h-full bg-[radial-gradient(circle_at_30%_30%,rgba(0,229,255,0.25),transparent)]"></div>
+      </a>
+      <a href="tienda.html?tipo=Playera%20Oversize" class="group relative rounded-xl overflow-hidden aspect-[4/5] bg-[#151515] border border-white/5 hover:border-bbwmagenta/60 transition">
+        <div class="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent z-10"><span class="font-display text-2xl tracking-wider">OVERSIZE</span></div>
+        <div class="w-full h-full bg-[radial-gradient(circle_at_70%_30%,rgba(255,45,149,0.25),transparent)]"></div>
+      </a>
+      <a href="tienda.html?tipo=Pack%20Digital" class="group relative rounded-xl overflow-hidden aspect-[4/5] bg-[#151515] border border-white/5 hover:border-bbwyellow/60 transition">
+        <div class="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/80 to-transparent z-10"><span class="font-display text-2xl tracking-wider">PACKS DIGITALES</span></div>
+        <div class="w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,212,0,0.2),transparent)]"></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- DESTACADOS -->
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="flex items-end justify-between mb-8">
+      <h2 class="font-display text-4xl tracking-wide">RECIÉN <span class="text-bbwyellow">LLEGADOS</span></h2>
+      <a href="tienda.html" class="text-sm font-semibold text-bbwgray hover:text-bbwyellow uppercase tracking-wide">Ver todo →</a>
+    </div>
+    <div id="featured" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+  </section>
+
+  <!-- VALUE PROPS -->
+  <section class="border-y border-white/10 bg-[#0F0F0F]">
+    <div class="max-w-7xl mx-auto px-4 py-14 grid md:grid-cols-3 gap-8 text-center">
+      <div><p class="font-display text-3xl text-bbwyellow tracking-wide">DISEÑO QUE EXPLOTA</p><p class="text-bbwgray mt-2 text-sm">Referencias de anime, memes y pop culture con acabado limpio.</p></div>
+      <div><p class="font-display text-3xl text-bbwcyan tracking-wide">HECHO EN PANAMÁ</p><p class="text-bbwgray mt-2 text-sm">Impresión DTF de alta calidad y envíos a todo el país.</p></div>
+      <div><p class="font-display text-3xl text-bbwmagenta tracking-wide">LISTO PARA STORIES</p><p class="text-bbwgray mt-2 text-sm">Piezas pensadas para volverse virales en tu feed.</p></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="max-w-7xl mx-auto px-4 py-12 text-sm text-bbwgray flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="font-display text-xl tracking-widest text-white">BIG BANG <span class="text-bbwyellow">WORKSHOPS</span></p>
+    <div class="flex gap-6">
+      <a id="f-wa" href="#" class="hover:text-bbwyellow">WhatsApp</a>
+      <a id="f-ig" href="#" class="hover:text-bbwyellow">Instagram</a>
+      <a id="f-mail" href="#" class="hover:text-bbwyellow">Email</a>
+    </div>
+    <p>© <span id="year"></span> Big Bang Workshops · Panamá</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.addEventListener("DOMContentLoaded", async () => {
+      const C = window.BBW;
+      document.getElementById("f-wa").href = "https://wa.me/" + C.whatsapp;
+      document.getElementById("f-ig").href = C.instagram;
+      document.getElementById("f-mail").href = "mailto:" + C.email;
+      const all = await bbwProducts();
+      const feat = [...all].sort((a, b) => Number(b.id) - Number(a.id)).slice(0, 8);
+      document.getElementById("featured").innerHTML = feat.map(bbwCard).join("");
+    });
+  </script>
+</body>
+</html>

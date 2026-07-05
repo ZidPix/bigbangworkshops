@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito — Big Bang Workshops</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body class="bg-bbwblack text-white font-body">
+
+  <header class="sticky top-0 z-50 bg-bbwblack/90 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display text-2xl tracking-widest text-bbwyellow">BIG BANG <span class="text-white">WORKSHOPS</span></a>
+      <a href="tienda.html" class="text-sm font-semibold uppercase tracking-wide hover:text-bbwyellow">← Seguir comprando</a>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-12">
+    <h1 class="font-display text-5xl tracking-wide mb-8">TU <span class="text-bbwyellow">CARRITO</span></h1>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div id="items" class="md:col-span-2 space-y-4"></div>
+      <aside class="bg-[#151515] border border-white/10 rounded-2xl p-6 h-fit">
+        <h2 class="font-display text-2xl tracking-wide mb-4">RESUMEN</h2>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-bbwgray">Subtotal</span><span id="sub"></span></div>
+          <div class="flex justify-between"><span class="text-bbwgray">Envío</span><span id="ship"></span></div>
+          <div class="border-t border-white/10 pt-3 flex justify-between font-bold text-lg"><span>Total</span><span id="total" class="text-bbwyellow"></span></div>
+        </div>
+        <div id="paypal-button-container" class="mt-6"></div>
+        <p id="pp-note" class="text-xs text-bbwgray mt-3"></p>
+        <a id="wa-order" href="#" target="_blank" class="mt-4 block text-center border border-white/20 rounded-lg py-3 text-sm font-semibold hover:border-bbwcyan hover:text-bbwcyan transition">📱 Ordenar por WhatsApp</a>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 py-12 text-sm text-bbwgray text-center">© Big Bang Workshops · Panamá</footer>
+
+  <script>
+    function renderCart() {
+      const items = bbwCart.items();
+      const box = document.getElementById("items");
+      if (!items.length) {
+        box.innerHTML = '<p class="text-bbwgray">Tu carrito está vacío. <a class="text-bbwyellow underline" href="tienda.html">Explora la tienda</a> ⚡</p>';
+      } else {
+        box.innerHTML = items.map(i => `
+          <div class="flex gap-4 bg-[#151515] border border-white/5 rounded-xl p-4 items-center">
+            <img src="${i.img}" class="w-20 h-20 rounded-lg object-cover bg-[#101010]" onerror="this.src='https://placehold.co/160x160/151515/FFD400?text=BBW'">
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-sm truncate">${bbwEsc(i.title)}</p>
+              <p class="text-xs text-bbwgray">${i.variant !== "Default Title" ? bbwEsc(i.variant) : (i.digital ? "Digital" : "")}</p>
+              <p class="text-bbwyellow font-bold mt-1">${bbwFmt(i.price)}</p>
+            </div>
+            <div class="flex items-center border border-white/15 rounded-lg">
+              <button class="px-3 py-1.5" onclick="bbwCart.setQty('${i.id}','${i.variant.replace(/'/g, "\\'")}',${i.qty - 1});renderCart()">−</button>
+              <span class="w-6 text-center text-sm">${i.qty}</span>
+              <button class="px-3 py-1.5" onclick="bbwCart.setQty('${i.id}','${i.variant.replace(/'/g, "\\'")}',${i.qty + 1});renderCart()">+</button>
+            </div>
+            <button class="text-bbwgray hover:text-bbwmagenta px-2" title="Quitar" onclick="bbwCart.remove('${i.id}','${i.variant.replace(/'/g, "\\'")}');renderCart()">✕</button>
+          </div>`).join("");
+      }
+      document.getElementById("sub").textContent = bbwFmt(bbwCart.subtotal());
+      document.getElementById("ship").textContent = bbwCart.shipping() === 0 ? "GRATIS" : bbwFmt(bbwCart.shipping());
+      document.getElementById("total").textContent = bbwFmt(bbwCart.total());
+
+      // Link de WhatsApp con el pedido
+      const lines = items.map(i => `• ${i.qty}x ${i.title}${i.variant !== "Default Title" ? " (" + i.variant + ")" : ""} — ${bbwFmt(i.price * i.qty)}`);
+      const msg = encodeURIComponent("¡Hola Big Bang Workshops! Quiero ordenar:\n" + lines.join("\n") + "\nTotal: " + bbwFmt(bbwCart.total()));
+      document.getElementById("wa-order").href = "https://wa.me/" + window.BBW.whatsapp + "?text=" + msg;
+    }
+
+    function initPayPal() {
+      const C = window.BBW;
+      if (!C.paypalClientId || C.paypalClientId === "TU_PAYPAL_CLIENT_ID") {
+        document.getElementById("pp-note").textContent = "⚠️ PayPal aún no está configurado (edita assets/js/config.js). Mientras tanto puedes ordenar por WhatsApp.";
+        return;
+      }
+      const s = document.createElement("script");
+      s.src = `https://www.paypal.com/sdk/js?client-id=${C.paypalClientId}&currency=${C.currency}&intent=capture`;
+      s.onload = () => {
+        paypal.Buttons({
+          style: { color: "gold", shape: "rect", label: "paypal", height: 45 },
+          createOrder: (data, actions) => actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: bbwCart.total().toFixed(2),
+                currency_code: C.currency,
+                breakdown: {
+                  item_total: { value: bbwCart.subtotal().toFixed(2), currency_code: C.currency },
+                  shipping: { value: bbwCart.shipping().toFixed(2), currency_code: C.currency }
+                }
+              },
+              items: bbwCart.items().map(i => ({
+                name: i.title.substring(0, 120),
+                unit_amount: { value: i.price.toFixed(2), currency_code: C.currency },
+                quantity: String(i.qty)
+              }))
+            }]
+          }),
+          onApprove: (data, actions) => actions.order.capture().then(det => {
+            if (window.gtag) gtag("event", "purchase", { transaction_id: det.id, value: bbwCart.total(), currency: C.currency });
+            // Opcional: guardar orden en Supabase → dispara email con Resend (ver README)
+            if (C.supabaseUrl && C.supabaseAnonKey) {
+              fetch(C.supabaseUrl + "/functions/v1/nueva-orden", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + C.supabaseAnonKey },
+                body: JSON.stringify({ paypal_id: det.id, payer: det.payer, items: bbwCart.items(), total: bbwCart.total() })
+              }).catch(() => {});
+            }
+            const digital = bbwCart.items().some(i => i.digital);
+            bbwCart.clear();
+            location.href = "gracias.html?id=" + encodeURIComponent(det.id) + (digital ? "&digital=1" : "");
+          })
+        }).render("#paypal-button-container");
+      };
+      document.head.appendChild(s);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => { renderCart(); initPayPal(); });
+  </script>
+</body>
+</html>

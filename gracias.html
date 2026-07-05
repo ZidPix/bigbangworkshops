@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Gracias! — Big Bang Workshops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body class="bg-bbwblack text-white font-body min-h-screen flex flex-col">
+  <main class="flex-1 flex items-center justify-center px-4">
+    <div class="text-center max-w-lg py-24">
+      <p class="text-7xl mb-6">💥</p>
+      <h1 class="font-display text-6xl tracking-wide">¡PEDIDO <span class="text-bbwyellow">CONFIRMADO!</span></h1>
+      <p class="text-bbwgray mt-4">Gracias por tu compra. Recibirás la confirmación de PayPal en tu correo.</p>
+      <p id="oid" class="text-xs text-bbwgray mt-2"></p>
+      <p id="dig" class="hidden text-bbwcyan text-sm mt-4">⚡ Tu pedido incluye productos digitales: te enviaremos los archivos a tu email en las próximas horas.</p>
+      <div class="mt-10 flex justify-center gap-4">
+        <a href="tienda.html" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-8 py-3 rounded-lg hover:scale-105 transition">SEGUIR COMPRANDO</a>
+        <a id="wa" href="#" class="border border-white/20 font-display text-xl tracking-widest px-8 py-3 rounded-lg hover:border-bbwcyan hover:text-bbwcyan transition">WHATSAPP</a>
+      </div>
+    </div>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const p = new URLSearchParams(location.search);
+      if (p.get("id")) document.getElementById("oid").textContent = "Orden PayPal: " + p.get("id");
+      if (p.get("digital")) document.getElementById("dig").classList.remove("hidden");
+      document.getElementById("wa").href = "https://wa.me/" + window.BBW.whatsapp;
+    });
+  </script>
+</body>
+</html>
