@@ -3,7 +3,14 @@
    Carrito + catálogo + analytics. Sin frameworks, sin build.
    ============================================================ */
 (function () {
-  const C = window.BBW || {};
+  // Defaults de respaldo por si config.js no carga
+  window.BBW = Object.assign({
+    paypalClientId: "", currency: "USD", whatsapp: "50763832139",
+    email: "impresiones246@outlook.com", instagram: "https://instagram.com/bigbangworkshops",
+    shippingFlat: 4.00, freeShippingMin: 60.00,
+    gaId: "", clarityId: "", supabaseUrl: "", supabaseAnonKey: ""
+  }, window.BBW || {});
+  const C = window.BBW;
   const CART_KEY = "bbw_cart_v1";
 
   /* ---------- Analytics ---------- */
