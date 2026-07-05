@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sube tu Diseño — Big Bang Workshops</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js" defer></script>
+  <style>
+    .swatch{width:52px;height:52px;border-radius:9999px;cursor:pointer;border:3px solid transparent;transition:.15s}
+    .swatch.sel{border-color:#FFD400;box-shadow:0 0 18px rgba(255,212,0,.45)}
+    .card-sel{border-color:#FFD400!important;box-shadow:0 0 20px rgba(255,212,0,.25)}
+    .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,212,0,.3);border-top-color:#FFD400;border-radius:50%;animation:sp 1s linear infinite;vertical-align:middle}
+    @keyframes sp{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body class="bg-bbwblack text-white font-body">
+
+  <header class="sticky top-0 z-50 bg-bbwblack/90 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display text-2xl tracking-widest text-bbwyellow">BIG BANG <span class="text-white">WORKSHOPS</span></a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-wide">
+        <a href="tienda.html" class="hover:text-bbwyellow transition">Tienda</a>
+        <a href="herramientas.html" class="hover:text-bbwyellow transition">Herramientas</a>
+        <a href="sube-tu-diseno.html" class="text-bbwmagenta">Personaliza</a>
+      </nav>
+      <a href="carrito.html" class="relative p-2" aria-label="Carrito">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 0 0 .9 1.4H19M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
+        <span data-cart-count class="absolute -top-1 -right-1 bg-bbwyellow text-bbwblack text-xs font-bold w-5 h-5 rounded-full items-center justify-center hidden flex">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <p class="text-bbwcyan font-semibold tracking-[0.3em] uppercase text-xs">Personalizado · DTF · Panamá</p>
+    <h1 class="font-display text-5xl md:text-6xl tracking-wide mt-2">SUBE TU <span class="text-bbwyellow">DISEÑO</span></h1>
+    <p class="text-bbwgray mt-3 max-w-2xl">Tu arte, meme o referencia geek en una prenda lista para stories. Sube tu archivo, elige prenda, color y talla — y recibimos tu pedido al instante.</p>
+
+    <div id="okBanner" class="hidden mt-6 bg-[#102810] border border-green-500/40 text-green-300 rounded-xl p-4 text-sm font-semibold">✅ ¡Pedido enviado! Te contactamos en menos de 24h para confirmar tu diseño y coordinar el pago.</div>
+
+    <!-- 1. ARCHIVO -->
+    <section class="mt-10 bg-[#151515] border border-white/10 rounded-2xl p-6">
+      <h2 class="font-display text-2xl tracking-wide text-bbwyellow">1. TU DISEÑO</h2>
+      <div id="drop" class="mt-4 border-2 border-dashed border-bbwyellow/60 rounded-xl p-10 text-center cursor-pointer hover:bg-white/5 transition">
+        <p class="text-4xl">📁</p>
+        <p class="font-semibold text-bbwyellow mt-2">Haz clic o arrastra tu archivo aquí</p>
+        <p class="text-bbwgray text-xs mt-1">PNG, JPG, WEBP, PDF, AI o PSD · máx 100 MB · idealmente 300 DPI</p>
+        <input id="file" type="file" class="hidden" accept=".png,.jpg,.jpeg,.webp,.pdf,.ai,.psd">
+      </div>
+      <div id="preview" class="hidden mt-4 flex items-center gap-4 bg-[#101010] rounded-xl p-4">
+        <img id="pimg" class="w-20 h-20 object-contain rounded-lg bg-[#1a1a1a] hidden">
+        <div class="flex-1 min-w-0">
+          <p id="pname" class="text-sm font-semibold truncate"></p>
+          <p id="pstatus" class="text-xs text-bbwgray mt-1"></p>
+        </div>
+        <button id="pdel" class="text-bbwgray hover:text-bbwmagenta px-2" title="Quitar">✕</button>
+      </div>
+      <p class="text-xs text-bbwgray mt-3">💡 ¿Tu imagen tiene fondo? Usa nuestro <a href="eliminar-fondo.html" class="text-bbwcyan underline">Eliminar Fondo IA</a> gratis antes de subirla.</p>
+    </section>
+
+    <!-- 2. PRENDA -->
+    <section class="mt-6 bg-[#151515] border border-white/10 rounded-2xl p-6">
+      <h2 class="font-display text-2xl tracking-wide text-bbwyellow">2. TIPO DE PRENDA</h2>
+      <div id="garments" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+    </section>
+
+    <!-- 3. COLOR -->
+    <section class="mt-6 bg-[#151515] border border-white/10 rounded-2xl p-6">
+      <h2 class="font-display text-2xl tracking-wide text-bbwyellow">3. COLOR</h2>
+      <div id="colors" class="mt-4 flex flex-wrap gap-4"></div>
+    </section>
+
+    <!-- 4. TALLA Y CANTIDAD -->
+    <section class="mt-6 bg-[#151515] border border-white/10 rounded-2xl p-6">
+      <h2 class="font-display text-2xl tracking-wide text-bbwyellow">4. TALLA Y CANTIDAD</h2>
+      <div id="sizes" class="mt-4 flex flex-wrap gap-2"></div>
+      <div class="flex items-center gap-4 mt-5">
+        <div class="flex items-center border border-white/20 rounded-lg">
+          <button id="minus" class="px-4 py-3 text-xl">−</button>
+          <span id="qty" class="w-8 text-center font-bold">1</span>
+          <button id="plus" class="px-4 py-3 text-xl">+</button>
+        </div>
+        <p class="text-bbwgray text-sm">unidades del mismo diseño</p>
+      </div>
+    </section>
+
+    <!-- 5. DATOS -->
+    <section class="mt-6 bg-[#151515] border border-white/10 rounded-2xl p-6">
+      <h2 class="font-display text-2xl tracking-wide text-bbwyellow">5. TUS DATOS</h2>
+      <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <input id="name" placeholder="Nombre *" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
+        <input id="phone" placeholder="WhatsApp / Teléfono *" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
+        <input id="email" type="email" placeholder="Email" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow md:col-span-2">
+        <textarea id="notes" rows="3" placeholder="Notas: ubicación del estampado, tamaño, referencias…" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow md:col-span-2"></textarea>
+      </div>
+    </section>
+
+    <!-- RESUMEN -->
+    <section class="mt-6 bg-gradient-to-br from-[#1a1a1a] to-[#151515] border border-bbwyellow/30 rounded-2xl p-6">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <p id="summary" class="text-sm text-bbwgray"></p>
+          <p class="text-3xl font-bold text-bbwyellow mt-1" id="total"></p>
+          <p class="text-xs text-bbwgray mt-1" id="shipnote"></p>
+        </div>
+        <div class="flex flex-col gap-2">
+          <button id="send" class="bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest px-10 py-3 rounded-lg hover:scale-[1.02] transition shadow-[0_0_40px_rgba(255,212,0,0.3)]">ENVIAR PEDIDO 💥</button>
+          <a id="waBtn" href="#" target="_blank" class="text-center border border-white/20 rounded-lg py-2.5 text-sm font-semibold hover:border-bbwcyan hover:text-bbwcyan transition">📱 O envíalo por WhatsApp</a>
+        </div>
+      </div>
+      <p id="err" class="hidden text-red-400 text-sm font-semibold mt-3"></p>
+    </section>
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 py-12 text-sm text-bbwgray text-center">© Big Bang Workshops · Panamá</footer>
+
+  <script>
+    const GARMENTS = [
+      { id:"prime155",  n:"Prime 155g",        b:"UNICRESE · Regular",   fit:"Regular",  price:21 },
+      { id:"heavy180",  n:"Heavy Cotton 180g", b:"UNICRESE · Regular",   fit:"Regular",  price:21 },
+      { id:"soft64000", n:"Softstyle 64000",   b:"GILDAN · Regular",     fit:"Regular",  price:21 },
+      { id:"heavy5000", n:"Heavy Cotton 5000", b:"GILDAN · Regular",     fit:"Regular",  price:21 },
+      { id:"ovr",       n:"Oversize Regular",  b:"SHAKA WEAR · Oversize",fit:"Oversize", price:35 },
+      { id:"ovrcrop",   n:"Oversize Cropped",  b:"SHAKA WEAR · Oversize",fit:"Oversize", price:35 }
+    ];
+    const COLORS = [
+      { id:"black", n:"Negro",  c:"#2a2a2a" }, { id:"white", n:"Blanco", c:"#EFEFEB" },
+      { id:"blue",  n:"Azul",   c:"#4A90D9" }, { id:"navy",  n:"Marino", c:"#1E3A5F" },
+      { id:"cream", n:"Crema",  c:"#F0E0C0" }, { id:"red",   n:"Rojo",   c:"#8B1A1A" },
+      { id:"pink",  n:"Rosado", c:"#C4547A" }
+    ];
+    const SIZES = ["S","M","L","XL","XXL"];
+    let g = 0, col = 0, size = 1, qty = 1;
+    let theFile = null, fileLink = "", uploading = false;
+    const $ = id => document.getElementById(id);
+
+    function render() {
+      $("garments").innerHTML = GARMENTS.map((x,i)=>`
+        <button data-g="${i}" class="g-card text-left bg-[#101010] border-2 border-white/10 rounded-xl p-4 hover:border-bbwyellow/50 transition ${i===g?'card-sel':''}">
+          <p class="text-2xl">${x.fit==="Oversize"?"🧥":"👕"}</p>
+          <p class="font-display text-lg tracking-wide mt-1">${x.n.toUpperCase()}</p>
+          <p class="text-[11px] text-bbwcyan font-semibold">${x.b}</p>
+          <p class="text-bbwyellow font-bold mt-1">$${x.price}</p>
+        </button>`).join("");
+      $("colors").innerHTML = COLORS.map((x,i)=>`
+        <div class="text-center">
+          <div data-c="${i}" class="swatch ${i===col?'sel':''}" style="background:${x.c};${x.id==='white'||x.id==='cream'?'border-color:'+(i===col?'#FFD400':'rgba(255,255,255,.25)'):''}"></div>
+          <p class="text-[10px] font-semibold mt-1 uppercase tracking-wide ${i===col?'text-bbwyellow':'text-bbwgray'}">${x.n}</p>
+        </div>`).join("");
+      $("sizes").innerHTML = SIZES.map((s,i)=>`
+        <button data-s="${i}" class="border ${i===size?'border-bbwyellow text-bbwyellow':'border-white/20'} rounded-lg px-5 py-2.5 text-sm font-bold hover:border-bbwyellow transition">${s}</button>`).join("");
+      const G = GARMENTS[g], tot = G.price * qty;
+      $("summary").textContent = `${qty}× ${G.n} · ${COLORS[col].n} · Talla ${SIZES[size]}`;
+      $("total").textContent = "$" + tot.toFixed(2);
+      const C = window.BBW || {};
+      $("shipnote").textContent = tot >= (C.freeShippingMin||60) ? "Envío GRATIS 🎉" : `+ envío $${(C.shippingFlat||4).toFixed(2)} en Panamá · gratis desde $${(C.freeShippingMin||60).toFixed(0)}`;
+      updateWA();
+    }
+
+    function updateWA() {
+      const G = GARMENTS[g];
+      const msg = `¡Hola BBW! Quiero una prenda personalizada 💥%0A· Prenda: ${G.n} (${G.b})%0A· Color: ${COLORS[col].n}%0A· Talla: ${SIZES[size]}%0A· Cantidad: ${qty}%0A· Total aprox: $${(G.price*qty).toFixed(2)}%0A· Mi diseño: ${fileLink || "(lo adjunto aquí)"}`;
+      const C = window.BBW || { whatsapp: "50763832139" };
+      $("waBtn").href = `https://wa.me/${C.whatsapp}?text=${msg}`;
+    }
+
+    /* ---- archivo ---- */
+    function uploadToGoFile(file) {
+      return fetch("https://api.gofile.io/servers").then(r=>r.json()).then(d=>{
+        const server = d.data.servers[0].name;
+        const fd = new FormData(); fd.append("file", file);
+        return fetch(`https://${server}.gofile.io/contents/uploadfile`, { method:"POST", body:fd });
+      }).then(r=>r.json()).then(resp=>{
+        if (resp.status === "ok") return resp.data.downloadPage;
+        throw new Error("upload failed");
+      });
+    }
+    function setFile(f) {
+      if (!f) return;
+      if (f.size > 100*1024*1024) { alert("El archivo supera 100 MB"); return; }
+      theFile = f; fileLink = ""; uploading = true;
+      $("preview").classList.remove("hidden");
+      $("pname").textContent = f.name;
+      $("pstatus").innerHTML = '<span class="spin"></span> Subiendo tu diseño…';
+      if (f.type.startsWith("image/")) { $("pimg").src = URL.createObjectURL(f); $("pimg").classList.remove("hidden"); }
+      else $("pimg").classList.add("hidden");
+      uploadToGoFile(f).then(link=>{
+        fileLink = link; uploading = false;
+        $("pstatus").innerHTML = "✅ Diseño subido y listo para enviar";
+        updateWA();
+      }).catch(()=>{
+        uploading = false;
+        $("pstatus").innerHTML = "⚠️ No se pudo subir automáticamente — igual puedes enviar el pedido y te lo pedimos por WhatsApp";
+      });
+    }
+
+    /* ---- envío ---- */
+    function send() {
+      const name = $("name").value.trim(), phone = $("phone").value.trim();
+      const email = $("email").value.trim(), notes = $("notes").value.trim();
+      const err = $("err");
+      err.classList.add("hidden");
+      if (!theFile) return showErr("Sube tu diseño primero (paso 1) 📁");
+      if (uploading) return showErr("Espera un momento — tu diseño se está subiendo ⏳");
+      if (!name || !phone) return showErr("Necesitamos tu nombre y WhatsApp para contactarte");
+      const G = GARMENTS[g], tot = (G.price*qty).toFixed(2);
+      const btn = $("send"); btn.disabled = true; btn.textContent = "ENVIANDO…";
+      const form = document.createElement("form");
+      form.action = "https://formsubmit.co/impresiones246@outlook.com";
+      form.method = "POST"; form.style.display = "none";
+      const add = (n,v)=>{ const i=document.createElement("input"); i.type="hidden"; i.name=n; i.value=v; form.appendChild(i); };
+      add("_subject", `[BBW] SUBE TU DISENO: ${G.n} ${COLORS[col].n} T-${SIZES[size]} x${qty} — ${name}`);
+      add("_captcha","false"); add("_template","table");
+      add("_next", location.origin + location.pathname + "?enviado=1");
+      add("1_Cliente", name);
+      add("2_WhatsApp", phone);
+      add("3_Email", email || "no dio email");
+      add("4_Prenda", `${G.n} (${G.b})`);
+      add("5_Color", COLORS[col].n);
+      add("6_Talla", SIZES[size]);
+      add("7_Cantidad", qty + " pcs");
+      add("8_Precio_unitario", "$" + G.price.toFixed(2));
+      add("9_Total", "$" + tot);
+      add("10_Archivo_diseno", fileLink || ("NO SUBIDO — pedir por WhatsApp: " + theFile.name));
+      add("11_Notas", notes || "sin notas");
+      document.body.appendChild(form);
+      form.submit();
+    }
+    function showErr(m){ const e=$("err"); e.textContent="⚠️ "+m; e.classList.remove("hidden"); }
+
+    /* ---- eventos ---- */
+    document.addEventListener("DOMContentLoaded", ()=>{
+      render();
+      if (new URLSearchParams(location.search).get("enviado")) {
+        $("okBanner").classList.remove("hidden");
+        window.scrollTo(0,0);
+      }
+      document.addEventListener("click", e=>{
+        const gc = e.target.closest(".g-card"); if (gc) { g = +gc.dataset.g; render(); }
+        const sw = e.target.closest(".swatch"); if (sw) { col = +sw.dataset.c; render(); }
+        const sz = e.target.closest("[data-s]"); if (sz) { size = +sz.dataset.s; render(); }
+      });
+      $("minus").onclick = ()=>{ qty = Math.max(1, qty-1); $("qty").textContent = qty; render(); };
+      $("plus").onclick  = ()=>{ qty++; $("qty").textContent = qty; render(); };
+      $("drop").onclick  = ()=> $("file").click();
+      $("file").onchange = e=> setFile(e.target.files[0]);
+      $("drop").ondragover = e=>{ e.preventDefault(); $("drop").classList.add("bg-white/5"); };
+      $("drop").ondragleave= ()=> $("drop").classList.remove("bg-white/5");
+      $("drop").ondrop   = e=>{ e.preventDefault(); $("drop").classList.remove("bg-white/5"); setFile(e.dataTransfer.files[0]); };
+      $("pdel").onclick  = ()=>{ theFile=null; fileLink=""; $("preview").classList.add("hidden"); $("file").value=""; updateWA(); };
+      $("send").onclick  = send;
+    });
+  </script>
+</body>
+</html>
