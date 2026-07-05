@@ -201,6 +201,7 @@
               },
               items: bbwCart.items().map(i => ({
                 name: i.title.substring(0, 120),
+                sku: String(i.id).substring(0, 127),
                 unit_amount: { value: i.price.toFixed(2), currency_code: C.currency },
                 quantity: String(i.qty)
               }))
@@ -209,11 +210,13 @@
           onApprove: (data, actions) => actions.order.capture().then(det => {
             if (window.gtag) gtag("event", "purchase", { transaction_id: det.id, value: bbwCart.total(), currency: C.currency });
             emailOrder(det);
-            if (C.supabaseUrl && C.supabaseAnonKey) {
-              fetch(C.supabaseUrl + "/functions/v1/nueva-orden", {
+            // Entrega automática de packs digitales (verifica el pago en el servidor)
+            if (C.supabaseUrl && bbwCart.items().some(i => i.digital)) {
+              fetch(C.supabaseUrl + "/functions/v1/entregar-pack", {
                 method: "POST",
-                headers: { "Content-Type": "application/json", Authorization: "Bearer " + C.supabaseAnonKey },
-                body: JSON.stringify({ paypal_id: det.id, payer: det.payer, checkout: loadCk(), zone: bbwCart.zone(), items: bbwCart.items(), total: bbwCart.total() })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order_id: det.id }),
+                keepalive: true
               }).catch(()=>{});
             }
             const digital = bbwCart.items().some(i => i.digital);

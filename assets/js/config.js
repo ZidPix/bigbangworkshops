@@ -25,6 +25,6 @@ window.BBW = {
   clarityId: "",
 
   // Supabase (opcional)
-  supabaseUrl: "",
-  supabaseAnonKey: ""
+  supabaseUrl: "https://cglankaljvhcdyzhyooo.supabase.co",
+  supabaseAnonKey: "sb_publishable_MpjauZ8iN8pzkkZaG33M2Q_iwKnSYgV"
 };
