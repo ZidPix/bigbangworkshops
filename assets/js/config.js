@@ -4,11 +4,11 @@
 // ============================================================
 window.BBW = {
   // PayPal (crear app en https://developer.paypal.com → Live → Client ID)
-  paypalClientId: "TU_PAYPAL_CLIENT_ID",
+  paypalClientId: "BAAsSw_l-3J5PD5dJd69au82TlG9VBhP5zWLz4xbAPSxCio_zDptORzeY6T2P0VwLOshQymkQq3h0r6VNA",
   currency: "USD",
 
   // Contacto
-  whatsapp: "50700000000",            // solo dígitos, con código de país
+  whatsapp: "50763832139",            // solo dígitos, con código de país
   email: "impresiones246@outlook.com",
   instagram: "https://instagram.com/bigbangworkshops",
 
@@ -21,6 +21,4 @@ window.BBW = {
   clarityId: "",                       // ej. "abcdefghij"
 
   // Supabase (opcional — para guardar órdenes y disparar emails con Resend)
-  supabaseUrl: "",                     // ej. "https://xxxx.supabase.co"
-  supabaseAnonKey: ""
-};
+  supabaseUrl: "",                 
