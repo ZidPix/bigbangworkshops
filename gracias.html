@@ -12,24 +12,58 @@
 </head>
 <body class="bg-bbwblack text-white font-body min-h-screen flex flex-col">
   <main class="flex-1 flex items-center justify-center px-4">
-    <div class="text-center max-w-lg py-24">
+
+    <!-- PayPal confirmado -->
+    <div id="pp-view" class="hidden text-center max-w-lg py-24">
       <p class="text-7xl mb-6">💥</p>
       <h1 class="font-display text-6xl tracking-wide">¡PEDIDO <span class="text-bbwyellow">CONFIRMADO!</span></h1>
       <p class="text-bbwgray mt-4">Gracias por tu compra. Recibirás la confirmación de PayPal en tu correo.</p>
       <p id="oid" class="text-xs text-bbwgray mt-2"></p>
-      <p id="dig" class="hidden text-bbwcyan text-sm mt-4">⚡ Tu pedido incluye productos digitales: te enviaremos los archivos a tu email en las próximas horas.</p>
+      <p id="dig" class="hidden text-bbwcyan text-sm mt-4">⚡ Tus archivos digitales van en camino a tu correo (revisa spam si no llegan en unos minutos).</p>
       <div class="mt-10 flex justify-center gap-4">
         <a href="tienda.html" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-8 py-3 rounded-lg hover:scale-105 transition">SEGUIR COMPRANDO</a>
         <a id="wa" href="#" class="border border-white/20 font-display text-xl tracking-widest px-8 py-3 rounded-lg hover:border-bbwcyan hover:text-bbwcyan transition">WHATSAPP</a>
       </div>
     </div>
+
+    <!-- Yappy pendiente -->
+    <div id="yp-view" class="hidden max-w-lg py-16 w-full">
+      <p class="text-6xl text-center mb-4">💙</p>
+      <h1 class="font-display text-5xl tracking-wide text-center">¡PEDIDO <span class="text-[#009FE3]">REGISTRADO!</span></h1>
+      <p class="text-bbwgray mt-3 text-center">Completa tu pago por Yappy para que empecemos a prepararlo:</p>
+      <div class="mt-6 bg-[#151515] border border-[#009FE3]/40 rounded-2xl p-6 space-y-4">
+        <div class="flex justify-between items-center"><span class="text-bbwgray text-sm">Envía por Yappy a</span><span class="font-bold" id="yp-titular"></span></div>
+        <div class="flex justify-between items-center"><span class="text-bbwgray text-sm">Directorio / número</span><span class="font-bold text-[#009FE3]" id="yp-numero"></span></div>
+        <div class="flex justify-between items-center"><span class="text-bbwgray text-sm">Monto exacto</span><span class="font-bold text-bbwyellow text-2xl" id="yp-total"></span></div>
+        <div class="flex justify-between items-center"><span class="text-bbwgray text-sm">Referencia (ponla en la descripción)</span><span class="font-mono font-bold" id="yp-ref"></span></div>
+      </div>
+      <p id="yp-dig" class="hidden text-bbwcyan text-xs mt-4 text-center">⚡ Tus archivos digitales se envían a tu correo apenas confirmemos el pago.</p>
+      <p class="text-bbwgray text-xs mt-4 text-center">Tu pedido queda reservado. Al confirmar la transferencia te escribimos para coordinar la entrega.</p>
+      <a id="yp-wa" href="#" target="_blank" class="mt-6 block text-center bg-[#25D366] text-white font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.02] transition">✅ YA PAGUÉ — ENVIAR COMPROBANTE</a>
+      <a href="tienda.html" class="mt-3 block text-center border border-white/20 rounded-lg py-3 text-sm font-semibold hover:border-bbwyellow hover:text-bbwyellow transition">Seguir comprando</a>
+    </div>
   </main>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const p = new URLSearchParams(location.search);
-      if (p.get("id")) document.getElementById("oid").textContent = "Orden PayPal: " + p.get("id");
-      if (p.get("digital")) document.getElementById("dig").classList.remove("hidden");
-      document.getElementById("wa").href = "https://wa.me/" + window.BBW.whatsapp;
+      const C = window.BBW;
+      if (p.get("yappy")) {
+        document.getElementById("yp-view").classList.remove("hidden");
+        const ref = p.get("ref") || "", total = p.get("total") || "";
+        document.getElementById("yp-titular").textContent = (C.yappy && C.yappy.titular) || "Big Bang Workshops";
+        document.getElementById("yp-numero").textContent = (C.yappy && C.yappy.numero) || C.whatsapp;
+        document.getElementById("yp-total").textContent = "$" + total;
+        document.getElementById("yp-ref").textContent = ref;
+        if (p.get("digital")) document.getElementById("yp-dig").classList.remove("hidden");
+        const msg = encodeURIComponent(`¡Hola BBW! Ya envié mi pago por Yappy 💙\nReferencia: ${ref}\nMonto: $${total}\nAdjunto el comprobante:`);
+        document.getElementById("yp-wa").href = "https://wa.me/" + C.whatsapp + "?text=" + msg;
+      } else {
+        document.getElementById("pp-view").classList.remove("hidden");
+        if (p.get("id")) document.getElementById("oid").textContent = "Orden PayPal: " + p.get("id");
+        if (p.get("digital")) document.getElementById("dig").classList.remove("hidden");
+        document.getElementById("wa").href = "https://wa.me/" + C.whatsapp;
+      }
     });
   </script>
 </body>

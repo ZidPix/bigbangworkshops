@@ -12,6 +12,12 @@ window.BBW = {
   orderEmail: "impresiones246@outlook.com", // adonde llegan los pedidos
   instagram: "https://instagram.com/bigbangworkshops",
 
+  // Yappy (pago manual — confirmas tú al recibir la transferencia)
+  yappy: {
+    titular: "Big Bang Workshops",
+    numero: "6383-2139"   // número de Yappy (directorio)
+  },
+
   // Zonas de envío (Panamá)
   shippingZones: [
     { id: "norte",    label: "Panamá Norte · San Antonio · Villa Lucre",        price: 0.00 },
