@@ -135,7 +135,7 @@
     let h = 0; const str = String(p.id);
     for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
     const rating = p.rating || (4.3 + (h % 71) / 100);
-    const count = p.ratingCount || (7 + ((h >> 3) % 114));
+    const count = p.ratingCount || (7 + ((h >>> 3) % 114));
     const full = Math.round(rating);
     let st = "";
     for (let i = 1; i <= 5; i++) st += '<span style="color:' + (i <= full ? "#FFD400" : "#3f3f3f") + '">★</span>';
