@@ -168,5 +168,45 @@
     </a>`;
   };
 
-  document.addEventListener("DOMContentLoaded", renderBadge);
+  /* ---------- Menú móvil (hamburguesa) ---------- */
+  function initMobileMenu() {
+    const nav = document.querySelector("header nav");
+    if (!nav || !/\bhidden\b/.test(nav.className)) return;
+    const header = nav.closest("header");
+    const bar = nav.parentElement;
+    const cartLink = bar.querySelector('a[aria-label="Carrito"]');
+    if (!cartLink) return;
+    // botón hamburguesa (solo móvil)
+    const btn = document.createElement("button");
+    btn.className = "md:hidden p-2 text-white";
+    btn.setAttribute("aria-label", "Abrir menú");
+    btn.innerHTML = '<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>';
+    // agrupar hamburguesa + carrito a la derecha
+    const wrap = document.createElement("div");
+    wrap.className = "flex items-center gap-1";
+    bar.insertBefore(wrap, cartLink);
+    wrap.appendChild(btn);
+    wrap.appendChild(cartLink);
+    // panel desplegable
+    const panel = document.createElement("div");
+    panel.className = "md:hidden hidden border-t border-white/10 bg-[#0B0B0B]/95 backdrop-blur px-4 py-2";
+    nav.querySelectorAll("a").forEach(a => {
+      const l = document.createElement("a");
+      l.href = a.getAttribute("href");
+      l.textContent = a.textContent;
+      const active = a.className.includes("text-bbwyellow") && !a.className.includes("hover:") ||
+                     a.className.includes("text-bbwmagenta") && !a.className.includes("hover:");
+      l.className = "block py-3 text-sm font-semibold uppercase tracking-wide border-b border-white/5 last:border-0 " + (active ? "text-bbwyellow" : "text-white");
+      panel.appendChild(l);
+    });
+    header.appendChild(panel);
+    btn.addEventListener("click", () => {
+      const open = panel.classList.toggle("hidden");
+      btn.innerHTML = open
+        ? '<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>'
+        : '<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>';
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => { renderBadge(); initMobileMenu(); });
 })();
