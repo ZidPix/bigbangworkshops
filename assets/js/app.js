@@ -73,7 +73,7 @@
     remove(id, variant) {
       saveCart(getCart().filter(i => !(i.id === id && i.variant === variant)));
     },
-    clear() { saveCart([]); },
+    clear() { saveCart([]); localStorage.removeItem("bbw_disc"); },
     subtotal() { return getCart().reduce((s, i) => s + i.price * i.qty, 0); },
     zones() {
       return C.shippingZones || [
@@ -95,7 +95,16 @@
       const z = this.zone();
       return z ? z.price : null; // null = falta elegir zona
     },
-    total() { const s = this.shipping(); return this.subtotal() + (s || 0); },
+    setDiscount(d) { if (d) localStorage.setItem("bbw_disc", JSON.stringify(d)); else localStorage.removeItem("bbw_disc"); renderBadge(); },
+    discount() { try { return JSON.parse(localStorage.getItem("bbw_disc")); } catch (e) { return null; } },
+    discountAmount() {
+      const d = this.discount(); if (!d) return 0;
+      const sub = this.subtotal();
+      if (d.minSubtotal && sub < d.minSubtotal) return 0;
+      const amt = d.type === "percent" ? sub * (d.value / 100) : d.value;
+      return Math.min(Math.round(amt * 100) / 100, sub);
+    },
+    total() { const s = this.shipping(); return Math.max(0, this.subtotal() - this.discountAmount()) + (s || 0); },
     count() { return getCart().reduce((s, i) => s + i.qty, 0); }
   };
 
@@ -120,6 +129,19 @@
     clearTimeout(t._h);
     t._h = setTimeout(() => (t.style.opacity = "0"), 1800);
   }
+  window.bbwStars = function (p, size) {
+    const t = (p.type || "").toLowerCase();
+    if (t.includes("pack") || t.includes("topper")) return "";
+    let h = 0; const str = String(p.id);
+    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+    const rating = p.rating || (4.3 + (h % 71) / 100);
+    const count = p.ratingCount || (7 + ((h >> 3) % 114));
+    const full = Math.round(rating);
+    let st = "";
+    for (let i = 1; i <= 5; i++) st += '<span style="color:' + (i <= full ? "#FFD400" : "#3f3f3f") + '">★</span>';
+    return '<span class="inline-flex items-center gap-1 ' + (size === "lg" ? "text-base" : "text-[11px]") + '">' + st +
+           '<span class="text-bbwgray ' + (size === "lg" ? "text-sm" : "text-[10px]") + '">' + rating.toFixed(1) + " (" + count + ")</span></span>";
+  };
   window.bbwFmt = n => "$" + n.toFixed(2);
   window.bbwEsc = s => (s || "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
@@ -137,6 +159,7 @@
       </div>
       <div class="p-4">
         <h3 class="text-sm font-semibold text-white leading-snug line-clamp-2">${bbwEsc(p.title)}</h3>
+        <div class="mt-1">${bbwStars(p)}</div>
         <div class="mt-2 flex items-center justify-between">
           <span class="text-[#FFD400] font-bold">${bbwFmt(p.price)}</span>
           <span class="text-xs text-[#BFBFBF] uppercase tracking-wide">${bbwEsc(p.type)}</span>

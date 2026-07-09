@@ -47,9 +47,15 @@
         <h2 class="font-display text-2xl tracking-wide mb-4">RESUMEN</h2>
         <div class="space-y-2 text-sm">
           <div class="flex justify-between"><span class="text-bbwgray">Subtotal</span><span id="sub"></span></div>
+          <div id="disc-row" class="hidden flex justify-between"><span class="text-bbwgray">Descuento <span id="disc-label" class="text-bbwcyan font-mono"></span></span><span id="disc-amt" class="text-bbwcyan font-semibold"></span></div>
           <div class="flex justify-between"><span class="text-bbwgray">Envío</span><span id="ship"></span></div>
           <div class="border-t border-white/10 pt-3 flex justify-between font-bold text-lg"><span>Total</span><span id="total" class="text-bbwyellow"></span></div>
         </div>
+        <div class="mt-4 flex gap-2">
+          <input id="disc-code" placeholder="Código de descuento" class="flex-1 bg-[#101010] border border-white/10 rounded-lg px-3 py-2.5 text-sm uppercase focus:outline-none focus:border-bbwcyan placeholder:normal-case">
+          <button id="disc-apply" class="border border-bbwcyan/50 text-bbwcyan rounded-lg px-4 text-sm font-semibold hover:bg-bbwcyan/10 transition">Aplicar</button>
+        </div>
+        <p id="disc-msg" class="hidden text-xs mt-2"></p>
         <p id="formWarn" class="hidden text-xs text-bbwyellow mt-4 bg-bbwyellow/10 border border-bbwyellow/30 rounded-lg p-3">✍️ Completa tus datos de entrega y elige tu zona para habilitar el pago.</p>
         <div id="paypal-wrap" class="mt-5 relative">
           <div id="paypal-button-container"></div>
@@ -132,6 +138,9 @@
       renderZones();
       const sh = bbwCart.shipping();
       $id("sub").textContent = bbwFmt(bbwCart.subtotal());
+      const dAmt = bbwCart.discountAmount(), dObj = bbwCart.discount();
+      $id("disc-row").classList.toggle("hidden", !(dObj && dAmt > 0));
+      if (dObj && dAmt > 0) { $id("disc-label").textContent = dObj.code; $id("disc-amt").textContent = "−" + bbwFmt(dAmt); }
       $id("ship").textContent = sh === null ? "elige tu zona ↑" : (sh === 0 ? "GRATIS" : bbwFmt(sh));
       $id("total").textContent = bbwFmt(bbwCart.total());
       // habilitar / bloquear PayPal
@@ -142,10 +151,32 @@
       updateWA();
     }
 
+    async function applyDiscount(silent) {
+      const code = $id("disc-code").value.trim().toUpperCase();
+      const msg = $id("disc-msg");
+      const show = (t, ok) => { if (silent) return; msg.textContent = t; msg.className = "text-xs mt-2 " + (ok ? "text-green-400" : "text-red-400"); };
+      if (!code) { bbwCart.setDiscount(null); msg.className = "hidden"; renderCart(); return; }
+      let list = [];
+      try { const r = await fetch("assets/data/discounts.json?nc=" + Date.now(), { cache: "no-store" }); if (r.ok) list = await r.json(); } catch (e) {}
+      const d = list.find(x => (x.code || "").toUpperCase() === code);
+      if (!d || d.active === false) { bbwCart.setDiscount(null); show("⚠️ Código inválido o desactivado", false); }
+      else if (d.expires && new Date(d.expires + "T23:59:59") < new Date()) { bbwCart.setDiscount(null); show("⚠️ Este código ya expiró", false); }
+      else if (d.minSubtotal && bbwCart.subtotal() < d.minSubtotal) { bbwCart.setDiscount(null); show("⚠️ Requiere compra mínima de $" + d.minSubtotal.toFixed(2), false); }
+      else { bbwCart.setDiscount(d); show("✅ " + (d.type === "percent" ? d.value + "% de descuento aplicado" : "$" + d.value.toFixed(2) + " de descuento aplicado"), true); }
+      renderCart();
+    }
+
+    function discountLine() {
+      const d = bbwCart.discount(), amt = bbwCart.discountAmount();
+      return d && amt > 0 ? `${d.code} (−${bbwFmt(amt)})` : "ninguno";
+    }
+
     function updateWA() {
       const items = bbwCart.items(), c = loadCk(), z = bbwCart.zone();
       const lines = items.map(i => `• ${i.qty}x ${i.title}${i.variant!=="Default Title" ? " ("+i.variant+")" : ""} — ${bbwFmt(i.price*i.qty)}`);
-      let msg = "¡Hola Big Bang Workshops! Quiero ordenar:\n" + lines.join("\n") + "\nTotal: " + bbwFmt(bbwCart.total());
+      let msg = "¡Hola Big Bang Workshops! Quiero ordenar:\n" + lines.join("\n");
+      if (bbwCart.discountAmount() > 0) msg += "\nDescuento: " + discountLine();
+      msg += "\nTotal: " + bbwFmt(bbwCart.total());
       if (c.name)  msg += "\nNombre: " + c.name;
       if (c.phone) msg += "\nTel: " + c.phone;
       if (c.addr)  msg += "\nDirección: " + c.addr;
@@ -170,6 +201,7 @@
           "7_Items": items,
           "8_Subtotal": bbwFmt(bbwCart.subtotal()),
           "9_Envio": sh===null ? "n/a" : bbwFmt(sh||0),
+          "9b_Descuento": discountLine(),
           "10_Total": bbwFmt(bbwCart.total())
         })
       }).catch(()=>{});
@@ -201,7 +233,8 @@
                 currency_code: C.currency,
                 breakdown: {
                   item_total: { value: bbwCart.subtotal().toFixed(2), currency_code: C.currency },
-                  shipping: { value: (bbwCart.shipping()||0).toFixed(2), currency_code: C.currency }
+                  shipping: { value: (bbwCart.shipping()||0).toFixed(2), currency_code: C.currency },
+                  discount: { value: bbwCart.discountAmount().toFixed(2), currency_code: C.currency }
                 }
               },
               items: bbwCart.items().map(i => ({
@@ -260,6 +293,7 @@
           "7_Zona_envio": z ? `${z.label} — ${z.price===0?"GRATIS":"$"+z.price.toFixed(2)}` : "(solo digital)",
           "8_Items": items,
           "9_Total": "$" + total,
+          "9b_Descuento": discountLine(),
           "10_Digitales": digital ? "SÍ — enviar archivos al confirmar el pago" : "no"
         })
       }).catch(()=>{}).finally(() => {
@@ -270,6 +304,10 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       $id("yappy-btn").addEventListener("click", yappyOrder);
+      $id("disc-apply").addEventListener("click", () => applyDiscount(false));
+      $id("disc-code").addEventListener("keydown", e => { if (e.key === "Enter") applyDiscount(false); });
+      const savedD = bbwCart.discount();
+      if (savedD) { $id("disc-code").value = savedD.code; applyDiscount(true); }
       const c = loadCk();
       $id("ck-name").value = c.name || ""; $id("ck-phone").value = c.phone || "";
       $id("ck-email").value = c.email || ""; $id("ck-addr").value = c.addr || "";

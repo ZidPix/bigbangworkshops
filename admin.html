@@ -37,13 +37,39 @@
     <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
       <h1 class="font-display text-4xl tracking-wide">PRODUCTOS <span id="count" class="text-bbwyellow"></span></h1>
       <div class="flex gap-2">
-        <button onclick="nuevo()" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:scale-105 transition">+ NUEVO PRODUCTO</button>
+        <button id="tab-prod" onclick="showView('prod')" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:scale-105 transition">+ NUEVO PRODUCTO</button>
+        <button id="tab-disc" onclick="showView('disc')" class="border border-bbwcyan/50 text-bbwcyan font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwcyan/10 transition">🎟 CUPONES</button>
         <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwmagenta hover:text-bbwmagenta">Salir</button>
       </div>
     </div>
     <input id="q" placeholder="Buscar producto…" oninput="renderList()" class="w-full bg-[#151515] border border-white/10 rounded-lg px-4 py-3 text-sm mb-6 focus:outline-none focus:border-bbwyellow">
     <div id="list" class="space-y-2"></div>
     <div class="flex justify-center mt-6"><button id="more" onclick="shown+=50;renderList()" class="hidden border border-white/20 rounded-lg px-8 py-2 text-sm hover:border-bbwyellow">Cargar más</button></div>
+
+    <!-- CUPONES -->
+    <section id="discView" class="hidden">
+      <div class="bg-[#151515] border border-bbwcyan/30 rounded-2xl p-6 mb-6">
+        <h2 class="font-display text-2xl tracking-wide mb-4 text-bbwcyan">CREAR CUPÓN</h2>
+        <div class="grid md:grid-cols-5 gap-3">
+          <div class="flex gap-2 md:col-span-2">
+            <input id="d-code" placeholder="CÓDIGO" class="flex-1 bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm uppercase font-mono focus:border-bbwcyan focus:outline-none">
+            <button onclick="genCode()" title="Generar código" class="border border-white/20 rounded-lg px-3 hover:border-bbwcyan">🎲</button>
+          </div>
+          <select id="d-type" class="bg-[#101010] border border-white/10 rounded-lg px-3 py-3 text-sm focus:outline-none">
+            <option value="percent">% porcentaje</option>
+            <option value="fixed">$ monto fijo</option>
+          </select>
+          <input id="d-value" type="number" step="0.01" min="0" placeholder="Valor *" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwcyan focus:outline-none">
+          <input id="d-min" type="number" step="0.01" min="0" placeholder="Compra mín. $ (opcional)" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwcyan focus:outline-none">
+        </div>
+        <div class="flex items-center gap-3 mt-3 flex-wrap">
+          <label class="text-xs text-bbwgray">Expira (opcional): <input id="d-exp" type="date" class="bg-[#101010] border border-white/10 rounded-lg px-3 py-2 text-sm ml-1"></label>
+          <button onclick="addDisc()" class="bg-bbwcyan text-bbwblack font-display text-xl tracking-widest px-8 py-2 rounded-lg hover:scale-105 transition ml-auto">CREAR Y PUBLICAR</button>
+        </div>
+        <p id="d-err" class="hidden text-red-400 text-sm mt-2"></p>
+      </div>
+      <div id="discList" class="space-y-2"></div>
+    </section>
   </main>
 
   <!-- EDITOR -->
@@ -108,6 +134,68 @@
       renderList();
     }
     function logout(){ localStorage.removeItem("bbw_admin_token"); location.reload(); }
+
+    /* ================= CUPONES ================= */
+    let DISCOUNTS = [], DSHA = "";
+    function showView(v) {
+      document.getElementById("list").style.display = v === "prod" ? "" : "none";
+      document.getElementById("q").style.display = v === "prod" ? "" : "none";
+      document.getElementById("more").style.display = "none";
+      $("discView").classList.toggle("hidden", v !== "disc");
+      if (v === "prod") renderList();
+      if (v === "disc") loadDiscounts();
+    }
+    async function loadDiscounts() {
+      const r = await gh("assets/data/discounts.json");
+      if (r.ok) { const d = await r.json(); DSHA = d.sha; DISCOUNTS = JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,""))))); }
+      else { DISCOUNTS = []; DSHA = ""; }
+      renderDiscs();
+    }
+    function renderDiscs() {
+      $("discList").innerHTML = DISCOUNTS.length ? DISCOUNTS.map((d, i) => `
+        <div class="flex items-center gap-4 bg-[#151515] border border-white/5 rounded-xl p-4 ${d.active === false ? "opacity-50" : ""}">
+          <span class="font-mono font-bold text-lg text-bbwcyan">${d.code}</span>
+          <span class="text-bbwyellow font-bold">${d.type === "percent" ? d.value + "%" : "$" + Number(d.value).toFixed(2)}</span>
+          <span class="text-xs text-bbwgray flex-1">${d.minSubtotal ? "mín $" + d.minSubtotal : ""} ${d.expires ? "· expira " + d.expires : "· sin expiración"} ${d.active === false ? "· ⏸ DESACTIVADO" : "· ✅ activo"}</span>
+          <button onclick="toggleDisc(${i})" class="border border-white/20 rounded-lg px-3 py-1.5 text-xs hover:border-bbwyellow">${d.active === false ? "Activar" : "Pausar"}</button>
+          <button onclick="delDisc(${i})" class="border border-red-500/40 text-red-400 rounded-lg px-3 py-1.5 text-xs hover:bg-red-500/10">Eliminar</button>
+        </div>`).join("") : '<p class="text-bbwgray text-sm">No hay cupones todavía. Crea el primero arriba ⬆</p>';
+    }
+    function genCode() {
+      const words = ["GEEK","BANG","OTAKU","ANIME","POWER","NEON","PIXEL","HYPE"];
+      $("d-code").value = words[Math.floor(Math.random()*words.length)] + (10 + Math.floor(Math.random() * 90));
+    }
+    async function pushDiscounts(msg) {
+      const g = await gh("assets/data/discounts.json");
+      if (g.ok) DSHA = (await g.json()).sha;
+      const body = btoa(unescape(encodeURIComponent(JSON.stringify(DISCOUNTS))));
+      const r = await gh("assets/data/discounts.json", { method: "PUT", body: JSON.stringify({ message: msg, content: body, ...(DSHA?{sha:DSHA}:{}) }) });
+      if (!r.ok) throw new Error("No se pudo publicar (status " + r.status + ")");
+      DSHA = (await r.json()).content.sha;
+    }
+    async function addDisc() {
+      const code = $("d-code").value.trim().toUpperCase().replace(/\s+/g, "");
+      const value = parseFloat($("d-value").value);
+      const errEl = $("d-err");
+      const err = m => { errEl.textContent = "⚠️ " + m; errEl.classList.remove("hidden"); setTimeout(()=>errEl.classList.add("hidden"), 4000); };
+      if (!code) return err("Escribe un código");
+      if (!(value > 0)) return err("Valor inválido");
+      if ($("d-type").value === "percent" && value > 100) return err("El porcentaje no puede pasar de 100");
+      if (DISCOUNTS.some(d => d.code === code)) return err("Ese código ya existe");
+      DISCOUNTS.unshift({ code, type: $("d-type").value, value, active: true,
+        expires: $("d-exp").value || null, minSubtotal: parseFloat($("d-min").value) || 0 });
+      try { await pushDiscounts("admin: cupón " + code); renderDiscs();
+        $("d-code").value = ""; $("d-value").value = ""; $("d-min").value = ""; $("d-exp").value = "";
+        alert("✅ Cupón " + code + " publicado. Activo en la web en ~1-2 minutos.");
+      } catch(e) { err(e.message); DISCOUNTS.shift(); }
+    }
+    async function toggleDisc(i) { DISCOUNTS[i].active = DISCOUNTS[i].active === false; await pushDiscounts("admin: toggle cupón " + DISCOUNTS[i].code); renderDiscs(); }
+    async function delDisc(i) {
+      if (!confirm("¿Eliminar el cupón " + DISCOUNTS[i].code + "?")) return;
+      const del = DISCOUNTS.splice(i, 1);
+      try { await pushDiscounts("admin: eliminar cupón " + del[0].code); } catch(e) { alert(e.message); }
+      renderDiscs();
+    }
 
     function renderList() {
       const q = $("q").value.toLowerCase();
