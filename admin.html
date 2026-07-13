@@ -39,6 +39,7 @@
       <div class="flex gap-2">
         <button id="tab-prod" onclick="showView('prod')" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:scale-105 transition">+ NUEVO PRODUCTO</button>
         <button id="tab-disc" onclick="showView('disc')" class="border border-bbwcyan/50 text-bbwcyan font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwcyan/10 transition">🎟 CUPONES</button>
+        <button id="tab-yappy" onclick="showView('yappy')" class="border border-bbwmagenta/50 text-bbwmagenta font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwmagenta/10 transition">🟡 YAPPY</button>
         <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwmagenta hover:text-bbwmagenta">Salir</button>
       </div>
     </div>
@@ -69,6 +70,30 @@
         <p id="d-err" class="hidden text-red-400 text-sm mt-2"></p>
       </div>
       <div id="discList" class="space-y-2"></div>
+    </section>
+
+    <!-- YAPPY -->
+    <section id="yappyView" class="hidden">
+      <div class="bg-[#151515] border border-bbwmagenta/30 rounded-2xl p-6 mb-6 max-w-2xl">
+        <h2 class="font-display text-2xl tracking-wide mb-1 text-bbwmagenta">CONFIRMAR PAGO YAPPY · ENVIAR LINKS</h2>
+        <p class="text-bbwgray text-xs mb-4">Cuando confirmes un pago recibido por Yappy: escribe el correo del cliente, marca los packs digitales que compró y envía. Le llegará un email con los enlaces de descarga.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-bbwgray">Clave de entrega (se guarda solo en este navegador)</label>
+            <input id="y-key" type="password" placeholder="clave admin de Yappy" class="mt-1 w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwmagenta focus:outline-none">
+          </div>
+          <div>
+            <label class="text-xs text-bbwgray">Correo del cliente</label>
+            <input id="y-email" type="email" placeholder="cliente@correo.com" class="mt-1 w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwmagenta focus:outline-none">
+          </div>
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Packs digitales comprados</p>
+            <div id="y-packs" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+          </div>
+          <button onclick="sendYappy()" id="y-btn" class="w-full bg-bbwmagenta text-white font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.01] transition">CONFIRMAR Y ENVIAR LINKS</button>
+          <p id="y-msg" class="hidden text-sm"></p>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -142,8 +167,10 @@
       document.getElementById("q").style.display = v === "prod" ? "" : "none";
       document.getElementById("more").style.display = "none";
       $("discView").classList.toggle("hidden", v !== "disc");
+      $("yappyView").classList.toggle("hidden", v !== "yappy");
       if (v === "prod") renderList();
       if (v === "disc") loadDiscounts();
+      if (v === "yappy") loadYappy();
     }
     async function loadDiscounts() {
       const r = await gh("assets/data/discounts.json");
@@ -195,6 +222,48 @@
       const del = DISCOUNTS.splice(i, 1);
       try { await pushDiscounts("admin: eliminar cupón " + del[0].code); } catch(e) { alert(e.message); }
       renderDiscs();
+    }
+
+    /* ================= YAPPY (entrega manual de packs) ================= */
+    const SUPA_FN = "https://cglankaljvhcdyzhyooo.supabase.co/functions/v1/";
+    let Y_KEY = localStorage.getItem("bbw_yappy_key") || "";
+    function loadYappy() {
+      if (Y_KEY) $("y-key").value = Y_KEY;
+      const digitals = PRODUCTS.filter(p => p.type === "Pack Digital");
+      $("y-packs").innerHTML = digitals.length ? digitals.map(p => `
+        <label class="flex items-center gap-3 bg-[#101010] border border-white/10 rounded-lg px-3 py-2 cursor-pointer hover:border-bbwmagenta/50">
+          <input type="checkbox" value="${p.id}" class="y-pack accent-bbwmagenta w-4 h-4">
+          <img src="${p.img}" class="w-9 h-9 rounded object-cover bg-[#151515]" onerror="this.style.visibility='hidden'">
+          <span class="text-sm flex-1 min-w-0 truncate">${p.title}</span>
+          <span class="text-xs text-bbwgray font-mono">${p.id}</span>
+        </label>`).join("") : '<p class="text-bbwgray text-sm">No hay productos tipo "Pack Digital" en el catálogo.</p>';
+    }
+    async function sendYappy() {
+      const msg = $("y-msg");
+      const show = (t, ok) => { msg.textContent = t; msg.className = "text-sm mt-1 " + (ok ? "text-green-400" : "text-red-400"); msg.classList.remove("hidden"); };
+      const key = $("y-key").value.trim();
+      const email = $("y-email").value.trim();
+      const skus = Array.from(document.querySelectorAll(".y-pack:checked")).map(c => c.value);
+      if (!key) return show("⚠️ Escribe la clave de entrega", false);
+      if (!email || email.indexOf("@") < 1) return show("⚠️ Correo del cliente inválido", false);
+      if (!skus.length) return show("⚠️ Marca al menos un pack", false);
+      Y_KEY = key; localStorage.setItem("bbw_yappy_key", key);
+      const btn = $("y-btn"); btn.disabled = true; const orig = btn.textContent; btn.textContent = "ENVIANDO…";
+      try {
+        const r = await fetch(SUPA_FN + "entregar-yappy", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key, email, skus })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d.ok) {
+          show("✅ Links enviados a " + email + " (" + d.delivered + " pack" + (d.delivered === 1 ? "" : "s") + ")" + (d.missing && d.missing.length ? " · sin mapping: " + d.missing.join(", ") : ""), true);
+          $("y-email").value = "";
+          document.querySelectorAll(".y-pack:checked").forEach(c => c.checked = false);
+        } else {
+          show("⚠️ " + (d.error || ("Error " + r.status)), false);
+        }
+      } catch(e) { show("⚠️ " + e.message, false); }
+      btn.disabled = false; btn.textContent = orig;
     }
 
     function renderList() {
