@@ -36,8 +36,9 @@
   <main id="app" class="hidden max-w-6xl mx-auto px-4 py-10">
     <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
       <h1 class="font-display text-4xl tracking-wide">PRODUCTOS <span id="count" class="text-bbwyellow"></span></h1>
-      <div class="flex gap-2">
-        <button id="tab-prod" onclick="showView('prod')" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:scale-105 transition">+ NUEVO PRODUCTO</button>
+      <div class="flex gap-2 flex-wrap">
+        <button id="tab-prod" onclick="showView('prod')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-5 py-2 rounded-lg hover:bg-bbwyellow/10 transition">PRODUCTOS</button>
+        <button onclick="nuevo()" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-5 py-2 rounded-lg hover:scale-105 transition">+ NUEVO</button>
         <button id="tab-disc" onclick="showView('disc')" class="border border-bbwcyan/50 text-bbwcyan font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwcyan/10 transition">🎟 CUPONES</button>
         <button id="tab-yappy" onclick="showView('yappy')" class="border border-bbwmagenta/50 text-bbwmagenta font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwmagenta/10 transition">🟡 YAPPY</button>
         <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwmagenta hover:text-bbwmagenta">Salir</button>
@@ -126,6 +127,11 @@
             + Añadir imagen <input id="f-file" type="file" accept="image/*" multiple class="hidden">
           </label>
         </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Colores (opcional) — cada uno con su nombre, muestra y foto</p>
+          <div id="f-colors" class="space-y-2"></div>
+          <button type="button" onclick="addColor()" class="mt-2 inline-block cursor-pointer border border-dashed border-bbwmagenta/60 rounded-lg px-4 py-2 text-sm text-bbwmagenta hover:bg-white/5">+ Añadir color</button>
+        </div>
         <p id="edErr" class="hidden text-red-400 text-sm"></p>
         <div class="flex gap-3 pt-2">
           <button id="saveBtn" onclick="save()" class="flex-1 bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.01] transition">GUARDAR Y PUBLICAR</button>
@@ -140,7 +146,7 @@
     const REPO = "ZidPix/bigbangworkshops", API = "https://api.github.com/repos/" + REPO + "/contents/";
     const SIZES = ["S","M","L","XL","XXL"];
     let TOK = localStorage.getItem("bbw_admin_token") || "";
-    let PRODUCTS = [], SHA = "", cur = null, curImgs = [], newFiles = [], shown = 50;
+    let PRODUCTS = [], SHA = "", cur = null, curImgs = [], newFiles = [], curColors = [], shown = 50;
     const $ = id => document.getElementById(id);
     const gh = (path, opt={}) => fetch(API + path + (opt.method ? "" : "?ref=main&t=" + Date.now()), {
       ...opt, headers: { Authorization: "Bearer " + TOK, Accept: "application/vnd.github+json", ...(opt.headers||{}) }
@@ -289,11 +295,26 @@
           <img src="${u.preview||u}" class="w-20 h-20 rounded-lg object-cover ${i===0?'ring-2 ring-bbwyellow':''}">
           <button onclick="curImgs.splice(${i},1);renderEd()" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white w-5 h-5 rounded-full text-xs leading-none hidden group-hover:block">✕</button>
         </div>`).join("");
+      renderColors();
     }
+    function renderColors() {
+      $("f-colors").innerHTML = curColors.map((c, i) => `
+        <div class="flex items-center gap-2 bg-[#101010] border border-white/10 rounded-lg p-2">
+          <input type="color" value="${c.swatch || '#000000'}" oninput="curColors[${i}].swatch=this.value" title="Muestra de color" class="w-9 h-9 rounded cursor-pointer bg-transparent border border-white/10 p-0 shrink-0">
+          <input value="${(c.name || '').replace(/"/g,'&quot;')}" oninput="curColors[${i}].name=this.value" placeholder="Nombre (Rojo, Negro…)" class="flex-1 min-w-0 bg-[#151515] border border-white/10 rounded-lg px-3 py-2 text-sm focus:border-bbwmagenta focus:outline-none">
+          ${(c.preview || c.img) ? `<img src="${c.preview || c.img}" class="w-10 h-10 rounded object-cover shrink-0">` : `<span class="w-10 h-10 rounded bg-[#151515] border border-white/10 flex items-center justify-center text-[10px] text-bbwgray shrink-0">sin foto</span>`}
+          <label class="cursor-pointer border border-dashed border-white/30 rounded-lg px-3 py-2 text-xs text-bbwgray hover:border-bbwmagenta whitespace-nowrap shrink-0">
+            ${(c.preview || c.img) ? 'Cambiar' : 'Foto'}<input type="file" accept="image/*" class="hidden" onchange="setColorFile(${i}, this.files[0])">
+          </label>
+          <button type="button" onclick="curColors.splice(${i},1);renderColors()" class="text-red-400 px-2 hover:text-red-300 shrink-0">✕</button>
+        </div>`).join("");
+    }
+    function addColor() { curColors.push({ name: "", swatch: "#000000", img: null, file: null, preview: null }); renderColors(); }
+    function setColorFile(i, file) { if (!file) return; curColors[i].file = file; curColors[i].preview = URL.createObjectURL(file); renderColors(); }
 
     function nuevo() {
       cur = { id: "bbw" + Date.now(), handle: "", title: "", type: "T-Shirt", tags: [], desc: "", price: 20, variants: [] };
-      curImgs = []; newFiles = [];
+      curImgs = []; newFiles = []; curColors = [];
       $("edTitle").textContent = "NUEVO PRODUCTO";
       $("f-title").value = ""; $("f-type").value = "T-Shirt"; $("f-price").value = "20.00"; $("f-tags").value = ""; $("f-desc").value = "";
       $("delBtn").classList.add("hidden"); $("editor").classList.remove("hidden"); renderEd();
@@ -301,6 +322,7 @@
     function editar(id) {
       cur = PRODUCTS.find(p => String(p.id) === String(id));
       curImgs = (cur.imgs && cur.imgs.length ? [...cur.imgs] : (cur.img ? [cur.img] : [])); newFiles = [];
+      curColors = (cur.colors || []).map(c => ({ name: c.name, swatch: c.swatch || "#000000", img: c.img || null, file: null, preview: null }));
       $("edTitle").textContent = "EDITAR";
       $("f-title").value = cur.title; $("f-type").value = cur.type; $("f-price").value = cur.price.toFixed(2);
       $("f-tags").value = (cur.tags||[]).join(", "); $("f-desc").value = cur.desc || "";
@@ -349,6 +371,16 @@
           await putFile(path, b64, "admin img: " + path);
           curImgs[idx] = path;
         }
+        // 1b) subir fotos de colores
+        for (let i = 0; i < curColors.length; i++) {
+          const c = curColors[i];
+          if (c.file) {
+            const cpath = "assets/img/" + cur.id + "_c" + (i + 1) + ".webp";
+            const cb64 = await toWebp(c.file);
+            await putFile(cpath, cb64, "admin color: " + cpath);
+            c.img = cpath;
+          }
+        }
         // 2) armar producto
         cur.title = t; cur.price = pr; cur.type = $("f-type").value;
         cur.tags = $("f-tags").value.split(",").map(x=>x.trim()).filter(Boolean);
@@ -361,6 +393,8 @@
         cur.img = typeof curImgs[0] === "string" ? curImgs[0] : cur.img;
         cur.imgs = curImgs.filter(x => typeof x === "string");
         if (cur.imgs.length < 2) delete cur.imgs;
+        const colors = curColors.filter(c => (c.name || "").trim()).map(c => { const o = { name: c.name.trim(), swatch: c.swatch || "#000000" }; if (c.img) o.img = c.img; return o; });
+        if (colors.length) cur.colors = colors; else delete cur.colors;
         if (!PRODUCTS.some(p => String(p.id) === String(cur.id))) PRODUCTS.unshift(cur);
         // 3) publicar catálogo
         await pushCatalog("admin: " + t);

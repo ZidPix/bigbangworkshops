@@ -55,7 +55,7 @@
       <div class="grid md:grid-cols-2 gap-10">
         <div>
           <div class="rounded-2xl overflow-hidden bg-[#151515] border border-white/5">
-            <img id="mainImg" src="${p.img}" alt="${bbwEsc(p.title)}" class="w-full object-cover"
+            <img id="mainImg" src="${(p.colors && p.colors.length && p.colors[0].img) ? p.colors[0].img : p.img}" alt="${bbwEsc(p.title)}" class="w-full object-cover"
                  onerror="this.src='https://placehold.co/800x800/151515/FFD400?text=BBW'">
           </div>
           ${(p.imgs && p.imgs.length > 1) ? `
@@ -69,6 +69,12 @@
           <div class="mt-2">${bbwStars(p, "lg")}</div>
           <p id="price" class="text-bbwyellow text-3xl font-bold mt-4"></p>
           <p class="text-bbwgray mt-4 leading-relaxed">${bbwEsc(p.desc)}…</p>
+
+          ${(p.colors && p.colors.length) ? `
+          <p class="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide">Color: <span id="colorName" class="text-bbwgray font-normal normal-case">${bbwEsc(p.colors[0].name)}</span></p>
+          <div id="colors" class="flex flex-wrap gap-2">
+            ${p.colors.map((c, i) => `<button data-ci="${i}" data-img="${c.img || ""}" title="${bbwEsc(c.name)}" class="color-btn w-9 h-9 rounded-full border-2 ${i === 0 ? "border-bbwyellow" : "border-white/25"} hover:border-bbwyellow transition" style="background:${c.swatch || "#888888"}"></button>`).join("")}
+          </div>` : ""}
 
           ${single ? "" : `
           <p class="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide">Talla / Variante</p>
@@ -88,7 +94,7 @@
         </div>
       </div>`;
 
-      let vi = 0, qty = 1;
+      let vi = 0, qty = 1, ci = 0;
       const priceEl = document.getElementById("price");
       const upd = () => { priceEl.textContent = bbwFmt(variants[vi].p); };
       upd();
@@ -106,10 +112,21 @@
         b.classList.remove("border-white/20"); b.classList.add("border-bbwyellow", "text-bbwyellow");
         upd();
       }));
+      const colorName = document.getElementById("colorName");
+      document.querySelectorAll(".color-btn").forEach(b => b.addEventListener("click", () => {
+        ci = Number(b.dataset.ci);
+        document.querySelectorAll(".color-btn").forEach(x => { x.classList.remove("border-bbwyellow"); x.classList.add("border-white/25"); });
+        b.classList.remove("border-white/25"); b.classList.add("border-bbwyellow");
+        if (b.dataset.img) document.getElementById("mainImg").src = b.dataset.img;
+        if (colorName && p.colors && p.colors[ci]) colorName.textContent = p.colors[ci].name;
+      }));
       document.getElementById("minus").addEventListener("click", () => { qty = Math.max(1, qty - 1); document.getElementById("qty").textContent = qty; });
       document.getElementById("plus").addEventListener("click", () => { qty++; document.getElementById("qty").textContent = qty; });
       document.getElementById("add").addEventListener("click", () => {
-        bbwCart.add({ id: p.id, handle: p.handle, title: p.title, variant: variants[vi].t, price: variants[vi].p, img: p.img, digital: isDigital, qty });
+        const col = (p.colors && p.colors.length) ? p.colors[ci] : null;
+        const size = single ? null : variants[vi].t;
+        const label = [col ? col.name : null, size].filter(Boolean).join(" / ") || variants[vi].t;
+        bbwCart.add({ id: p.id, handle: p.handle, title: p.title, variant: label, price: variants[vi].p, img: (col && col.img) ? col.img : p.img, digital: isDigital, qty });
       });
 
       // Relacionados
