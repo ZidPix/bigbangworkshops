@@ -1,3 +1,7 @@
+
+
+/* Enlace legal (Terminos y Condiciones) inyectado en el footer de todas las paginas */
+(function(){function addLegal(){var f=document.querySelector('footer');if(f&&!f.querySelector('a[href="terminos.html"]')){var d=document.createElement('div');d.style.cssText='text-align:center;margin-top:14px';d.innerHTML='<a href="terminos.html" style="color:#FFD400;text-decoration:none;font-size:12px;font-weight:600">Terminos y Condiciones</a>';f.appendChild(d);}}if(document.readyState!=='loading'){addLegal();}else{document.addEventListener('DOMContentLoaded',addLegal);}})();
 /* ============================================================
    BIG BANG WORKSHOPS — app.js
    Carrito + catálogo + analytics. Sin frameworks, sin build.
