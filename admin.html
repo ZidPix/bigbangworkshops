@@ -41,6 +41,7 @@
         <button onclick="nuevo()" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-5 py-2 rounded-lg hover:scale-105 transition">+ NUEVO</button>
         <button id="tab-disc" onclick="showView('disc')" class="border border-bbwcyan/50 text-bbwcyan font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwcyan/10 transition">🎟 CUPONES</button>
         <button id="tab-yappy" onclick="showView('yappy')" class="border border-bbwmagenta/50 text-bbwmagenta font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwmagenta/10 transition">🟡 YAPPY</button>
+            <button id="tab-packs" onclick="showView('packs')" class="border border-bbwmagenta/50 text-bbwmagenta font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwmagenta/10 transition">PACKS DIGITALES</button>
         <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwmagenta hover:text-bbwmagenta">Salir</button>
       </div>
     </div>
@@ -96,6 +97,30 @@
         </div>
       </div>
     </section>
+
+        <!-- PACKS DIGITALES (mapping.json) -->
+        <section id="packsView" class="hidden">
+          <div style="max-width:680px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;">
+            <div style="background:#141414;border:1px solid #2a2a2a;border-radius:16px;padding:24px;">
+              <h2 style="color:#FF2D95;font-weight:800;letter-spacing:1px;margin:0 0 6px;font-size:18px;">PACKS DIGITALES &middot; ENLACES</h2>
+              <p style="color:#9a9a9a;font-size:13px;margin:0 0 18px;line-height:1.5;">Agrega o edita los enlaces de descarga (mapping.json). El <b>ID</b> debe coincidir con el <b>id</b> del producto en products.json.</p>
+              <label style="color:#cfcfcf;font-size:12px;">Clave admin</label>
+              <input id="mp-key" type="password" placeholder="clave admin (se guarda en este navegador)" style="width:100%;margin:6px 0 14px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div><label style="color:#cfcfcf;font-size:12px;">ID (SKU)</label><input id="mp-sku" placeholder="ej. 9503390630143" style="width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;"></div>
+                <div><label style="color:#cfcfcf;font-size:12px;">Nombre</label><input id="mp-name" placeholder="ej. Pack Digital DBZ" style="width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;"></div>
+              </div>
+              <label style="color:#cfcfcf;font-size:12px;display:block;margin-top:10px;">Enlace de descarga (Google Drive)</label>
+              <input id="mp-url" placeholder="https://drive.google.com/..." style="width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;">
+              <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+                <button id="mp-save" style="flex:1;min-width:160px;background:#FF2D95;color:#fff;font-weight:800;border:none;padding:14px;border-radius:10px;cursor:pointer;">GUARDAR PACK</button>
+                <button id="mp-load" style="background:#222;color:#fff;font-weight:700;border:1px solid #333;padding:14px 18px;border-radius:10px;cursor:pointer;">CARGAR LISTA</button>
+              </div>
+              <div id="mp-msg" style="margin-top:12px;font-size:13px;"></div>
+              <div id="mp-list" style="margin-top:16px;overflow-x:auto;"></div>
+            </div>
+          </div>
+        </section>
   </main>
 
   <!-- EDITOR -->
@@ -424,33 +449,11 @@
     if (TOK) { $("tok").value = TOK; login(); }
   </script>
 
-<!-- ===== PANEL GESTION DE PACKS (mapping.json) - agregado ===== -->
-<section id="bbw-mapping-panel" style="max-width:680px;margin:24px auto 60px;padding:0 16px;font-family:Arial,Helvetica,sans-serif;">
-  <div style="background:#141414;border:1px solid #2a2a2a;border-radius:16px;padding:24px;">
-    <h2 style="color:#FF2D95;font-weight:800;letter-spacing:1px;margin:0 0 6px;font-size:18px;">GESTIONAR PACKS DIGITALES &middot; ENLACES</h2>
-    <p style="color:#9a9a9a;font-size:13px;margin:0 0 18px;line-height:1.5;">Agrega o edita los enlaces de descarga (mapping.json). El <b>ID</b> debe coincidir con el <b>id</b> del producto en products.json.</p>
-    <label style="color:#cfcfcf;font-size:12px;">Clave admin</label>
-    <input id="mp-key" type="password" placeholder="clave admin (se guarda en este navegador)" style="width:100%;margin:6px 0 14px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div><label style="color:#cfcfcf;font-size:12px;">ID (SKU)</label><input id="mp-sku" placeholder="ej. 9503390630143" style="width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;"></div>
-      <div><label style="color:#cfcfcf;font-size:12px;">Nombre</label><input id="mp-name" placeholder="ej. Pack Digital DBZ" style="width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;"></div>
-    </div>
-    <label style="color:#cfcfcf;font-size:12px;display:block;margin-top:10px;">Enlace de descarga (Google Drive)</label>
-    <input id="mp-url" placeholder="https://drive.google.com/..." style="width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;">
-    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-      <button id="mp-save" style="flex:1;min-width:160px;background:#FF2D95;color:#fff;font-weight:800;border:none;padding:14px;border-radius:10px;cursor:pointer;">GUARDAR PACK</button>
-      <button id="mp-load" style="background:#222;color:#fff;font-weight:700;border:1px solid #333;padding:14px 18px;border-radius:10px;cursor:pointer;">CARGAR LISTA</button>
-    </div>
-    <div id="mp-msg" style="margin-top:12px;font-size:13px;"></div>
-    <div id="mp-list" style="margin-top:16px;overflow-x:auto;"></div>
-  </div>
-</section>
 <script>
 (function(){
   var FN = "https://cglankaljvhcdyzhyooo.supabase.co/functions/v1/packs-mapping";
   var LS = "bbw_yappy_key";
   var $ = function(id){ return document.getElementById(id); };
-  try { var sv = localStorage.getItem(LS); if(sv) $("mp-key").value = sv; } catch(e){}
   function msg(t, ok){ $("mp-msg").innerHTML = t; $("mp-msg").style.color = ok ? "#39d98a" : "#ff6b6b"; }
   function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;"); }
   async function call(action, extra){
@@ -462,6 +465,7 @@
     return { status: r.status, j: j };
   }
   async function load(){
+    if(!$("mp-list")) return;
     msg("Cargando...", true);
     var res = await call("list");
     if(!res.j.ok){ msg("Error: " + esc(res.j.error || res.status), false); return; }
@@ -481,18 +485,26 @@
     html += "</table>";
     $("mp-list").innerHTML = html;
     msg(items.length + " pack(s) cargados.", true);
-    document.querySelectorAll(".mp-edit").forEach(function(b){ b.onclick = function(){ var it = JSON.parse(b.getAttribute("data-e")); $("mp-sku").value = it.sku; $("mp-name").value = it.name; $("mp-url").value = it.url; window.scrollTo({ top: $("bbw-mapping-panel").offsetTop - 20, behavior:"smooth" }); }; });
+    document.querySelectorAll(".mp-edit").forEach(function(b){ b.onclick = function(){ var it = JSON.parse(b.getAttribute("data-e")); $("mp-sku").value = it.sku; $("mp-name").value = it.name; $("mp-url").value = it.url; }; });
     document.querySelectorAll(".mp-del").forEach(function(b){ b.onclick = async function(){ var sku = b.getAttribute("data-sku"); if(!confirm("Borrar el pack " + sku + "?")) return; msg("Borrando...", true); var res = await call("delete", { sku: sku }); if(res.j.ok){ msg("Borrado.", true); load(); } else { msg("Error: " + esc(res.j.error || res.status), false); } }; });
   }
-  $("mp-save").onclick = async function(){
-    var sku = $("mp-sku").value.trim(), name = $("mp-name").value.trim(), url = $("mp-url").value.trim();
-    if(!sku || !url){ msg("Falta el ID o el enlace.", false); return; }
-    msg("Guardando...", true);
-    var res = await call("upsert", { sku: sku, name: name, url: url });
-    if(res.j.ok){ msg("Guardado. Total: " + res.j.count + " packs.", true); $("mp-url").value = ""; load(); }
-    else { msg("Error: " + esc(res.j.error || res.status), false); }
-  };
-  $("mp-load").onclick = load;
+  function init(){
+    if(!$("mp-key")) return;
+    try { var sv = localStorage.getItem(LS); if(sv) $("mp-key").value = sv; } catch(e){}
+    $("mp-save").onclick = async function(){
+      var sku = $("mp-sku").value.trim(), name = $("mp-name").value.trim(), url = $("mp-url").value.trim();
+      if(!sku || !url){ msg("Falta el ID o el enlace.", false); return; }
+      msg("Guardando...", true);
+      var res = await call("upsert", { sku: sku, name: name, url: url });
+      if(res.j.ok){ msg("Guardado. Total: " + res.j.count + " packs.", true); $("mp-url").value = ""; load(); }
+      else { msg("Error: " + esc(res.j.error || res.status), false); }
+    };
+    $("mp-load").onclick = load;
+    window.__mpLoad = load;
+  }
+  if(document.readyState !== "loading") init(); else document.addEventListener("DOMContentLoaded", init);
+  var _sv = window.showView;
+  window.showView = function(n){ var p = document.getElementById("packsView"); if(p){ if(n === "packs"){ p.classList.remove("hidden"); if(window.__mpLoad){ try{ window.__mpLoad(); }catch(e){} } } else { p.classList.add("hidden"); } } if(typeof _sv === "function") return _sv.apply(this, arguments); };
 })();
 </script>
 </body>
