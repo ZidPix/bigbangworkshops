@@ -1,7 +1,7 @@
 
 
 /* Enlace legal (Terminos y Condiciones) inyectado en el footer de todas las paginas */
-(function(){function addLegal(){var f=document.querySelector('footer');if(f&&!f.querySelector('a[href="terminos.html"]')){var d=document.createElement('div');d.style.cssText='text-align:center;margin-top:14px';d.innerHTML='<a href="terminos.html" style="color:#FFD400;text-decoration:none;font-size:12px;font-weight:600">Terminos y Condiciones</a>';f.appendChild(d);}}if(document.readyState!=='loading'){addLegal();}else{document.addEventListener('DOMContentLoaded',addLegal);}})();
+(function(){function addLegal(){var f=document.querySelector('footer');if(f&&!f.querySelector('a[href="terminos.html"]')){var d=document.createElement('div');d.style.cssText='text-align:center;margin-top:14px';d.innerHTML='<a href="terminos.html" style="color:#FFC629;text-decoration:none;font-size:12px;font-weight:600">Terminos y Condiciones</a>';f.appendChild(d);}}if(document.readyState!=='loading'){addLegal();}else{document.addEventListener('DOMContentLoaded',addLegal);}})();
 /* ============================================================
    BIG BANG WORKSHOPS — app.js
    Carrito + catálogo + analytics. Sin frameworks, sin build.
@@ -65,7 +65,7 @@
       else cart.push({ ...item, qty: item.qty || 1 });
       saveCart(cart);
       if (window.gtag) gtag("event", "add_to_cart", { currency: C.currency, value: item.price, items: [{ item_id: item.id, item_name: item.title }] });
-      toast("⚡ AÑADIDO AL CARRITO");
+      toast("AÑADIDO AL CARRITO");
     },
     setQty(id, variant, qty) {
       let cart = getCart();
@@ -125,7 +125,7 @@
     if (!t) {
       t = document.createElement("div");
       t.id = "bbw-toast";
-      t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#FFD400;color:#0B0B0B;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;padding:12px 28px;border-radius:8px;z-index:9999;box-shadow:0 8px 30px rgba(255,212,0,.4);transition:opacity .3s";
+      t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#FFC629;color:#111111;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;padding:12px 28px;border-radius:8px;z-index:9999;box-shadow:0 8px 30px rgba(255,198,41,.4);transition:opacity .3s";
       document.body.appendChild(t);
     }
     t.textContent = msg;
@@ -142,7 +142,7 @@
     const count = p.ratingCount || (7 + ((h >>> 3) % 114));
     const full = Math.round(rating);
     let st = "";
-    for (let i = 1; i <= 5; i++) st += '<span style="color:' + (i <= full ? "#FFD400" : "#3f3f3f") + '">★</span>';
+    for (let i = 1; i <= 5; i++) st += '<span style="color:' + (i <= full ? "#FFC629" : "#3f3f3f") + '">★</span>';
     return '<span class="inline-flex items-center gap-1 ' + (size === "lg" ? "text-base" : "text-[11px]") + '">' + st +
            '<span class="text-bbwgray ' + (size === "lg" ? "text-sm" : "text-[10px]") + '">' + rating.toFixed(1) + " (" + count + ")</span></span>";
   };
@@ -151,22 +151,22 @@
 
   /* ---------- Tarjeta de producto ---------- */
   window.bbwCard = function (p) {
-    const badge = p.type === "Pack Digital" ? '<span class="absolute top-3 left-3 bg-[#00E5FF] text-[#0B0B0B] text-xs font-bold px-2 py-1 rounded">DIGITAL</span>'
-      : p.type === "Playera Oversize" ? '<span class="absolute top-3 left-3 bg-[#FF2D95] text-white text-xs font-bold px-2 py-1 rounded">OVERSIZE</span>' : "";
+    const badge = p.type === "Pack Digital" ? '<span class="absolute top-3 left-3 bg-[#E8E8E8] text-[#111111] text-[10px] font-semibold tracking-[0.15em] px-2 py-1">DIGITAL</span>'
+      : p.type === "Playera Oversize" ? '<span class="absolute top-3 left-3 bg-bbwyellow text-[#111111] text-[10px] font-semibold tracking-[0.15em] px-2 py-1">OVERSIZE</span>' : "";
     return `
-    <a href="producto.html?h=${encodeURIComponent(p.handle)}" class="group block bg-[#151515] rounded-xl overflow-hidden border border-white/5 hover:border-[#FFD400]/60 transition-all hover:-translate-y-1">
+    <a href="producto.html?h=${encodeURIComponent(p.handle)}" class="group block bg-[#151515] overflow-hidden border border-white/10 hover:border-[#FFC629] transition-all">
       <div class="relative aspect-square overflow-hidden bg-[#101010]">
         ${badge}
         <img src="${p.img}" alt="${bbwEsc(p.title)}" loading="lazy"
              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-             onerror="this.src='https://placehold.co/600x600/151515/FFD400?text=BBW'">
+             onerror="this.src='https://placehold.co/600x600/151515/FFC629?text=BBW'">
       </div>
       <div class="p-4">
         <h3 class="text-sm font-semibold text-white leading-snug line-clamp-2">${bbwEsc(p.title)}</h3>
         <div class="mt-1">${bbwStars(p)}</div>
         <div class="mt-2 flex items-center justify-between">
-          <span class="text-[#FFD400] font-bold">${bbwFmt(p.price)}</span>
-          <span class="text-xs text-[#BFBFBF] uppercase tracking-wide">${bbwEsc(p.type)}</span>
+          <span class="text-[#FFC629] font-bold">${bbwFmt(p.price)}</span>
+          <span class="text-xs text-[#9A9A9A] uppercase tracking-wide">${bbwEsc(p.type)}</span>
         </div>
       </div>
     </a>`;
@@ -193,7 +193,7 @@
     wrap.appendChild(cartLink);
     // panel desplegable
     const panel = document.createElement("div");
-    panel.className = "md:hidden hidden border-t border-white/10 bg-[#0B0B0B]/95 backdrop-blur px-4 py-2";
+    panel.className = "md:hidden hidden border-t border-white/10 bg-[#111111]/95 backdrop-blur px-4 py-2";
     nav.querySelectorAll("a").forEach(a => {
       const l = document.createElement("a");
       l.href = a.getAttribute("href");
