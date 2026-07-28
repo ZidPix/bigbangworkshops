@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrito — Big Bang Workshops</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#111111',bbwyellow:'#FFC629',bbwgray:'#9A9A9A',bbwcyan:'#E8E8E8',bbwmagenta:'#6D6D6D',bbwconcrete:'#E8E8E8',bbwsteel:'#6D6D6D'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif'],ui:['Inter','sans-serif']}}}}</script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/app.js" defer></script>
 </head>
@@ -14,7 +14,7 @@
 
   <header class="sticky top-0 z-50 bg-bbwblack/90 backdrop-blur border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="index.html" class="font-display text-2xl tracking-widest text-bbwyellow">BIG BANG <span class="text-white">WORKSHOPS</span></a>
+      <a href="index.html" class="font-display text-2xl tracking-[0.15em] text-white">BIG BANG <span class="text-bbwyellow">WORKSHOPS</span></a>
       <a href="tienda.html" class="text-sm font-semibold uppercase tracking-wide hover:text-bbwyellow">← Seguir comprando</a>
     </div>
   </header>
@@ -38,7 +38,7 @@
 
           <h3 class="font-display text-xl tracking-wide mt-6 mb-3">ZONA DE <span class="text-bbwyellow">ENVÍO</span></h3>
           <div id="zones" class="space-y-2"></div>
-          <p id="digitalNote" class="hidden text-xs text-bbwcyan mt-3">⚡ Tu carrito solo tiene productos digitales: no pagas envío, te llegan por correo.</p>
+          <p id="digitalNote" class="hidden text-xs text-bbwyellow mt-3">Tu carrito solo tiene productos digitales: no pagas envío, te llegan por correo.</p>
         </div>
       </div>
 
@@ -47,13 +47,13 @@
         <h2 class="font-display text-2xl tracking-wide mb-4">RESUMEN</h2>
         <div class="space-y-2 text-sm">
           <div class="flex justify-between"><span class="text-bbwgray">Subtotal</span><span id="sub"></span></div>
-          <div id="disc-row" class="hidden flex justify-between"><span class="text-bbwgray">Descuento <span id="disc-label" class="text-bbwcyan font-mono"></span></span><span id="disc-amt" class="text-bbwcyan font-semibold"></span></div>
+          <div id="disc-row" class="hidden flex justify-between"><span class="text-bbwgray">Descuento <span id="disc-label" class="text-bbwyellow font-mono"></span></span><span id="disc-amt" class="text-bbwyellow font-semibold"></span></div>
           <div class="flex justify-between"><span class="text-bbwgray">Envío</span><span id="ship"></span></div>
           <div class="border-t border-white/10 pt-3 flex justify-between font-bold text-lg"><span>Total</span><span id="total" class="text-bbwyellow"></span></div>
         </div>
         <div class="mt-4 flex gap-2">
           <input id="disc-code" placeholder="Código de descuento" class="flex-1 bg-[#101010] border border-white/10 rounded-lg px-3 py-2.5 text-sm uppercase focus:outline-none focus:border-bbwcyan placeholder:normal-case">
-          <button id="disc-apply" class="border border-bbwcyan/50 text-bbwcyan rounded-lg px-4 text-sm font-semibold hover:bg-bbwcyan/10 transition">Aplicar</button>
+          <button id="disc-apply" class="border border-bbwyellow/50 text-bbwyellow rounded-lg px-4 text-sm font-semibold hover:bg-bbwyellow/10 transition">Aplicar</button>
         </div>
         <p id="disc-msg" class="hidden text-xs mt-2"></p>
         <p id="formWarn" class="hidden text-xs text-bbwyellow mt-4 bg-bbwyellow/10 border border-bbwyellow/30 rounded-lg p-3">✍️ Completa tus datos de entrega y elige tu zona para habilitar el pago.</p>
@@ -67,7 +67,7 @@
           <img src="assets/img/yappy-logo.svg" alt="Yappy" class="h-9">
         </button>
         <p class="text-[11px] text-bbwgray mt-1 text-center">Transferencia Yappy · confirmamos tu pedido al recibir el pago</p>
-        <a id="wa-order" href="#" target="_blank" class="mt-4 block text-center border border-white/20 rounded-lg py-3 text-sm font-semibold hover:border-bbwcyan hover:text-bbwcyan transition">📱 Ordenar por WhatsApp</a>
+        <a id="wa-order" href="#" target="_blank" class="mt-4 block text-center border border-white/20 rounded-lg py-3 text-sm font-semibold hover:border-bbwyellow hover:text-bbwyellow transition">📱 Ordenar por WhatsApp</a>
       </aside>
     </div>
   </main>
@@ -98,10 +98,10 @@
       $id("zones").innerHTML = zs.map(z => `
         <label class="flex items-center justify-between gap-3 bg-[#101010] border ${sel && sel.id===z.id ? "border-bbwyellow" : "border-white/10"} rounded-lg px-4 py-3 cursor-pointer hover:border-bbwyellow/60 transition">
           <span class="flex items-center gap-3 text-sm">
-            <input type="radio" name="zone" value="${z.id}" ${sel && sel.id===z.id ? "checked" : ""} class="accent-[#FFD400]">
+            <input type="radio" name="zone" value="${z.id}" ${sel && sel.id===z.id ? "checked" : ""} class="accent-[#FFC629]">
             ${z.label}
           </span>
-          <span class="font-bold ${z.price===0 ? "text-bbwcyan" : "text-bbwyellow"}">${z.price===0 ? "GRATIS" : "$"+z.price.toFixed(2)}</span>
+          <span class="font-bold ${z.price===0 ? "text-bbwyellow" : "text-bbwyellow"}">${z.price===0 ? "GRATIS" : "$"+z.price.toFixed(2)}</span>
         </label>`).join("");
       document.querySelectorAll('input[name="zone"]').forEach(r =>
         r.addEventListener("change", e => { bbwCart.setZone(e.target.value); renderCart(); })
@@ -115,13 +115,13 @@
       const items = bbwCart.items();
       const box = $id("items");
       if (!items.length) {
-        box.innerHTML = '<p class="text-bbwgray">Tu carrito está vacío. <a class="text-bbwyellow underline" href="tienda.html">Explora la tienda</a> ⚡</p>';
+        box.innerHTML = '<p class="text-bbwgray">Tu carrito está vacío. <a class="text-bbwyellow underline" href="tienda.html">Explora la tienda</a></p>';
         $id("checkoutForm").style.display = "none";
       } else {
         $id("checkoutForm").style.display = "";
         box.innerHTML = items.map(i => `
           <div class="flex gap-4 bg-[#151515] border border-white/5 rounded-xl p-4 items-center">
-            <img src="${i.img}" class="w-20 h-20 rounded-lg object-cover bg-[#101010]" onerror="this.src='https://placehold.co/160x160/151515/FFD400?text=BBW'">
+            <img src="${i.img}" class="w-20 h-20 rounded-lg object-cover bg-[#101010]" onerror="this.src='https://placehold.co/160x160/151515/FFC629?text=BBW'">
             <div class="flex-1 min-w-0">
               <p class="font-semibold text-sm truncate">${bbwEsc(i.title)}</p>
               <p class="text-xs text-bbwgray">${i.variant !== "Default Title" ? bbwEsc(i.variant) : (i.digital ? "Digital" : "")}</p>
@@ -132,7 +132,7 @@
               <span class="w-6 text-center text-sm">${i.qty}</span>
               <button class="px-3 py-1.5" onclick="bbwCart.setQty('${i.id}','${i.variant.replace(/'/g,"\\'")}',${i.qty+1});renderCart()">+</button>
             </div>
-            <button class="text-bbwgray hover:text-bbwmagenta px-2" title="Quitar" onclick="bbwCart.remove('${i.id}','${i.variant.replace(/'/g,"\\'")}');renderCart()">✕</button>
+            <button class="text-bbwgray hover:text-bbwyellow px-2" title="Quitar" onclick="bbwCart.remove('${i.id}','${i.variant.replace(/'/g,"\\'")}');renderCart()">✕</button>
           </div>`).join("");
       }
       renderZones();

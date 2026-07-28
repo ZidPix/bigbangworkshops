@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
   <title>Admin — Big Bang Workshops</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#0B0B0B',bbwyellow:'#FFD400',bbwgray:'#BFBFBF',bbwcyan:'#00E5FF',bbwmagenta:'#FF2D95'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif']}}}}</script>
+  <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#111111',bbwyellow:'#FFC629',bbwgray:'#9A9A9A',bbwcyan:'#E8E8E8',bbwmagenta:'#6D6D6D',bbwconcrete:'#E8E8E8',bbwsteel:'#6D6D6D'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif'],ui:['Inter','sans-serif']}}}}</script>
 </head>
 <body class="bg-bbwblack text-white font-body">
 
@@ -39,10 +39,10 @@
       <div class="flex gap-2 flex-wrap">
         <button id="tab-prod" onclick="showView('prod')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-5 py-2 rounded-lg hover:bg-bbwyellow/10 transition">PRODUCTOS</button>
         <button onclick="nuevo()" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-5 py-2 rounded-lg hover:scale-105 transition">+ NUEVO</button>
-        <button id="tab-disc" onclick="showView('disc')" class="border border-bbwcyan/50 text-bbwcyan font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwcyan/10 transition">🎟 CUPONES</button>
-        <button id="tab-yappy" onclick="showView('yappy')" class="border border-bbwmagenta/50 text-bbwmagenta font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwmagenta/10 transition">🟡 YAPPY</button>
-            <button id="tab-packs" onclick="showView('packs')" class="border border-bbwmagenta/50 text-bbwmagenta font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwmagenta/10 transition">PACKS DIGITALES</button>
-        <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwmagenta hover:text-bbwmagenta">Salir</button>
+        <button id="tab-disc" onclick="showView('disc')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwyellow/10 transition">🎟 CUPONES</button>
+        <button id="tab-yappy" onclick="showView('yappy')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwyellow/10 transition">🟡 YAPPY</button>
+            <button id="tab-packs" onclick="showView('packs')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwyellow/10 transition">PACKS DIGITALES</button>
+        <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwyellow hover:text-bbwyellow">Salir</button>
       </div>
     </div>
     <input id="q" placeholder="Buscar producto…" oninput="renderList()" class="w-full bg-[#151515] border border-white/10 rounded-lg px-4 py-3 text-sm mb-6 focus:outline-none focus:border-bbwyellow">
@@ -52,11 +52,11 @@
     <!-- CUPONES -->
     <section id="discView" class="hidden">
       <div class="bg-[#151515] border border-bbwcyan/30 rounded-2xl p-6 mb-6">
-        <h2 class="font-display text-2xl tracking-wide mb-4 text-bbwcyan">CREAR CUPÓN</h2>
+        <h2 class="font-display text-2xl tracking-wide mb-4 text-bbwyellow">CREAR CUPÓN</h2>
         <div class="grid md:grid-cols-5 gap-3">
           <div class="flex gap-2 md:col-span-2">
             <input id="d-code" placeholder="CÓDIGO" class="flex-1 bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm uppercase font-mono focus:border-bbwcyan focus:outline-none">
-            <button onclick="genCode()" title="Generar código" class="border border-white/20 rounded-lg px-3 hover:border-bbwcyan">🎲</button>
+            <button onclick="genCode()" title="Generar código" class="border border-white/20 rounded-lg px-3 hover:border-bbwyellow">🎲</button>
           </div>
           <select id="d-type" class="bg-[#101010] border border-white/10 rounded-lg px-3 py-3 text-sm focus:outline-none">
             <option value="percent">% porcentaje</option>
@@ -67,7 +67,7 @@
         </div>
         <div class="flex items-center gap-3 mt-3 flex-wrap">
           <label class="text-xs text-bbwgray">Expira (opcional): <input id="d-exp" type="date" class="bg-[#101010] border border-white/10 rounded-lg px-3 py-2 text-sm ml-1"></label>
-          <button onclick="addDisc()" class="bg-bbwcyan text-bbwblack font-display text-xl tracking-widest px-8 py-2 rounded-lg hover:scale-105 transition ml-auto">CREAR Y PUBLICAR</button>
+          <button onclick="addDisc()" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-8 py-2 rounded-lg hover:scale-105 transition ml-auto">CREAR Y PUBLICAR</button>
         </div>
         <p id="d-err" class="hidden text-red-400 text-sm mt-2"></p>
       </div>
@@ -76,23 +76,23 @@
 
     <!-- YAPPY -->
     <section id="yappyView" class="hidden">
-      <div class="bg-[#151515] border border-bbwmagenta/30 rounded-2xl p-6 mb-6 max-w-2xl">
-        <h2 class="font-display text-2xl tracking-wide mb-1 text-bbwmagenta">CONFIRMAR PAGO YAPPY · ENVIAR LINKS</h2>
+      <div class="bg-[#151515] border border-bbwyellow/30 rounded-2xl p-6 mb-6 max-w-2xl">
+        <h2 class="font-display text-2xl tracking-wide mb-1 text-bbwyellow">CONFIRMAR PAGO YAPPY · ENVIAR LINKS</h2>
         <p class="text-bbwgray text-xs mb-4">Cuando confirmes un pago recibido por Yappy: escribe el correo del cliente, marca los packs digitales que compró y envía. Le llegará un email con los enlaces de descarga.</p>
         <div class="space-y-3">
           <div>
             <label class="text-xs text-bbwgray">Clave de entrega (se guarda solo en este navegador)</label>
-            <input id="y-key" type="password" placeholder="clave admin de Yappy" class="mt-1 w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwmagenta focus:outline-none">
+            <input id="y-key" type="password" placeholder="clave admin de Yappy" class="mt-1 w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
           </div>
           <div>
             <label class="text-xs text-bbwgray">Correo del cliente</label>
-            <input id="y-email" type="email" placeholder="cliente@correo.com" class="mt-1 w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwmagenta focus:outline-none">
+            <input id="y-email" type="email" placeholder="cliente@correo.com" class="mt-1 w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
           </div>
           <div>
             <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Packs digitales comprados</p>
             <div id="y-packs" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
           </div>
-          <button onclick="sendYappy()" id="y-btn" class="w-full bg-bbwmagenta text-white font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.01] transition">CONFIRMAR Y ENVIAR LINKS</button>
+          <button onclick="sendYappy()" id="y-btn" class="w-full bg-bbwyellow text-bbwblack font-display text-2xl tracking-widest py-3 rounded-lg hover:scale-[1.01] transition">CONFIRMAR Y ENVIAR LINKS</button>
           <p id="y-msg" class="hidden text-sm"></p>
         </div>
       </div>
@@ -102,7 +102,7 @@
         <section id="packsView" class="hidden">
           <div style="max-width:680px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;">
             <div style="background:#141414;border:1px solid #2a2a2a;border-radius:16px;padding:24px;">
-              <h2 style="color:#FF2D95;font-weight:800;letter-spacing:1px;margin:0 0 6px;font-size:18px;">PACKS DIGITALES &middot; ENLACES</h2>
+              <h2 style="color:#6D6D6D;font-weight:800;letter-spacing:1px;margin:0 0 6px;font-size:18px;">PACKS DIGITALES &middot; ENLACES</h2>
               <p style="color:#9a9a9a;font-size:13px;margin:0 0 18px;line-height:1.5;">Agrega o edita los enlaces de descarga (mapping.json). El <b>ID</b> debe coincidir con el <b>id</b> del producto en products.json.</p>
               <label style="color:#cfcfcf;font-size:12px;">Clave admin</label>
               <input id="mp-key" type="password" placeholder="clave admin (se guarda en este navegador)" style="width:100%;margin:6px 0 14px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;">
@@ -113,7 +113,7 @@
               <label style="color:#cfcfcf;font-size:12px;display:block;margin-top:10px;">Enlace de descarga (Google Drive)</label>
               <input id="mp-url" placeholder="https://drive.google.com/..." style="width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#0e0e0e;color:#fff;box-sizing:border-box;">
               <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-                <button id="mp-save" style="flex:1;min-width:160px;background:#FF2D95;color:#fff;font-weight:800;border:none;padding:14px;border-radius:10px;cursor:pointer;">GUARDAR PACK</button>
+                <button id="mp-save" style="flex:1;min-width:160px;background:#6D6D6D;color:#fff;font-weight:800;border:none;padding:14px;border-radius:10px;cursor:pointer;">GUARDAR PACK</button>
                 <button id="mp-load" style="background:#222;color:#fff;font-weight:700;border:1px solid #333;padding:14px 18px;border-radius:10px;cursor:pointer;">CARGAR LISTA</button>
               </div>
               <div id="mp-msg" style="margin-top:12px;font-size:13px;"></div>
@@ -139,7 +139,7 @@
           </select>
           <input id="f-price" type="number" step="0.01" placeholder="Precio USD *" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
         </div>
-        <input id="f-tags" placeholder="Etiquetas separadas por coma (JJK, anime, oversize…)" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
+        <input id="f-tags" placeholder="Etiquetas separadas por coma (colección, oversize, edición…)" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
         <textarea id="f-desc" rows="3" placeholder="Descripción" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none"></textarea>
         <div>
           <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Tallas (mismo precio)</p>
@@ -155,7 +155,7 @@
         <div>
           <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Colores (opcional) — cada uno con su nombre, muestra y foto</p>
           <div id="f-colors" class="space-y-2"></div>
-          <button type="button" onclick="addColor()" class="mt-2 inline-block cursor-pointer border border-dashed border-bbwmagenta/60 rounded-lg px-4 py-2 text-sm text-bbwmagenta hover:bg-white/5">+ Añadir color</button>
+          <button type="button" onclick="addColor()" class="mt-2 inline-block cursor-pointer border border-dashed border-bbwyellow/40 rounded-lg px-4 py-2 text-sm text-bbwyellow hover:bg-white/5">+ Añadir color</button>
         </div>
         <p id="edErr" class="hidden text-red-400 text-sm"></p>
         <div class="flex gap-3 pt-2">
@@ -212,7 +212,7 @@
     function renderDiscs() {
       $("discList").innerHTML = DISCOUNTS.length ? DISCOUNTS.map((d, i) => `
         <div class="flex items-center gap-4 bg-[#151515] border border-white/5 rounded-xl p-4 ${d.active === false ? "opacity-50" : ""}">
-          <span class="font-mono font-bold text-lg text-bbwcyan">${d.code}</span>
+          <span class="font-mono font-bold text-lg text-bbwyellow">${d.code}</span>
           <span class="text-bbwyellow font-bold">${d.type === "percent" ? d.value + "%" : "$" + Number(d.value).toFixed(2)}</span>
           <span class="text-xs text-bbwgray flex-1">${d.minSubtotal ? "mín $" + d.minSubtotal : ""} ${d.expires ? "· expira " + d.expires : "· sin expiración"} ${d.active === false ? "· ⏸ DESACTIVADO" : "· ✅ activo"}</span>
           <button onclick="toggleDisc(${i})" class="border border-white/20 rounded-lg px-3 py-1.5 text-xs hover:border-bbwyellow">${d.active === false ? "Activar" : "Pausar"}</button>
@@ -220,7 +220,7 @@
         </div>`).join("") : '<p class="text-bbwgray text-sm">No hay cupones todavía. Crea el primero arriba ⬆</p>';
     }
     function genCode() {
-      const words = ["GEEK","BANG","OTAKU","ANIME","POWER","NEON","PIXEL","HYPE"];
+      const words = ["STUDIO","WORKSHOP","DESIGN","CREATE","PRODUCE","CRAFT","PREMIUM","BUILD"];
       $("d-code").value = words[Math.floor(Math.random()*words.length)] + (10 + Math.floor(Math.random() * 90));
     }
     async function pushDiscounts(msg) {
@@ -262,8 +262,8 @@
       if (Y_KEY) $("y-key").value = Y_KEY;
       const digitals = PRODUCTS.filter(p => p.type === "Pack Digital");
       $("y-packs").innerHTML = digitals.length ? digitals.map(p => `
-        <label class="flex items-center gap-3 bg-[#101010] border border-white/10 rounded-lg px-3 py-2 cursor-pointer hover:border-bbwmagenta/50">
-          <input type="checkbox" value="${p.id}" class="y-pack accent-bbwmagenta w-4 h-4">
+        <label class="flex items-center gap-3 bg-[#101010] border border-white/10 rounded-lg px-3 py-2 cursor-pointer hover:border-bbwyellow/50">
+          <input type="checkbox" value="${p.id}" class="y-pack accent-bbwyellow w-4 h-4">
           <img src="${p.img}" class="w-9 h-9 rounded object-cover bg-[#151515]" onerror="this.style.visibility='hidden'">
           <span class="text-sm flex-1 min-w-0 truncate">${p.title}</span>
           <span class="text-xs text-bbwgray font-mono">${p.id}</span>
@@ -303,7 +303,7 @@
       $("count").textContent = "(" + f.length + ")";
       $("list").innerHTML = f.slice(0, shown).map(p => `
         <div class="flex items-center gap-4 bg-[#151515] border border-white/5 rounded-xl p-3 hover:border-bbwyellow/40 cursor-pointer" onclick="editar('${p.id}')">
-          <img src="${p.img}" class="w-14 h-14 rounded-lg object-cover bg-[#101010]" onerror="this.src='https://placehold.co/100/151515/FFD400?text=BBW'">
+          <img src="${p.img}" class="w-14 h-14 rounded-lg object-cover bg-[#101010]" onerror="this.src='https://placehold.co/100/151515/FFC629?text=BBW'">
           <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">${p.title}</p><p class="text-xs text-bbwgray">${p.type} · ${(p.variants||[]).length} variantes</p></div>
           <p class="text-bbwyellow font-bold">$${p.price.toFixed(2)}</p>
         </div>`).join("");
@@ -326,9 +326,9 @@
       $("f-colors").innerHTML = curColors.map((c, i) => `
         <div class="flex items-center gap-2 bg-[#101010] border border-white/10 rounded-lg p-2">
           <input type="color" value="${c.swatch || '#000000'}" oninput="curColors[${i}].swatch=this.value" title="Muestra de color" class="w-9 h-9 rounded cursor-pointer bg-transparent border border-white/10 p-0 shrink-0">
-          <input value="${(c.name || '').replace(/"/g,'&quot;')}" oninput="curColors[${i}].name=this.value" placeholder="Nombre (Rojo, Negro…)" class="flex-1 min-w-0 bg-[#151515] border border-white/10 rounded-lg px-3 py-2 text-sm focus:border-bbwmagenta focus:outline-none">
+          <input value="${(c.name || '').replace(/"/g,'&quot;')}" oninput="curColors[${i}].name=this.value" placeholder="Nombre (Rojo, Negro…)" class="flex-1 min-w-0 bg-[#151515] border border-white/10 rounded-lg px-3 py-2 text-sm focus:border-bbwyellow focus:outline-none">
           ${(c.preview || c.img) ? `<img src="${c.preview || c.img}" class="w-10 h-10 rounded object-cover shrink-0">` : `<span class="w-10 h-10 rounded bg-[#151515] border border-white/10 flex items-center justify-center text-[10px] text-bbwgray shrink-0">sin foto</span>`}
-          <label class="cursor-pointer border border-dashed border-white/30 rounded-lg px-3 py-2 text-xs text-bbwgray hover:border-bbwmagenta whitespace-nowrap shrink-0">
+          <label class="cursor-pointer border border-dashed border-white/30 rounded-lg px-3 py-2 text-xs text-bbwgray hover:border-bbwyellow whitespace-nowrap shrink-0">
             ${(c.preview || c.img) ? 'Cambiar' : 'Foto'}<input type="file" accept="image/*" class="hidden" onchange="setColorFile(${i}, this.files[0])">
           </label>
           <button type="button" onclick="curColors.splice(${i},1);renderColors()" class="text-red-400 px-2 hover:text-red-300 shrink-0">✕</button>

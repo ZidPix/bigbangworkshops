@@ -8,13 +8,13 @@
   <script src="assets/js/config.js"></script>
   <script src="assets/js/app.js" defer></script>
   <style>
-    body { margin:0; background:#0B0B0B; color:#fff; font-family:Montserrat,sans-serif; }
-    .bbw-nav { position:sticky; top:0; z-index:50; background:rgba(11,11,11,.92); backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.1); }
+    body { margin:0; background:#111111; color:#fff; font-family:Montserrat,sans-serif; }
+    .bbw-nav { position:sticky; top:0; z-index:50; background:rgba(17,17,17,.92); backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.1); }
     .bbw-nav-inner { max-width:80rem; margin:0 auto; padding:0 16px; height:64px; display:flex; align-items:center; justify-content:space-between; }
-    .bbw-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:3px; color:#FFD400; text-decoration:none; }
+    .bbw-logo { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:3px; color:#FFC629; text-decoration:none; }
     .bbw-logo span { color:#fff; }
     .bbw-links a { color:#fff; text-decoration:none; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-left:24px; }
-    .bbw-links a:hover { color:#FFD400; }
+    .bbw-links a:hover { color:#FFC629; }
   </style>
 </head>
 <body>
@@ -22,7 +22,7 @@
     <a href="index.html" class="bbw-logo">BIG BANG <span>WORKSHOPS</span></a>
     <nav class="bbw-links">
       <a href="tienda.html">Tienda</a>
-      <a href="herramientas.html" style="color:#FFD400">Herramientas</a>
+      <a href="herramientas.html" style="color:#FFC629">Herramientas</a>
       <a href="carrito.html">Carrito</a>
     </nav>
   </div></header>
@@ -33,13 +33,13 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --black: #0B0B0B; --yellow: #FFD400; --white: #FFFFFF; --gray: #BFBFBF;
-  --neon: #00E5FF; --mag: #FF2D95; --surface: #161616; --surface2: #1E1E1E;
+  --black: #111111; --yellow: #FFC629; --white: #FFFFFF; --gray: #9A9A9A;
+  --neon: #E8E8E8; --mag: #6D6D6D; --surface: #161616; --surface2: #1E1E1E;
   --border: #2C2C2C; --r: 12px;
 }
 body { background: var(--black); color: var(--white); font-family: 'Montserrat', sans-serif; min-height: 100vh; padding: 20px; }
 .header { text-align: center; padding: 40px 20px 28px; }
-.brand { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,9vw,76px); letter-spacing: 5px; color: var(--yellow); line-height: 1; text-shadow: 0 0 40px rgba(255,212,0,.25); }
+.brand { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,9vw,76px); letter-spacing: 5px; color: var(--yellow); line-height: 1; text-shadow: 0 0 40px rgba(255,198,41,.25); }
 .brand span { color: var(--white); }
 .divider { width: 60px; height: 3px; background: var(--yellow); margin: 14px auto; border-radius: 2px; }
 .subtitle { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--gray); text-transform: uppercase; }
@@ -50,7 +50,7 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .colors { display: flex; flex-wrap: wrap; gap: 20px; padding-bottom: 22px; }
 .cbtn { position: relative; width: 52px; height: 52px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; background: none; padding: 0; transition: all .2s; }
 .cbtn::after { content: attr(data-label); position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--gray); white-space: nowrap; }
-.cbtn.active { border-color: var(--yellow); box-shadow: 0 0 14px rgba(255,212,0,.5); transform: scale(1.1); }
+.cbtn.active { border-color: var(--yellow); box-shadow: 0 0 14px rgba(255,198,41,.5); transform: scale(1.1); }
 .cbtn.active::after { color: var(--yellow); }
 .swatch { width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(255,255,255,.1); }
 .sw-blk{background:#444444!important}.sw-wht{background:#F5F5F0!important;border:2px solid #aaa!important}
@@ -60,29 +60,29 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .stype-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
 .stype-btn { background: var(--surface2); border: 2px solid var(--border); border-radius: var(--r); padding: 20px 16px; cursor: pointer; transition: all .2s; text-align: center; color: var(--white); }
 .stype-btn:hover { border-color: #555; }
-.stype-btn.active { border-color: var(--yellow); background: rgba(255,212,0,.06); }
+.stype-btn.active { border-color: var(--yellow); background: rgba(255,198,41,.06); }
 .stype-icon { font-size: 36px; margin-bottom: 10px; display: block; }
 .stype-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; }
 .stype-btn.active .stype-name { color: var(--yellow); }
 .stype-price { font-size: 11px; color: var(--gray); margin-top: 5px; font-weight: 700; letter-spacing: 1px; }
 .stype-btn.active .stype-price { color: var(--neon); }
-.stype-tag { display: inline-block; background: rgba(0,229,255,.1); border: 1px solid rgba(0,229,255,.3); border-radius: 20px; padding: 3px 10px; font-size: 9px; font-weight: 700; color: var(--neon); letter-spacing: 1px; margin-top: 8px; }
+.stype-tag { display: inline-block; background: rgba(232,232,232,.1); border: 1px solid rgba(232,232,232,.3); border-radius: 20px; padding: 3px 10px; font-size: 9px; font-weight: 700; color: var(--neon); letter-spacing: 1px; margin-top: 8px; }
 .prints { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 12px; margin-bottom: 24px; }
 .pbtn { background: var(--surface2); border: 2px solid var(--border); border-radius: var(--r); padding: 14px 10px; cursor: pointer; transition: all .2s; text-align: center; color: var(--white); }
 .pbtn:hover { border-color: #555; }
-.pbtn.active { border-color: var(--yellow); background: rgba(255,212,0,.06); }
+.pbtn.active { border-color: var(--yellow); background: rgba(255,198,41,.06); }
 .pbtn.active .pname { color: var(--yellow); }
-.pbtn.fullback-btn.active { border-color: var(--mag); background: rgba(255,45,149,.06); }
+.pbtn.fullback-btn.active { border-color: var(--mag); background: rgba(109,109,109,.06); }
 .pbtn.fullback-btn.active .pname { color: var(--mag); }
 .picon { font-size: 26px; margin-bottom: 6px; display: block; }
 .pname { font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1.5px; }
 .pdesc { font-size: 10px; color: var(--gray); margin-top: 4px; font-weight: 500; }
-.pbtn .ptag { display:inline-block; background:rgba(255,45,149,.15); border:1px solid rgba(255,45,149,.4); border-radius:20px; padding:2px 8px; font-size:9px; font-weight:700; color:var(--mag); letter-spacing:1px; margin-top:6px; }
+.pbtn .ptag { display:inline-block; background:rgba(109,109,109,.15); border:1px solid rgba(109,109,109,.4); border-radius:20px; padding:2px 8px; font-size:9px; font-weight:700; color:var(--mag); letter-spacing:1px; margin-top:6px; }
 .mockup-row { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; padding: 8px 0 4px; }
 .mockup-side { text-align: center; }
 .mockup-label { font-size: 9px; letter-spacing: 2px; color: var(--gray); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
 .mockup-side svg { width: 120px; height: 144px; filter: drop-shadow(0 6px 18px rgba(0,0,0,.6)); transition: filter .3s; }
-.mockup-side svg:hover { filter: drop-shadow(0 8px 24px rgba(255,212,0,.2)); }
+.mockup-side svg:hover { filter: drop-shadow(0 8px 24px rgba(255,198,41,.2)); }
 .qty-wrap { display: flex; align-items: center; border: 2px solid var(--border); border-radius: var(--r); overflow: hidden; max-width: 210px; }
 .qbtn { background: var(--surface2); border: none; color: var(--white); font-size: 22px; font-weight: 700; width: 52px; height: 52px; cursor: pointer; transition: background .15s; display: flex; align-items: center; justify-content: center; }
 .qbtn:hover { background: var(--yellow); color: var(--black); }
@@ -98,12 +98,12 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .size-btns { display: flex; justify-content: center; gap: 6px; margin-top: 6px; }
 .s-pm { background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 22px; height: 22px; color: var(--white); cursor: pointer; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all .15s; }
 .s-pm:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
-.size-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 10px 14px; background: rgba(255,212,0,.05); border-radius: 8px; border: 1px solid rgba(255,212,0,.2); }
+.size-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 10px 14px; background: rgba(255,198,41,.05); border-radius: 8px; border: 1px solid rgba(255,198,41,.2); }
 .size-bar-lbl { font-size: 11px; color: var(--gray); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 .size-bar-val { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); }
 .size-hint { font-size: 10px; font-weight: 700; margin-left: 8px; }
 .results { background: linear-gradient(135deg,#1a1400 0%,#0d0d0d 100%); border: 2px solid var(--yellow); border-radius: var(--r); padding: 28px; margin-bottom: 18px; position: relative; overflow: hidden; }
-.results::before { content: ''; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle,rgba(255,212,0,.07) 0%,transparent 70%); pointer-events: none; }
+.results::before { content: ''; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle,rgba(255,198,41,.07) 0%,transparent 70%); pointer-events: none; }
 .rhead { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--yellow); margin-bottom: 22px; }
 .price-hero { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding: 16px; background: rgba(255,255,255,.03); border-radius: 10px; }
 .pblk { text-align: center; }
@@ -120,9 +120,9 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .brow.ship-row .lbl { color: var(--neon); font-size: 12px; } .brow.ship-row .val { color: var(--neon); }
 .brow.ttl { border-top: 2px solid var(--border); margin-top: 6px; padding-top: 10px; font-size: 15px; font-weight: 800; }
 .brow.ttl .val { color: var(--yellow); font-size: 17px; }
-.eff-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,229,255,.08); border: 1px solid rgba(0,229,255,.25); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 700; color: var(--neon); margin-top: 14px; }
+.eff-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(232,232,232,.08); border: 1px solid rgba(232,232,232,.25); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 700; color: var(--neon); margin-top: 14px; }
 .upload-zone { border: 2px dashed var(--border); border-radius: var(--r); padding: 32px 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--surface2); position: relative; }
-.upload-zone:hover, .upload-zone.drag-over { border-color: var(--yellow); background: rgba(255,212,0,.04); }
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--yellow); background: rgba(255,198,41,.04); }
 .u-icon { font-size: 38px; margin-bottom: 10px; }
 .u-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; margin-bottom: 5px; }
 .u-sub { font-size: 11px; color: var(--gray); font-weight: 500; } .u-sub strong { color: var(--yellow); }
@@ -132,25 +132,25 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .ftag { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 600; color: var(--white); display: flex; align-items: center; gap: 6px; }
 .ftag .rm { cursor: pointer; color: var(--gray); } .ftag .rm:hover { color: var(--mag); }
 .upload-status-bar { display:none; margin-top:12px; padding:10px 14px; border-radius:8px; font-size:12px; font-weight:700; }
-.upload-status-bar.uploading { display:flex; align-items:center; gap:8px; background:rgba(0,229,255,.08); border:1px solid rgba(0,229,255,.3); color:var(--neon); }
+.upload-status-bar.uploading { display:flex; align-items:center; gap:8px; background:rgba(232,232,232,.08); border:1px solid rgba(232,232,232,.3); color:var(--neon); }
 .upload-status-bar.done { display:flex; align-items:center; gap:8px; background:rgba(0,197,102,.1); border:1px solid rgba(0,197,102,.4); color:#00C566; }
-.upload-status-bar.fail { display:flex; align-items:center; gap:8px; background:rgba(255,45,149,.1); border:1px solid rgba(255,45,149,.4); color:var(--mag); }
-.spin { display:inline-block; width:14px; height:14px; border:2px solid rgba(0,229,255,.3); border-top-color:var(--neon); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+.upload-status-bar.fail { display:flex; align-items:center; gap:8px; background:rgba(109,109,109,.1); border:1px solid rgba(109,109,109,.4); color:var(--mag); }
+.spin { display:inline-block; width:14px; height:14px; border:2px solid rgba(232,232,232,.3); border-top-color:var(--neon); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
 @keyframes spin{to{transform:rotate(360deg);}}
 .note-inp { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 13px; padding: 12px; resize: vertical; min-height: 80px; outline: none; margin-top: 4px; transition: border-color .2s; }
 .note-inp:focus { border-color: var(--yellow); } .note-inp::placeholder { color: var(--gray); }
-.deposit-notice { display: flex; align-items: flex-start; gap: 10px; background: rgba(255,212,0,.08); border: 2px solid rgba(255,212,0,.5); border-radius: var(--r); padding: 14px 18px; margin-bottom: 14px; }
+.deposit-notice { display: flex; align-items: flex-start; gap: 10px; background: rgba(255,198,41,.08); border: 2px solid rgba(255,198,41,.5); border-radius: var(--r); padding: 14px 18px; margin-bottom: 14px; }
 .deposit-notice .dn-icon { font-size: 22px; flex-shrink: 0; }
 .deposit-notice .dn-text { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.5; }
 .deposit-notice .dn-text span { color: var(--black); font-weight: 600; }
 .cta { width: 100%; background: var(--yellow); color: var(--black); border: none; border-radius: var(--r); padding: 18px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; cursor: pointer; transition: all .2s; margin-top: 4px; }
-.cta:hover { background: #ffe033; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(255,212,0,.3); }
+.cta:hover { background: #ffe033; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(255,198,41,.3); }
 .cta:disabled { opacity: .7; cursor: not-allowed; transform: none; }
 .cta-footer { margin-top: 12px; text-align: center; font-size: 11px; color: var(--gray); font-weight: 600; line-height: 1.7; }
 .cta-footer strong { color: var(--neon); }
 .footer { text-align: center; padding: 24px; color: var(--gray); font-size: 10px; font-weight: 600; letter-spacing: 1px; }
 .footer a { color: var(--yellow); text-decoration: none; }
-.min-notice { display:none; align-items:center; gap:8px; background:rgba(255,45,149,.1); border:1px solid rgba(255,45,149,.4); border-radius:8px; padding:10px 14px; margin-top:12px; font-size:12px; font-weight:700; color:#FF2D95; }
+.min-notice { display:none; align-items:center; gap:8px; background:rgba(109,109,109,.1); border:1px solid rgba(109,109,109,.4); border-radius:8px; padding:10px 14px; margin-top:12px; font-size:12px; font-weight:700; color:#6D6D6D; }
 .min-notice.show { display:flex; }
 .contact-grid { display:grid; grid-template-columns:1fr; gap:14px; }
 @media(min-width:580px){ .contact-grid { grid-template-columns:1fr 1fr; } }
@@ -158,7 +158,7 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .inp-contact { width:100%; background:var(--surface2); border:2px solid var(--border); border-radius:8px; color:var(--white); font-family:'Montserrat',sans-serif; font-size:14px; padding:13px 14px; outline:none; transition:border-color .2s; }
 .inp-contact:focus { border-color:var(--yellow); }
 .inp-contact::placeholder { color:var(--gray); }
-.inp-contact.err { border-color:var(--mag)!important; box-shadow:0 0 0 3px rgba(255,45,149,.15); }
+.inp-contact.err { border-color:var(--mag)!important; box-shadow:0 0 0 3px rgba(109,109,109,.15); }
 .req { color:var(--mag); margin-left:2px; }
 @media(max-width:500px){ .price-hero{flex-direction:column;} .pdivider{width:60px;height:1px;} .size-grid{grid-template-columns:repeat(3,1fr);} .stype-grid{grid-template-columns:1fr;} }
 </style>
@@ -210,13 +210,13 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 
   <div class="card">
     <div class="ctitle">
-<span>⚡</span> 3. Tipo de impresion</div>
+3. Tipo de impresion</div>
     <div class="prints">
       <button class="pbtn active" data-type="back" onclick="selPrint(this)"><span class="picon">👕</span><div class="pname">Solo Trasera</div>
 <div class="pdesc">30x30 cm atras</div></button>
       <button class="pbtn" data-type="front30" onclick="selPrint(this)"><span class="picon">🔥</span><div class="pname">Solo Frontal</div>
 <div class="pdesc">30x30 cm al frente</div></button>
-      <button class="pbtn" data-type="both30" onclick="selPrint(this)"><span class="picon">💥</span><div class="pname">Trasera + Frontal</div>
+      <button class="pbtn" data-type="both30" onclick="selPrint(this)"><span class="picon">■</span><div class="pname">Trasera + Frontal</div>
 <div class="pdesc">30x30 cm en ambos</div></button>
       <button class="pbtn" data-type="both" onclick="selPrint(this)"><span class="picon">✨</span><div class="pname">Trasera + Logo</div>
 <div class="pdesc">30x30 atras + 10x10 frente</div></button>
@@ -242,8 +242,8 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
           <path d="M34 20 L10 40 L22 46 L32 38Z" fill="url(#gFs)" opacity="0.6"></path>
           <path d="M86 20 L110 40 L98 46 L88 38Z" fill="url(#gFs)" opacity="0.6"></path>
           <path d="M46 20 Q60 30 74 20" fill="none" stroke="rgba(255,255,255,0.13)" stroke-width="1.8" stroke-linecap="round"></path>
-          <g id="frontFull" opacity="0" style="transition:opacity .3s"><rect x="22" y="36" width="76" height="76" rx="5" fill="#FFD400" opacity="0.95"></rect><text x="60" y="70" text-anchor="middle" font-size="8.5" fill="#0B0B0B" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="92" text-anchor="middle" font-size="5" fill="rgba(0,0,0,0.4)" font-family="serif">30 x 30 cm</text></g>
-          <g id="frontLogo" opacity="0" style="transition:opacity .3s"><rect x="36" y="42" width="26" height="26" rx="3" fill="#FFD400"></rect><text x="49" y="53" text-anchor="middle" font-size="5.5" fill="#0B0B0B" font-family="serif" font-weight="700">BIG</text><text x="49" y="62" text-anchor="middle" font-size="5.5" fill="#0B0B0B" font-family="serif" font-weight="700">BANG</text></g>
+          <g id="frontFull" opacity="0" style="transition:opacity .3s"><rect x="22" y="36" width="76" height="76" rx="5" fill="#FFC629" opacity="0.95"></rect><text x="60" y="70" text-anchor="middle" font-size="8.5" fill="#111111" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="92" text-anchor="middle" font-size="5" fill="rgba(0,0,0,0.4)" font-family="serif">30 x 30 cm</text></g>
+          <g id="frontLogo" opacity="0" style="transition:opacity .3s"><rect x="36" y="42" width="26" height="26" rx="3" fill="#FFC629"></rect><text x="49" y="53" text-anchor="middle" font-size="5.5" fill="#111111" font-family="serif" font-weight="700">BIG</text><text x="49" y="62" text-anchor="middle" font-size="5.5" fill="#111111" font-family="serif" font-weight="700">BANG</text></g>
           <g id="noFront" opacity="1" style="transition:opacity .3s"><text x="60" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.1)" font-family="serif">sin impresion</text></g>
         </svg>
       </div>
@@ -253,13 +253,13 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
           <defs>
             <lineargradient id="gB" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" id="gB1" stop-color="#2a2a2a"></stop><stop offset="100%" id="gB2" stop-color="#141414"></stop></lineargradient>
             <lineargradient id="gBs" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" id="gBs1" stop-color="#222222"></stop><stop offset="100%" id="gBs2" stop-color="#111111"></stop></lineargradient>
-            <lineargradient id="pGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD400"></stop><stop offset="100%" stop-color="#FFC000"></stop></lineargradient>
-            <lineargradient id="fbGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF2D95"></stop><stop offset="100%" stop-color="#c01070"></stop></lineargradient>
+            <lineargradient id="pGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFC629"></stop><stop offset="100%" stop-color="#FFC000"></stop></lineargradient>
+            <lineargradient id="fbGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6D6D6D"></stop><stop offset="100%" stop-color="#c01070"></stop></lineargradient>
           </defs>
           <path d="M34 20 L10 40 L22 46 L22 116 L98 116 L98 46 L110 40 L86 20 Q74 6 60 6 Q46 6 34 20Z" fill="url(#gB)" stroke="rgba(255,255,255,0.07)" stroke-width="1.2" filter="url(#ds)"></path>
           <path d="M34 20 L10 40 L22 46 L32 38Z" fill="url(#gBs)" opacity="0.6"></path>
           <path d="M86 20 L110 40 L98 46 L88 38Z" fill="url(#gBs)" opacity="0.6"></path>
-          <g id="backPrint" opacity="1" style="transition:opacity .3s"><rect x="22" y="36" width="76" height="76" rx="5" fill="url(#pGrad)" opacity="0.95"></rect><text x="60" y="68" text-anchor="middle" font-size="8.5" fill="#0B0B0B" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="78" text-anchor="middle" font-size="5.5" fill="#0B0B0B" font-family="serif" font-weight="700">WORKSHOPS</text><text x="60" y="92" text-anchor="middle" font-size="5" fill="rgba(0,0,0,0.4)" font-family="serif">30 x 30 cm</text></g>
+          <g id="backPrint" opacity="1" style="transition:opacity .3s"><rect x="22" y="36" width="76" height="76" rx="5" fill="url(#pGrad)" opacity="0.95"></rect><text x="60" y="68" text-anchor="middle" font-size="8.5" fill="#111111" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="78" text-anchor="middle" font-size="5.5" fill="#111111" font-family="serif" font-weight="700">WORKSHOPS</text><text x="60" y="92" text-anchor="middle" font-size="5" fill="rgba(0,0,0,0.4)" font-family="serif">30 x 30 cm</text></g>
           <g id="backFullPrint" opacity="0" style="transition:opacity .3s"><rect x="16" y="24" width="88" height="92" rx="5" fill="url(#fbGrad)" opacity="0.95"></rect><text x="60" y="60" text-anchor="middle" font-size="8.5" fill="#fff" font-family="serif" font-weight="700">BIG BANG</text><text x="60" y="72" text-anchor="middle" font-size="5.5" fill="rgba(255,255,255,0.8)" font-family="serif" font-weight="700">WORKSHOPS</text><text x="60" y="96" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="serif">35 x 45 cm</text></g>
           <g id="noBack" opacity="0" style="transition:opacity .3s"><text x="60" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.1)" font-family="serif">sin impresion</text></g>
         </svg>
@@ -324,7 +324,7 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
   </div>
 
   <div class="results">
-    <div class="rhead">💥 TU COTIZACION BIGBANG</div>
+    <div class="rhead">TU COTIZACION BIGBANG</div>
     <div class="price-hero">
       <div class="pblk">
 <div class="plbl">Precio por unidad</div>
@@ -355,7 +355,7 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 <span class="lbl">💰 Total del pedido</span><span class="val" id="bdTotal">—</span>
 </div>
     </div>
-    <div class="eff-tag">⚡ <span id="effText"></span>
+    <div class="eff-tag"><span id="effText"></span>
 </div>
     <div class="min-notice" id="minNotice">
 <span>⚠️</span> 1-2 piezas: precio fijo · 3-5 piezas: precio fijo</div>
@@ -560,8 +560,8 @@ function showToast(msg,type){
   var t=g('bbToast');
   if(!t){t=document.createElement('div');t.id='bbToast';t.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%);padding:13px 22px;border-radius:12px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:700;z-index:9999;transition:opacity .5s;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.4);';document.body.appendChild(t);}
   t.textContent=msg;
-  t.style.background=type==='ok'?'#00C566':type==='err'?'#FF2D95':'#FFD400';
-  t.style.color=type==='err'?'#fff':'#0B0B0B';
+  t.style.background=type==='ok'?'#00C566':type==='err'?'#6D6D6D':'#FFC629';
+  t.style.color=type==='err'?'#fff':'#111111';
   t.style.opacity='1';
   clearTimeout(t._tmr);
   t._tmr=setTimeout(function(){t.style.opacity='0';},5000);
@@ -677,6 +677,6 @@ function sendOrder(){
 calc();applyMockup();applyColor();
 </script>
 
-  <footer style="max-width:80rem;margin:0 auto;padding:48px 16px;font-size:13px;color:#BFBFBF;text-align:center">© Big Bang Workshops · Panamá</footer>
+  <footer style="max-width:80rem;margin:0 auto;padding:48px 16px;font-size:13px;color:#9A9A9A;text-align:center">© Big Bang Workshops · Panamá</footer>
 </body>
 </html>
