@@ -46,6 +46,11 @@
         <option>Pack Digital</option>
         <option>Custom Apparel</option>
       </select>
+      <select id="genero" class="bg-[#151515] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
+        <option value="">Hombre y Mujer</option>
+        <option value="Hombre">Hombre</option>
+        <option value="Mujer">Mujer</option>
+      </select>
       <select id="orden" class="bg-[#151515] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
         <option value="new">Más nuevos</option>
         <option value="price-asc">Precio: menor a mayor</option>
@@ -76,8 +81,10 @@
     function apply(all) {
       const q = $("q").value.trim().toLowerCase();
       const tipo = $("tipo").value;
+      const genero = $("genero").value;
       filtered = all.filter(p =>
         (!tipo || p.type === tipo) &&
+        (!genero || p.gender === genero) &&
         (!q || p.title.toLowerCase().includes(q) || (p.tags || []).join(" ").toLowerCase().includes(q))
       );
       const o = $("orden").value;
@@ -99,6 +106,7 @@
       const params = new URLSearchParams(location.search);
       if (params.get("q")) $("q").value = params.get("q");
       if (params.get("tipo")) $("tipo").value = params.get("tipo");
+      if (params.get("genero")) $("genero").value = params.get("genero");
 
       $("chips").innerHTML = CHIPS.map(c =>
         `<button data-chip="${c}" class="border border-white/15 rounded-full px-4 py-1.5 hover:border-bbwyellow hover:text-bbwyellow transition uppercase tracking-wide">${c}</button>`
@@ -108,7 +116,7 @@
         if (c) { $("q").value = c.dataset.chip; apply(all); }
       });
 
-      ["q", "tipo", "orden"].forEach(id => $(id).addEventListener("input", () => apply(all)));
+      ["q", "tipo", "genero", "orden"].forEach(id => $(id).addEventListener("input", () => apply(all)));
       $("more").addEventListener("click", () => { shown += PAGE; render(); });
       apply(all);
     });

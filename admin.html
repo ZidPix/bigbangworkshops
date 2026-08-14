@@ -139,7 +139,21 @@
           </select>
           <input id="f-price" type="number" step="0.01" placeholder="Precio USD *" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
         </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Fit / Género</p>
+          <select id="f-gender" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
+            <option value="">— Sin especificar —</option>
+            <option value="Hombre">Hombre</option>
+            <option value="Mujer">Mujer</option>
+          </select>
+        </div>
         <input id="f-tags" placeholder="Etiquetas separadas por coma (colección, oversize, edición…)" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
+        <div class="flex gap-2 flex-wrap -mt-1">
+          <span class="text-xs text-bbwgray self-center">Tags rápidos:</span>
+          <button type="button" onclick="addTag('Regular Fit')" class="border border-white/20 rounded-full px-3 py-1 text-xs hover:border-bbwyellow hover:text-bbwyellow">+ Regular Fit</button>
+          <button type="button" onclick="addTag('Oversize')" class="border border-white/20 rounded-full px-3 py-1 text-xs hover:border-bbwyellow hover:text-bbwyellow">+ Oversize</button>
+          <button type="button" onclick="addTag('Fit de mujer')" class="border border-white/20 rounded-full px-3 py-1 text-xs hover:border-bbwyellow hover:text-bbwyellow">+ Fit de mujer</button>
+        </div>
         <textarea id="f-desc" rows="3" placeholder="Descripción" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none"></textarea>
         <div>
           <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Tallas (mismo precio)</p>
@@ -337,11 +351,16 @@
     function addColor() { curColors.push({ name: "", swatch: "#000000", img: null, file: null, preview: null }); renderColors(); }
     function setColorFile(i, file) { if (!file) return; curColors[i].file = file; curColors[i].preview = URL.createObjectURL(file); renderColors(); }
 
+    function addTag(t) {
+      const tags = $("f-tags").value.split(",").map(x=>x.trim()).filter(Boolean);
+      if (!tags.some(x => x.toLowerCase() === t.toLowerCase())) tags.push(t);
+      $("f-tags").value = tags.join(", ");
+    }
     function nuevo() {
-      cur = { id: "bbw" + Date.now(), handle: "", title: "", type: "T-Shirt", tags: [], desc: "", price: 20, variants: [] };
+      cur = { id: "bbw" + Date.now(), handle: "", title: "", type: "T-Shirt", gender: "", tags: [], desc: "", price: 20, variants: [] };
       curImgs = []; newFiles = []; curColors = [];
       $("edTitle").textContent = "NUEVO PRODUCTO";
-      $("f-title").value = ""; $("f-type").value = "T-Shirt"; $("f-price").value = "20.00"; $("f-tags").value = ""; $("f-desc").value = "";
+      $("f-title").value = ""; $("f-type").value = "T-Shirt"; $("f-gender").value = ""; $("f-price").value = "20.00"; $("f-tags").value = ""; $("f-desc").value = "";
       $("delBtn").classList.add("hidden"); $("editor").classList.remove("hidden"); renderEd();
     }
     function editar(id) {
@@ -349,7 +368,7 @@
       curImgs = (cur.imgs && cur.imgs.length ? [...cur.imgs] : (cur.img ? [cur.img] : [])); newFiles = [];
       curColors = (cur.colors || []).map(c => ({ name: c.name, swatch: c.swatch || "#000000", img: c.img || null, file: null, preview: null }));
       $("edTitle").textContent = "EDITAR";
-      $("f-title").value = cur.title; $("f-type").value = cur.type; $("f-price").value = cur.price.toFixed(2);
+      $("f-title").value = cur.title; $("f-type").value = cur.type; $("f-gender").value = cur.gender || ""; $("f-price").value = cur.price.toFixed(2);
       $("f-tags").value = (cur.tags||[]).join(", "); $("f-desc").value = cur.desc || "";
       $("delBtn").classList.remove("hidden"); $("editor").classList.remove("hidden"); renderEd();
     }
@@ -408,6 +427,8 @@
         }
         // 2) armar producto
         cur.title = t; cur.price = pr; cur.type = $("f-type").value;
+        const gVal = $("f-gender").value;
+        if (gVal) cur.gender = gVal; else delete cur.gender;
         cur.tags = $("f-tags").value.split(",").map(x=>x.trim()).filter(Boolean);
         cur.desc = $("f-desc").value.trim();
         if (!cur.handle) cur.handle = t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
