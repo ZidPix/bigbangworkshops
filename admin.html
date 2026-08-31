@@ -554,13 +554,15 @@
       for (const { path, file } of files) {
         const parts = path.split("/").filter(Boolean);
         let corteIdx = -1, map = null;
-        for (let k = 0; k < parts.length - 2; k++) {
+        for (let k = 0; k < parts.length - 1; k++) {
           const m = BULK_MAP[bulkNormFolder(parts[k])];
           if (m) { corteIdx = k; map = m; break; }
         }
         if (corteIdx === -1) continue;
-        const corteRaw = parts[corteIdx], prodRaw = parts[corteIdx + 1], fname = parts[parts.length - 1];
+        const corteRaw = parts[corteIdx], fname = parts[parts.length - 1];
         if (fname.startsWith(".") || fname.toLowerCase() === "thumbs.db") continue;
+        // Corte/Producto/imagen.png (subcarpeta) o Corte/imagen.png (archivo suelto → nombre = archivo)
+        const prodRaw = corteIdx === parts.length - 2 ? fname.replace(/\.[^.]+$/, "") : parts[corteIdx + 1];
         const key = corteRaw + "/" + prodRaw;
         if (!groups[key]) groups[key] = { corte: corteRaw, prod: prodRaw, map, images: [], descFile: null };
         if (fname.toLowerCase() === "descripcion.txt") groups[key].descFile = file;
