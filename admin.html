@@ -42,6 +42,7 @@
         <button id="tab-disc" onclick="showView('disc')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwyellow/10 transition">🎟 CUPONES</button>
         <button id="tab-yappy" onclick="showView('yappy')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwyellow/10 transition">🟡 YAPPY</button>
             <button id="tab-packs" onclick="showView('packs')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwyellow/10 transition">PACKS DIGITALES</button>
+        <button id="tab-bulk" onclick="showView('bulk')" class="border border-bbwyellow/50 text-bbwyellow font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:bg-bbwyellow/10 transition">📦 CARGA MASIVA</button>
         <button onclick="logout()" class="border border-white/20 rounded-lg px-4 text-sm hover:border-bbwyellow hover:text-bbwyellow">Salir</button>
       </div>
     </div>
@@ -121,6 +122,36 @@
             </div>
           </div>
         </section>
+
+    <!-- CARGA MASIVA -->
+    <section id="bulkView" class="hidden">
+      <div class="bg-[#151515] border border-bbwyellow/30 rounded-2xl p-6 mb-6">
+        <h2 class="font-display text-2xl tracking-wide mb-1 text-bbwyellow">CARGA MASIVA DE MOCKUPS</h2>
+        <p class="text-bbwgray text-xs mb-4 leading-relaxed">
+          Organiza tus mockups en carpetas por corte: <b>Regular-Fit</b> · <b>Oversize</b> · <b>Sin-Mangas</b>. Dentro de cada una, una subcarpeta por producto (su nombre será el título). Arrastra la carpeta principal aquí, o haz click para elegirla.<br>
+          Precio automático: Regular Fit $21 · Oversize $30 · Sin Mangas $30. Tallas S–XXL premarcadas. Puedes editar todo antes de publicar. Opcional: agrega un archivo <code>descripcion.txt</code> dentro de cada subcarpeta para fijar su descripción.
+        </p>
+        <div id="bulkDrop" class="border-2 border-dashed border-bbwyellow/40 rounded-xl p-10 text-center text-bbwgray hover:border-bbwyellow transition cursor-pointer">
+          <p class="text-3xl mb-2">📁</p>
+          <p class="text-sm">Suelta aquí la carpeta de mockups</p>
+          <p class="text-xs mt-1">o <span class="text-bbwyellow underline">haz click para elegirla</span></p>
+          <input id="bulkFile" type="file" webkitdirectory directory multiple class="hidden">
+        </div>
+        <p id="bulkScanMsg" class="hidden text-red-400 text-sm mt-3"></p>
+      </div>
+
+      <div id="bulkReview" class="hidden">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <h3 class="font-display text-xl tracking-wide text-bbwyellow">REVISAR (<span id="bulkCount">0</span>)</h3>
+          <div class="flex gap-2">
+            <button onclick="bulkCancel()" class="border border-white/20 rounded-lg px-4 py-2 text-sm hover:border-red-400 hover:text-red-400">Cancelar</button>
+            <button id="bulkPublishBtn" onclick="bulkPublish()" class="bg-bbwyellow text-bbwblack font-display text-xl tracking-widest px-6 py-2 rounded-lg hover:scale-105 transition">PUBLICAR TODOS</button>
+          </div>
+        </div>
+        <p id="bulkProgress" class="hidden text-sm text-bbwgray mb-3"></p>
+        <div id="bulkList" class="space-y-4"></div>
+      </div>
+    </section>
   </main>
 
   <!-- EDITOR -->
@@ -135,7 +166,7 @@
         <div class="grid grid-cols-2 gap-3">
           <select id="f-type" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none">
             <option>T-Shirt</option><option>Graphic Tee</option><option>Playera Oversize</option>
-            <option>Playera Regular Fit</option><option>Pack Digital</option><option>Custom Apparel</option><option>TOPPER</option>
+            <option>Playera Regular Fit</option><option>Playera Sin Mangas</option><option>Pack Digital</option><option>Custom Apparel</option><option>TOPPER</option>
           </select>
           <input id="f-price" type="number" step="0.01" placeholder="Precio USD *" class="bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
         </div>
@@ -213,6 +244,7 @@
       document.getElementById("more").style.display = "none";
       $("discView").classList.toggle("hidden", v !== "disc");
       $("yappyView").classList.toggle("hidden", v !== "yappy");
+      $("bulkView").classList.toggle("hidden", v !== "bulk");
       if (v === "prod") renderList();
       if (v === "disc") loadDiscounts();
       if (v === "yappy") loadYappy();
@@ -467,6 +499,167 @@
     }
 
     function err(m){ $("edErr").textContent = "⚠️ " + m; $("edErr").classList.remove("hidden"); setTimeout(()=>$("edErr").classList.add("hidden"), 5000); }
+
+    /* ================= CARGA MASIVA ================= */
+    const BULK_MAP = {
+      "regular fit": { type: "Playera Regular Fit", price: 21, tag: "Regular Fit" },
+      "regularfit":  { type: "Playera Regular Fit", price: 21, tag: "Regular Fit" },
+      "oversize":    { type: "Playera Oversize",    price: 30, tag: "Oversize" },
+      "sin mangas":  { type: "Playera Sin Mangas",  price: 30, tag: "Sin Mangas" },
+      "sinmangas":   { type: "Playera Sin Mangas",  price: 30, tag: "Sin Mangas" }
+    };
+    let bulkDrafts = [];
+
+    function bulkNormFolder(s) {
+      return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[-_]+/g, " ").trim();
+    }
+    function bulkPrettify(s) {
+      return s.replace(/[-_]+/g, " ").trim().replace(/\s+/g, " ")
+        .split(" ").map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join(" ");
+    }
+    function bulkIsImage(name) { return /\.(png|jpe?g|webp)$/i.test(name); }
+    function bulkDefaultDesc(title) {
+      return "# Camiseta " + title + " | Regular Fit, Oversize y Sin Mangas\n\nDiseño inspirado en **" + title + "**. Estampado de alta calidad y acabado premium.\n\nImpresión **DTF de alta calidad**: colores intensos y acabado duradero.";
+    }
+
+    async function bulkReadEntries(entry, base, out) {
+      if (entry.isFile) {
+        await new Promise(res => entry.file(f => { out.push({ path: base + entry.name, file: f }); res(); }));
+      } else if (entry.isDirectory) {
+        const reader = entry.createReader();
+        const entries = await new Promise(res => {
+          let all = [];
+          const read = () => reader.readEntries(batch => { if (!batch.length) return res(all); all = all.concat(batch); read(); });
+          read();
+        });
+        for (const e of entries) await bulkReadEntries(e, base + entry.name + "/", out);
+      }
+    }
+    async function bulkHandleDrop(e) {
+      e.preventDefault();
+      const items = e.dataTransfer.items;
+      const entries = [];
+      for (const it of items) { const en = it.webkitGetAsEntry && it.webkitGetAsEntry(); if (en) entries.push(en); }
+      const files = [];
+      for (const en of entries) await bulkReadEntries(en, "", files);
+      bulkProcessFiles(files);
+    }
+    function bulkHandlePick(e) {
+      const files = Array.from(e.target.files).map(f => ({ path: f.webkitRelativePath || f.name, file: f }));
+      bulkProcessFiles(files);
+    }
+
+    function bulkProcessFiles(files) {
+      const groups = {};
+      for (const { path, file } of files) {
+        const parts = path.split("/").filter(Boolean);
+        let corteIdx = -1, map = null;
+        for (let k = 0; k < parts.length - 2; k++) {
+          const m = BULK_MAP[bulkNormFolder(parts[k])];
+          if (m) { corteIdx = k; map = m; break; }
+        }
+        if (corteIdx === -1) continue;
+        const corteRaw = parts[corteIdx], prodRaw = parts[corteIdx + 1], fname = parts[parts.length - 1];
+        if (fname.startsWith(".") || fname.toLowerCase() === "thumbs.db") continue;
+        const key = corteRaw + "/" + prodRaw;
+        if (!groups[key]) groups[key] = { corte: corteRaw, prod: prodRaw, map, images: [], descFile: null };
+        if (fname.toLowerCase() === "descripcion.txt") groups[key].descFile = file;
+        else if (bulkIsImage(fname)) groups[key].images.push(file);
+      }
+      const drafts = Object.values(groups).filter(g => g.images.length).map(g => {
+        g.images.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+        return { title: bulkPrettify(g.prod), type: g.map.type, price: g.map.price, tag: g.map.tag,
+          sizes: [...SIZES], images: g.images, descFile: g.descFile, desc: "", status: "pendiente" };
+      });
+      if (!drafts.length) {
+        $("bulkScanMsg").textContent = "⚠️ No se encontraron productos válidos. Revisa que la estructura sea Corte/Producto/imagen.jpg (Corte = Regular-Fit, Oversize o Sin-Mangas).";
+        $("bulkScanMsg").classList.remove("hidden");
+        return;
+      }
+      Promise.all(drafts.map(async d => {
+        d.desc = d.descFile ? (await d.descFile.text()).trim() : bulkDefaultDesc(d.title);
+      })).then(() => { bulkDrafts = drafts; bulkRenderReview(); });
+    }
+
+    function bulkRenderReview() {
+      $("bulkScanMsg").classList.add("hidden");
+      $("bulkReview").classList.toggle("hidden", !bulkDrafts.length);
+      $("bulkCount").textContent = bulkDrafts.length;
+      $("bulkList").innerHTML = bulkDrafts.map((d, i) => `
+        <div class="bg-[#151515] border border-white/10 rounded-xl p-4">
+          <div class="flex gap-4 flex-wrap">
+            <div class="flex gap-1 flex-wrap w-24">
+              ${d.images.slice(0,4).map(f => `<img src="${URL.createObjectURL(f)}" class="w-11 h-11 rounded object-cover">`).join("")}
+            </div>
+            <div class="flex-1 min-w-[220px] space-y-2">
+              <div class="flex gap-2 flex-wrap">
+                <input value="${d.title.replace(/"/g,'&quot;')}" oninput="bulkDrafts[${i}].title=this.value" class="flex-1 min-w-[160px] bg-[#101010] border border-white/10 rounded-lg px-3 py-2 text-sm focus:border-bbwyellow focus:outline-none">
+                <input type="number" step="0.01" value="${d.price}" oninput="bulkDrafts[${i}].price=parseFloat(this.value)||0" class="w-24 bg-[#101010] border border-white/10 rounded-lg px-3 py-2 text-sm focus:border-bbwyellow focus:outline-none">
+                <span class="self-center text-xs text-bbwgray border border-white/10 rounded-full px-3 py-1 whitespace-nowrap">${d.type}</span>
+              </div>
+              <div class="flex gap-2 flex-wrap">
+                ${SIZES.map(s => `<button type="button" onclick="bulkToggleSize(${i},'${s}',this)" class="${d.sizes.includes(s)?'sel border-bbwyellow text-bbwyellow':''} border border-white/20 rounded-lg px-3 py-1 text-xs font-bold">${s}</button>`).join("")}
+              </div>
+              <textarea rows="2" oninput="bulkDrafts[${i}].desc=this.value" class="w-full bg-[#101010] border border-white/10 rounded-lg px-3 py-2 text-xs focus:border-bbwyellow focus:outline-none">${d.desc.replace(/</g,'&lt;')}</textarea>
+            </div>
+            <div class="flex flex-col items-end justify-between gap-2">
+              <button onclick="bulkDrafts.splice(${i},1);bulkRenderReview()" class="text-red-400 text-xs hover:text-red-300">Quitar</button>
+              <span class="text-xs text-bbwgray" id="bulkStatus${i}">${d.status}</span>
+            </div>
+          </div>
+        </div>`).join("");
+    }
+    function bulkToggleSize(i, s, btn) {
+      const d = bulkDrafts[i];
+      const has = d.sizes.includes(s);
+      d.sizes = has ? d.sizes.filter(x => x !== s) : [...d.sizes, s];
+      btn.classList.toggle("sel"); btn.classList.toggle("border-bbwyellow"); btn.classList.toggle("text-bbwyellow");
+    }
+    function bulkCancel() { bulkDrafts = []; $("bulkReview").classList.add("hidden"); $("bulkFile").value = ""; }
+
+    async function bulkPublish() {
+      if (!bulkDrafts.length) return;
+      const btn = $("bulkPublishBtn"); btn.disabled = true; btn.textContent = "PUBLICANDO…";
+      const prog = $("bulkProgress"); prog.classList.remove("hidden");
+      let ok = 0, fail = 0;
+      for (let i = 0; i < bulkDrafts.length; i++) {
+        const d = bulkDrafts[i];
+        prog.textContent = "Subiendo " + (i+1) + "/" + bulkDrafts.length + ": " + d.title + "…";
+        try {
+          const id = "bbw" + (Date.now() + i);
+          const imgPaths = [];
+          for (let n = 0; n < d.images.length; n++) {
+            const path = "assets/img/" + id + (n === 0 ? "" : "_" + (n+1)) + ".webp";
+            const b64 = await toWebp(d.images[n]);
+            await putFile(path, b64, "admin bulk: " + path);
+            imgPaths.push(path);
+          }
+          const handle = d.title.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+          const variants = (d.sizes.length ? d.sizes : ["Default Title"]).map(s => ({ t: s, p: d.price }));
+          const product = { id, handle, title: d.title, type: d.type, tags: [d.tag], desc: d.desc, price: d.price, variants, img: imgPaths[0] };
+          if (imgPaths.length > 1) product.imgs = imgPaths;
+          PRODUCTS.unshift(product);
+          d.status = "✅ publicado"; ok++;
+        } catch (e) {
+          d.status = "⚠️ error: " + e.message; fail++;
+        }
+        const stEl = $("bulkStatus" + i); if (stEl) stEl.textContent = d.status;
+      }
+      try {
+        if (ok) await pushCatalog("admin: carga masiva (" + ok + " productos)");
+        prog.textContent = "✅ " + ok + " publicados" + (fail ? " · ⚠️ " + fail + " con error" : "") + ". La tienda se actualiza en ~1-2 minutos.";
+      } catch (e) {
+        prog.textContent = "⚠️ Error al publicar el catálogo: " + e.message;
+      }
+      btn.disabled = false; btn.textContent = "PUBLICAR TODOS";
+      renderList();
+    }
+
+    $("bulkDrop").addEventListener("click", () => $("bulkFile").click());
+    $("bulkDrop").addEventListener("dragover", e => e.preventDefault());
+    $("bulkDrop").addEventListener("drop", bulkHandleDrop);
+    $("bulkFile").addEventListener("change", bulkHandlePick);
+
     if (TOK) { $("tok").value = TOK; login(); }
   </script>
 
