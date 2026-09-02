@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sube tu Diseño — Big Bang Workshops</title>
+  <title>Tu Diseño Personalizado — Big Bang Workshops</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#111111',bbwyellow:'#FFC629',bbwgray:'#9A9A9A',bbwcyan:'#E8E8E8',bbwmagenta:'#6D6D6D',bbwconcrete:'#E8E8E8',bbwsteel:'#6D6D6D'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif'],ui:['Inter','sans-serif']}}}}</script>
@@ -25,7 +25,7 @@
       <nav class="hidden md:flex items-center gap-8 text-sm font-semibold uppercase tracking-wide">
         <a href="tienda.html" class="hover:text-bbwyellow transition">Tienda</a>
         <a href="herramientas.html" class="hover:text-bbwyellow transition">Herramientas</a>
-        <a href="sube-tu-diseno.html" class="text-bbwyellow">Personaliza</a>
+        <a href="tu-diseno-personalizado.html" class="text-bbwyellow">Personaliza</a>
       </nav>
       <a href="carrito.html" class="relative p-2" aria-label="Carrito">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 0 0 .9 1.4H19M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>
@@ -36,7 +36,7 @@
 
   <main class="max-w-4xl mx-auto px-4 py-12">
     <p class="text-bbwyellow font-semibold tracking-[0.3em] uppercase text-xs">Personalizado · DTF · Panamá</p>
-    <h1 class="font-display text-5xl md:text-6xl tracking-wide mt-2">SUBE TU <span class="text-bbwyellow">DISEÑO</span></h1>
+    <h1 class="font-display text-5xl md:text-6xl tracking-wide mt-2">TU DISEÑO <span class="text-bbwyellow">PERSONALIZADO</span></h1>
     <p class="text-bbwgray mt-3 max-w-2xl">Tu concepto convertido en una prenda producida con acabado premium. Sube tu archivo, elige prenda, color y talla — y recibimos tu pedido al instante.</p>
 
     <div id="okBanner" class="hidden mt-6 bg-[#102810] border border-green-500/40 text-green-300 rounded-xl p-4 text-sm font-semibold">✅ ¡Pedido enviado! Te contactamos en menos de 24h para confirmar tu diseño y coordinar el pago.</div>
@@ -212,7 +212,7 @@
 
       // 1) Email con todos los parámetros (en segundo plano, no bloquea el pago)
       const payload = {
-        _subject: `[BBW] SUBE TU DISENO: ${G.n} ${COLORS[col].n} T-${SIZES[size]} x${qty} — ${name}`,
+        _subject: `[BBW] TU DISENO PERSONALIZADO: ${G.n} ${COLORS[col].n} T-${SIZES[size]} x${qty} — ${name}`,
         _template: "table", _captcha: "false",
         "1_Cliente": name,
         "2_WhatsApp": phone,
