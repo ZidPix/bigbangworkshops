@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Admin — Big Bang Workshops</title>
+  <!-- SEC-R1/R2 · Politica de seguridad de contenido. connect-src es la linea que
+       impide que un script inyectado exfiltre el token de GitHub o la clave admin. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com https://cglankaljvhcdyzhyooo.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<!-- BBW-SEO:INICIO -->
+  <!-- noindex: panel interno -->
+  <title>Panel interno — Big Bang Workshops</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" href="/assets/brand/bbw-favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/assets/brand/bbw-favicon-16.png" sizes="16x16" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/brand/bbw-favicon-180.png">
+  <meta name="theme-color" content="#111111">
+<!-- BBW-SEO:FIN -->
+
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{colors:{bbwblack:'#111111',bbwyellow:'#FFC629',bbwgray:'#9A9A9A',bbwcyan:'#E8E8E8',bbwmagenta:'#6D6D6D',bbwconcrete:'#E8E8E8',bbwsteel:'#6D6D6D'},fontFamily:{display:['"Bebas Neue"','sans-serif'],body:['Montserrat','sans-serif'],ui:['Inter','sans-serif']}}}}</script>
@@ -129,7 +140,7 @@
         <h2 class="font-display text-2xl tracking-wide mb-1 text-bbwyellow">CARGA MASIVA DE MOCKUPS</h2>
         <p class="text-bbwgray text-xs mb-4 leading-relaxed">
           Cada bucket ya tiene su corte y precio fijos. <b>Una imagen suelta = un producto</b> (el título sale del nombre del archivo) — abre la carpeta de ese corte, selecciona las imágenes con Ctrl+A y arrástralas al bucket (no arrastres el ícono de la carpeta completa). Para un producto con varias fotos (frente/espalda), arrastra esa subcarpeta del producto directamente — puedes soltar varias subcarpetas de producto a la vez.<br>
-          Tallas S–XXL premarcadas, todo editable antes de publicar. Opcional: incluye un archivo <code>descripcion.txt</code> junto a las fotos de una subcarpeta para fijar su descripción.
+          Cada bucket premarca su set de tallas (adulto S–XXL · niños 4T–M BOY), todo editable antes de publicar. Opcional: incluye un archivo <code>descripcion.txt</code> junto a las fotos de una subcarpeta para fijar su descripción.
         </p>
         <div id="bulkBuckets" class="grid sm:grid-cols-2 gap-4"></div>
         <p id="bulkScanMsg" class="hidden text-red-400 text-sm mt-3"></p>
@@ -167,10 +178,11 @@
         </div>
         <div>
           <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Fit / Género</p>
-          <select id="f-gender" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
+          <select id="f-gender" onchange="renderEd()" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-bbwyellow">
             <option value="">— Sin especificar —</option>
             <option value="Hombre">Hombre</option>
             <option value="Mujer">Mujer</option>
+            <option value="Niños">Niños</option>
           </select>
         </div>
         <input id="f-tags" placeholder="Etiquetas separadas por coma (colección, oversize, edición…)" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none">
@@ -182,8 +194,12 @@
         </div>
         <textarea id="f-desc" rows="3" placeholder="Descripción" class="w-full bg-[#101010] border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-bbwyellow focus:outline-none"></textarea>
         <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Tallas (mismo precio)</p>
+          <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">
+            Tallas (mismo precio)
+            <span id="f-sizes-set" class="ml-2 normal-case tracking-normal text-bbwyellow font-bold"></span>
+          </p>
           <div id="f-sizes" class="flex gap-2 flex-wrap"></div>
+          <p id="f-sizes-hint" class="text-xs text-bbwgray mt-2"></p>
         </div>
         <div>
           <p class="text-xs font-semibold uppercase tracking-wide text-bbwgray mb-2">Imágenes (la 1ª es la principal — frente; añade espalda/detalles)</p>
@@ -209,8 +225,17 @@
 
   <script>
     const REPO = "ZidPix/bigbangworkshops", API = "https://api.github.com/repos/" + REPO + "/contents/";
-    const SIZES = ["S","M","L","XL","XXL"];
-    let TOK = localStorage.getItem("bbw_admin_token") || "";
+    /* ===== SETS DE TALLAS (BOS · KID-R1) =====
+       ADULTO: S-XXL  ·  NINOS: 4T-M BOY (medidas en tabla-medidas.html)
+       El set activo lo decide el campo Fit / Genero del producto. */
+    const SIZES_ADULTO = ["S","M","L","XL","XXL"];
+    const SIZES_KIDS   = ["4T","6T","XS BOY","S BOY","M BOY"];
+    const KIDS_GENDER  = "Ni\u00f1os";
+    const KIDS_PRICE   = 10.80;
+    const SIZES = SIZES_ADULTO; // compatibilidad
+    const sizeSetFor = g => (g === KIDS_GENDER ? SIZES_KIDS : SIZES_ADULTO);
+    const looksKids = v => SIZES_KIDS.some(k => v.t === k || v.t.endsWith("/ " + k));
+    let TOK = sessionStorage.getItem("bbw_admin_token") || "";
     let PRODUCTS = [], SHA = "", cur = null, curImgs = [], newFiles = [], curColors = [], shown = 50;
     const $ = id => document.getElementById(id);
     const gh = (path, opt={}) => fetch(API + path + (opt.method ? "" : "?ref=main&t=" + Date.now()), {
@@ -221,7 +246,7 @@
       TOK = $("tok").value.trim() || TOK;
       const r = await gh("assets/data/products.json");
       if (!r.ok) { $("loginErr").textContent = "Token inválido o sin permiso (status " + r.status + ")"; $("loginErr").classList.remove("hidden"); return; }
-      localStorage.setItem("bbw_admin_token", TOK);
+      sessionStorage.setItem("bbw_admin_token", TOK);
       const d = await r.json();
       SHA = d.sha;
       PRODUCTS = JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,"")))));
@@ -229,7 +254,7 @@
       $("status").textContent = "conectado ✓";
       renderList();
     }
-    function logout(){ localStorage.removeItem("bbw_admin_token"); location.reload(); }
+    function logout(){ sessionStorage.removeItem("bbw_admin_token"); location.reload(); }
 
     /* ================= CUPONES ================= */
     let DISCOUNTS = [], DSHA = "";
@@ -298,7 +323,7 @@
 
     /* ================= YAPPY (entrega manual de packs) ================= */
     const SUPA_FN = "https://cglankaljvhcdyzhyooo.supabase.co/functions/v1/";
-    let Y_KEY = localStorage.getItem("bbw_yappy_key") || "";
+    let Y_KEY = sessionStorage.getItem("bbw_yappy_key") || "";
     function loadYappy() {
       if (Y_KEY) $("y-key").value = Y_KEY;
       const digitals = PRODUCTS.filter(p => p.type === "Pack Digital");
@@ -319,7 +344,7 @@
       if (!key) return show("⚠️ Escribe la clave de entrega", false);
       if (!email || email.indexOf("@") < 1) return show("⚠️ Correo del cliente inválido", false);
       if (!skus.length) return show("⚠️ Marca al menos un pack", false);
-      Y_KEY = key; localStorage.setItem("bbw_yappy_key", key);
+      Y_KEY = key; sessionStorage.setItem("bbw_yappy_key", key);
       const btn = $("y-btn"); btn.disabled = true; const orig = btn.textContent; btn.textContent = "ENVIANDO…";
       try {
         const r = await fetch(SUPA_FN + "entregar-yappy", {
@@ -340,27 +365,29 @@
 
     function renderList() {
       const q = $("q").value.toLowerCase();
-      const f = PRODUCTS.filter(p => !q || p.title.toLowerCase().includes(q) || String(p.id).toLowerCase().includes(q) || (p.tags||[]).join(" ").toLowerCase().includes(q));
+      const f = PRODUCTS.filter(p => !q || p.title.toLowerCase().includes(q) || (p.tags||[]).join(" ").toLowerCase().includes(q));
       $("count").textContent = "(" + f.length + ")";
       $("list").innerHTML = f.slice(0, shown).map(p => `
         <div class="flex items-center gap-4 bg-[#151515] border border-white/5 rounded-xl p-3 hover:border-bbwyellow/40 cursor-pointer" onclick="editar('${p.id}')">
           <img src="${p.img}" class="w-14 h-14 rounded-lg object-cover bg-[#101010]" onerror="this.src='https://placehold.co/100/151515/FFC629?text=BBW'">
-          <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">${p.title}</p><p class="text-xs text-bbwgray">${p.type} · ${(p.variants||[]).length} variantes</p><button onclick="copiarId(event,'${p.id}')" title="Copiar ID" class="mt-1 inline-flex items-center gap-1.5 font-mono text-[11px] text-bbwgray hover:text-bbwyellow transition"><span class="uppercase tracking-[0.15em] text-[9px] opacity-60">ID</span>${p.id}<span class="opacity-50">⧉</span></button></div>
+          <div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">${p.title}</p><p class="text-xs text-bbwgray">${p.type} · ${(p.variants||[]).length} variantes</p></div>
           <p class="text-bbwyellow font-bold">$${p.price.toFixed(2)}</p>
         </div>`).join("");
       $("more").classList.toggle("hidden", shown >= f.length);
     }
 
-    function copiarId(ev, id) {
-      ev.stopPropagation();
-      const el = ev.currentTarget, prev = el.innerHTML;
-      const done = () => { el.innerHTML = '<span class="text-bbwyellow">\u2713 ID copiado</span>'; setTimeout(() => { el.innerHTML = prev; }, 1200); };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(id).then(done).catch(done);
-      else done();
-    }
-
     function renderEd() {
-      $("f-sizes").innerHTML = SIZES.map(s => {
+      // el set de tallas lo manda el fit; si el producto ya trae variantes kids, se autodetecta
+      if (!$("f-gender").value && cur.variants && cur.variants.length && cur.variants.every(looksKids)) {
+        $("f-gender").value = KIDS_GENDER;
+      }
+      const isKids = $("f-gender").value === KIDS_GENDER;
+      const activeSizes = sizeSetFor($("f-gender").value);
+      $("f-sizes-set").textContent = isKids ? "• SET NIÑOS" : "• SET ADULTO";
+      $("f-sizes-hint").textContent = isKids
+        ? "Set niños activo. Precio de línea kids: $" + KIDS_PRICE.toFixed(2) + " — no aplica recargo de talla."
+        : "Para publicar tallas de niño, cambia Fit / Género a “Niños”.";
+      $("f-sizes").innerHTML = activeSizes.map(s => {
         const on = cur.variants && cur.variants.some(v => v.t === s || v.t.endsWith("/ " + s));
         return `<button data-s="${s}" onclick="this.classList.toggle('sel');this.classList.toggle('border-bbwyellow');this.classList.toggle('text-bbwyellow')" class="${on?'sel border-bbwyellow text-bbwyellow':''} border border-white/20 rounded-lg px-4 py-2 text-sm font-bold">${s}</button>`;
       }).join("");
@@ -508,9 +535,10 @@
       { key: "regular",   label: "REGULAR FIT",   type: "Playera Regular Fit", price: 21, tag: "Regular Fit" },
       { key: "oversize",  label: "OVERSIZE",      type: "Playera Oversize",    price: 30, tag: "Oversize" },
       { key: "sinmangas", label: "SIN MANGAS",    type: "Playera Sin Mangas",  price: 30, tag: "Sin Mangas" },
-      { key: "otros",     label: "OTROS DISEÑOS", type: "Playera Woman Fit",   price: 21, tag: "Otros" }
+      { key: "otros",     label: "OTROS DISEÑOS", type: "Playera Woman Fit",   price: 21, tag: "Otros" },
+      { key: "kids",      label: "NIÑOS",         type: "Playera Niño",         price: KIDS_PRICE, tag: "Niños", gender: KIDS_GENDER }
     ];
-    const TYPE_OPTIONS = ["T-Shirt","Graphic Tee","Playera Oversize","Playera Regular Fit","Playera Sin Mangas","Playera Woman Fit","Custom Apparel","TOPPER"];
+    const TYPE_OPTIONS = ["T-Shirt","Graphic Tee","Playera Oversize","Playera Regular Fit","Playera Sin Mangas","Playera Woman Fit","Playera Niño","Custom Apparel","TOPPER"];
     let bulkDrafts = [];
 
     function bulkPrettify(s) {
@@ -583,7 +611,8 @@
       const drafts = Object.values(groups).filter(g => g.images.length).map(g => {
         g.images.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
         return { title: bulkPrettify(g.prod), type: bucket.type, price: bucket.price, tag: bucket.tag,
-          sizes: [...SIZES], images: g.images, descFile: g.descFile, desc: "", status: "pendiente" };
+          gender: bucket.gender || "", sizes: [...sizeSetFor(bucket.gender)],
+          images: g.images, descFile: g.descFile, desc: "", status: "pendiente" };
       });
       if (!drafts.length) {
         $("bulkScanMsg").textContent = "⚠️ No se encontraron imágenes válidas en lo que soltaste en " + bucket.label + ".";
@@ -618,7 +647,7 @@
                 </select>
               </div>
               <div class="flex gap-2 flex-wrap">
-                ${SIZES.map(s => `<button type="button" onclick="bulkToggleSize(${i},'${s}',this)" class="${d.sizes.includes(s)?'sel border-bbwyellow text-bbwyellow':''} border border-white/20 rounded-lg px-3 py-1 text-xs font-bold">${s}</button>`).join("")}
+                ${sizeSetFor(d.gender).map(s => `<button type="button" onclick="bulkToggleSize(${i},'${s}',this)" class="${d.sizes.includes(s)?'sel border-bbwyellow text-bbwyellow':''} border border-white/20 rounded-lg px-3 py-1 text-xs font-bold">${s}</button>`).join("")}
               </div>
               <textarea rows="2" oninput="bulkDrafts[${i}].desc=this.value" class="w-full bg-[#101010] border border-white/10 rounded-lg px-3 py-2 text-xs focus:border-bbwyellow focus:outline-none">${d.desc.replace(/</g,'&lt;')}</textarea>
             </div>
@@ -657,6 +686,7 @@
           const handle = d.title.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
           const variants = (d.sizes.length ? d.sizes : ["Default Title"]).map(s => ({ t: s, p: d.price }));
           const product = { id, handle, title: d.title, type: d.type, tags: [d.tag], desc: d.desc, price: d.price, variants, img: imgPaths[0] };
+          if (d.gender) product.gender = d.gender;
           if (imgPaths.length > 1) product.imgs = imgPaths;
           PRODUCTS.unshift(product);
           d.status = "✅ publicado"; ok++;
@@ -689,7 +719,7 @@
   function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;"); }
   async function call(action, extra){
     var key = $("mp-key").value.trim();
-    try { localStorage.setItem(LS, key); } catch(e){}
+    try { sessionStorage.setItem(LS, key); } catch(e){}
     var body = Object.assign({ key: key, action: action }, extra || {});
     var r = await fetch(FN, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
     var j = await r.json().catch(function(){ return {}; });
@@ -721,7 +751,7 @@
   }
   function init(){
     if(!$("mp-key")) return;
-    try { var sv = localStorage.getItem(LS); if(sv) $("mp-key").value = sv; } catch(e){}
+    try { var sv = sessionStorage.getItem(LS); if(sv) $("mp-key").value = sv; } catch(e){}
     $("mp-save").onclick = async function(){
       var sku = $("mp-sku").value.trim(), name = $("mp-name").value.trim(), url = $("mp-url").value.trim();
       if(!sku || !url){ msg("Falta el ID o el enlace.", false); return; }
