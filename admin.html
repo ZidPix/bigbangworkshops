@@ -727,6 +727,12 @@
   }
   async function load(){
     if(!$("mp-list")) return;
+    // Sin clave no llamamos al servidor: abrir la pestana no debe generar un
+    // intento fallido ni consumir el limite de 5 del rate limiter.
+    if(!$("mp-key").value.trim()){
+      msg("Escribe la clave admin y pulsa CARGAR LISTA.", true);
+      return;
+    }
     msg("Cargando...", true);
     var res = await call("list");
     if(!res.j.ok){ msg("Error: " + esc(res.j.error || res.status), false); return; }
