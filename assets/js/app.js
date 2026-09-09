@@ -42,7 +42,7 @@
   window.bbwProducts = async function () {
     if (PRODUCTS) return PRODUCTS;
     const base = location.pathname.includes("/") ? "" : "";
-    const res = await fetch("assets/data/products.json?v=3");
+    const res = await fetch("assets/data/products.json?v=5");
     PRODUCTS = await res.json();
     return PRODUCTS;
   };
@@ -59,6 +59,9 @@
   window.bbwCart = {
     items: getCart,
     add(item) { // {id, handle, title, variant, price, img, qty}
+      // 1049 productos traen variants:["Default Title"]. Eso no es una talla:
+      // se normaliza aquí para que el carrito y el correo del pedido no digan "Default Title".
+      if (/^default title$/i.test(item.variant || "")) item.variant = "Única";
       const cart = getCart();
       const found = cart.find(i => i.id === item.id && i.variant === item.variant);
       if (found) found.qty += item.qty || 1;
@@ -149,28 +152,76 @@
   window.bbwFmt = n => "$" + n.toFixed(2);
   window.bbwEsc = s => (s || "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
-  /* ---------- Tarjeta de producto ---------- */
+  /* ---------- Tarjeta de producto — CARD-R1 (bbw.css) ---------- */
   window.bbwCard = function (p) {
-    const badge = p.type === "Pack Digital" ? '<span class="absolute top-3 left-3 bg-[#E8E8E8] text-[#111111] text-[10px] font-semibold tracking-[0.15em] px-2 py-1">DIGITAL</span>'
-      : p.type === "Playera Oversize" ? '<span class="absolute top-3 left-3 bg-bbwyellow text-[#111111] text-[10px] font-semibold tracking-[0.15em] px-2 py-1">OVERSIZE</span>' : "";
+    const isDigital = /pack digital/i.test(p.type || "");
+    const badge = isDigital ? '<span class="bbw-badge">DIGITAL</span>'
+      : p.type === "Playera Oversize" ? '<span class="bbw-badge y">OVERSIZE</span>'
+      : p.type === "Playera Niño" ? '<span class="bbw-badge k">NIÑOS</span>' : "";
+
+    // Tallas reales del producto. "Default Title" no es una talla.
+    const vs = (p.variants || []).filter(v => v && v.t && !/^default title$/i.test(v.t));
+    const short = vs.length > 1 && vs.every(v => String(v.t).length <= 7);
+    let strip;
+    if (short) {
+      strip = '<div class="bbw-strip">' + vs.slice(0, 6).map(v =>
+        `<b role="button" tabindex="0" data-bbw-add="${bbwEsc(v.t)}" data-p="${v.p}">${bbwEsc(v.t)}</b>`
+      ).join("") + '</div>';
+    } else if (vs.length > 1) {
+      // variantes de nombre largo (ej. "Regular Fit / S"): mejor abrir el producto
+      strip = '<div class="bbw-strip"><b>VER OPCIONES</b></div>';
+    } else {
+      const v = vs[0] || (p.variants || [])[0] || { t: "Único", p: p.price };
+      strip = `<div class="bbw-strip"><b role="button" tabindex="0" data-bbw-add="${bbwEsc(v.t)}" data-p="${v.p}">` +
+              (isDigital ? "DESCARGAR AHORA" : "AÑADIR AL CARRITO") + '</b></div>';
+    }
+
     return `
-    <a href="producto.html?h=${encodeURIComponent(p.handle)}" class="group block bg-[#151515] overflow-hidden border border-white/10 hover:border-[#FFC629] transition-all">
-      <div class="relative aspect-square overflow-hidden bg-[#101010]">
+    <a href="producto.html?h=${encodeURIComponent(p.handle)}" class="bbw-card${isDigital ? " is-digital" : ""}"
+       data-bbw-id="${bbwEsc(String(p.id))}" data-bbw-handle="${bbwEsc(p.handle)}"
+       data-bbw-title="${bbwEsc(p.title)}" data-bbw-img="${bbwEsc(p.img)}" data-bbw-digital="${isDigital ? 1 : 0}">
+      <div class="bbw-shot">
         ${badge}
         <img src="${p.img}" alt="${bbwEsc(p.title)}" loading="lazy"
-             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-             onerror="this.src='https://placehold.co/600x600/151515/FFC629?text=BBW'">
+             onerror="this.src='https://placehold.co/600x750/151515/FFC629?text=BBW'">
+        ${strip}
       </div>
-      <div class="p-4">
-        <h3 class="text-sm font-semibold text-white leading-snug line-clamp-2">${bbwEsc(p.title)}</h3>
-        <div class="mt-1">${bbwStars(p)}</div>
-        <div class="mt-2 flex items-center justify-between">
-          <span class="text-[#FFC629] font-bold">${bbwFmt(p.price)}</span>
-          <span class="text-xs text-[#9A9A9A] uppercase tracking-wide">${bbwEsc(p.type)}</span>
-        </div>
+      <div class="bbw-meta">
+        <h3>${bbwEsc(p.title)}</h3>
+        <span class="bbw-stars">${bbwStars(p)}</span>
+        <div class="bbw-price"><span class="p">${bbwFmt(p.price)}</span><span class="t">${bbwEsc(p.type)}</span></div>
       </div>
     </a>`;
   };
+
+  /* ---------- Añadido rápido desde la tarjeta (delegado) ---------- */
+  function quickAdd(trigger) {
+    const card = trigger.closest("[data-bbw-id]");
+    if (!card) return;
+    window.bbwCart.add({
+      id: card.dataset.bbwId,
+      handle: card.dataset.bbwHandle,
+      title: card.dataset.bbwTitle,
+      variant: trigger.dataset.bbwAdd,
+      price: Number(trigger.dataset.p),
+      img: card.dataset.bbwImg,
+      digital: card.dataset.bbwDigital === "1",
+      qty: 1
+    });
+  }
+  document.addEventListener("click", e => {
+    const t = e.target.closest("[data-bbw-add]");
+    if (!t) return;
+    e.preventDefault(); e.stopPropagation();
+    quickAdd(t);
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const t = e.target.closest && e.target.closest("[data-bbw-add]");
+    if (!t) return;
+    e.preventDefault(); e.stopPropagation();
+    quickAdd(t);
+  });
 
   /* ---------- Menú móvil (hamburguesa) ---------- */
   function initMobileMenu() {
