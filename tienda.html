@@ -111,7 +111,13 @@
       const q = $("q").value.trim().toLowerCase();
       const tipo = $("tipo").value;
       const genero = $("genero").value;
+      // Los packs digitales no son apparel: no se mezclan en el catálogo general.
+      // Aparecen al elegir su categoría, o si el cliente los busca por nombre.
+      const esDigital = p => /pack digital/i.test(p.type || "");
+      const mostrarDigitales = tipo === "Pack Digital" || q !== "";
+
       filtered = all.filter(p =>
+        (mostrarDigitales || !esDigital(p)) &&
         (!tipo || p.type === tipo) &&
         (!genero || p.gender === genero) &&
         (!q || p.title.toLowerCase().includes(q) || (p.tags || []).join(" ").toLowerCase().includes(q))

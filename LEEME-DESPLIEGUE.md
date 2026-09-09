@@ -85,6 +85,35 @@ solo cambio de copy y color — sigue siendo una campaña completa.
 
 ---
 
+## 1 bis · Orden de los tabs y los packs digitales
+
+Tabs, en este orden: **COLECCIÓN PLAYERAS · OVERSIZE · COLECCIÓN NIÑOS · PACKS DIGITALES.**
+Playeras es el tab activo al entrar — es el catálogo real (1,267 productos) y el corazón del negocio.
+
+### DIGITAL-R1 · Un producto digital no es apparel
+
+Los 8 packs digitales aparecen **solo en su propia sección**. Se sacaron de:
+
+| Dónde | Antes | Ahora |
+|---|---|---|
+| Tab Playeras / Oversize / Niños | ya estaban fuera | fuera |
+| Riel "Recién agregado" (home) | **se mezclaban** | fuera |
+| Collage del hero | ya estaban fuera | fuera |
+| `tienda.html` sin filtro | **se mezclaban** (1,292) | fuera (1,284) |
+| `tienda.html` categoría "Pack Digital" | 8 | 8 |
+| `tienda.html` buscando "pack", "naruto"… | 8 | 8 — **la búsqueda sí los encuentra** |
+| Relacionados en `producto.html` | ya filtraba por tipo igual | sin cambios |
+
+Decisión que tomé y puedes revertir: **la búsqueda sigue encontrándolos.** Una categoría es una
+categoría; una búsqueda es intención explícita del cliente. Si prefieres que ni buscando salgan
+fuera de su sección, en `tienda.html` cambia `mostrarDigitales` a `tipo === "Pack Digital"` y ya.
+
+En el código hay **una sola definición**, `ES_DIGITAL`, y todo lo demás la usa. Si mañana agregas
+otro tipo digital (fuentes, mockups, plantillas), lo añades ahí y queda excluido en todas partes
+de una vez.
+
+---
+
 ## 2 bis · El hero y sus fotos
 
 **Altura:** 589 px en escritorio (era 802). Ahora la barra de tabs entra en pantalla

@@ -107,25 +107,17 @@
 <div class="bbw-tabsbar" id="bbw-cat">
   <div class="bbw-wrap">
     <div class="bbw-tabs" role="tablist" id="bbwTabs">
-      <button class="bbw-tab" role="tab" data-tab="packs" aria-selected="true"><b>PACKS DIGITALES</b><small>Descarga inmediata</small></button>
-      <button class="bbw-tab" role="tab" data-tab="tees"  aria-selected="false"><b>COLECCIÓN PLAYERAS</b><small>Regular fit · DTF</small></button>
+      <button class="bbw-tab" role="tab" data-tab="tees"  aria-selected="true"><b>COLECCIÓN PLAYERAS</b><small>Regular fit · DTF</small></button>
       <button class="bbw-tab" role="tab" data-tab="over"  aria-selected="false"><b>OVERSIZE</b><small>Corte caído</small></button>
       <button class="bbw-tab" role="tab" data-tab="ninos" aria-selected="false"><b>COLECCIÓN NIÑOS</b><small>Tallas 2–12</small></button>
+      <button class="bbw-tab" role="tab" data-tab="packs" aria-selected="false"><b>PACKS DIGITALES</b><small>Descarga inmediata</small></button>
     </div>
   </div>
 </div>
 
 <main class="bbw-wrap bbw-main">
 
-  <section class="bbw-panel on" data-panel="packs">
-    <div class="bbw-sechead">
-      <div><p class="bbw-rule">Archivos listos para imprimir</p><h2 class="bbw-display">PACKS DIGITALES</h2></div>
-      <a href="tienda.html?tipo=Pack%20Digital" class="bbw-rule">Ver todo →</a>
-    </div>
-    <div class="bbw-grid" data-grid="packs"></div>
-  </section>
-
-  <section class="bbw-panel" data-panel="tees">
+  <section class="bbw-panel on" data-panel="tees">
     <div class="bbw-sechead">
       <div><p class="bbw-rule">Catálogo principal</p><h2 class="bbw-display">COLECCIÓN PLAYERAS</h2></div>
       <a href="tienda.html" class="bbw-rule">Ver todo →</a>
@@ -147,6 +139,14 @@
       <a href="tienda.html?tipo=Playera%20Ni%C3%B1o" class="bbw-rule">Ver todo →</a>
     </div>
     <div class="bbw-grid" data-grid="ninos"></div>
+  </section>
+
+  <section class="bbw-panel" data-panel="packs">
+    <div class="bbw-sechead">
+      <div><p class="bbw-rule">Archivos listos para imprimir</p><h2 class="bbw-display">PACKS DIGITALES</h2></div>
+      <a href="tienda.html?tipo=Pack%20Digital" class="bbw-rule">Ver todo →</a>
+    </div>
+    <div class="bbw-grid" data-grid="packs"></div>
   </section>
 
   <div class="bbw-sechead">
@@ -214,11 +214,17 @@ function bbwNewest(a, b) {
   return (B[0] - A[0]) || (B[1] - A[1]);
 }
 
+/* Un producto digital NO es apparel: vive solo en su propia sección.
+   ES_DIGITAL es la única definición; todo lo demás la usa. */
+const ES_DIGITAL = p => /pack digital/i.test(p.type || "");
+
+/* Orden de los tabs. Los packs van al final a propósito: el catálogo manda,
+   el archivo digital es un complemento. */
 const GROUPS = {
-  packs: p => p.type === "Pack Digital",
   tees:  p => ["T-Shirt", "Graphic Tee", "Playera Regular Fit", "Playera Woman Fit", "Playera Sin Mangas"].includes(p.type),
   over:  p => p.type === "Playera Oversize",
-  ninos: p => p.type === "Playera Niño"
+  ninos: p => p.type === "Playera Niño",
+  packs: ES_DIGITAL
 };
 const PER_TAB = 8;
 
@@ -231,7 +237,7 @@ const PER_TAB = 8;
 const HERO_MEDIA = { modo: "variado", cantidad: 6, manual: [] };
 
 function heroImgs(sorted) {
-  const pool = sorted.filter(p => p.img);
+  const pool = sorted.filter(p => p.img && !ES_DIGITAL(p));
   if (HERO_MEDIA.modo === "manual" && HERO_MEDIA.manual.length) {
     return HERO_MEDIA.manual.map(h => pool.find(p => p.handle === h))
                             .filter(Boolean).slice(0, HERO_MEDIA.cantidad);
@@ -293,7 +299,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     box.innerHTML = html;
   });
 
-  document.getElementById("bbwRail").innerHTML = sorted.slice(0, 10).map(bbwCard).join("");
+  // "Recién agregado" es apparel. Los packs digitales tienen su propio tab.
+  document.getElementById("bbwRail").innerHTML =
+    sorted.filter(p => !ES_DIGITAL(p)).slice(0, 10).map(bbwCard).join("");
 
   // collage del hero: producto real en escala de grises (ver HERO_MEDIA arriba)
   document.getElementById("bbwHeroMedia").innerHTML =
