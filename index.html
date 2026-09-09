@@ -221,6 +221,39 @@ const GROUPS = {
 };
 const PER_TAB = 8;
 
+/* ---------- FOTOS DEL COLLAGE DEL HERO ----------
+   modo "variado"  → el más nuevo de cada franquicia (evita 6 playeras del mismo drop)
+   modo "nuevos"   → literalmente los 6 más nuevos, salgan como salgan
+   modo "manual"   → tú eliges, por handle exacto:
+                     manual: ["bts-arirang", "jjk-sukuna", "roshi-gym-beast"]
+   El hero es textura, no vitrina: no hay enlaces, no se hace clic.          */
+const HERO_MEDIA = { modo: "variado", cantidad: 6, manual: [] };
+
+function heroImgs(sorted) {
+  const pool = sorted.filter(p => p.img);
+  if (HERO_MEDIA.modo === "manual" && HERO_MEDIA.manual.length) {
+    return HERO_MEDIA.manual.map(h => pool.find(p => p.handle === h))
+                            .filter(Boolean).slice(0, HERO_MEDIA.cantidad);
+  }
+  const tees = pool.filter(GROUPS.tees);
+  if (HERO_MEDIA.modo === "nuevos") return tees.slice(0, HERO_MEDIA.cantidad);
+  /* "variado": una playera por familia.
+     OJO: no se puede usar tags[0] — en los productos nuevos ese tag es el FIT
+     ("Oversize", "Regular Fit", "Fit de mujer"), no la franquicia. Tres camisas
+     BTS con tres fits distintos pasaban como tres familias distintas.
+     La primera palabra del título sí identifica la familia:
+     "BTS ARIRANG" / "BTS WHALE" -> BTS;  "JJK | Sukuna" -> JJK. */
+  const familia = p => String(p.title).trim().split(/[\s|·—-]+/)[0].toUpperCase();
+  const out = [], vistos = new Set();
+  for (const p of tees) {
+    const fam = familia(p);
+    if (vistos.has(fam)) continue;
+    vistos.add(fam); out.push(p);
+    if (out.length >= HERO_MEDIA.cantidad) break;
+  }
+  return out;
+}
+
 /* EMPTY-R1 · colección naciente: en vez de un grid roto, lista de espera por WhatsApp */
 function emptyCard() {
   const wa = "https://wa.me/" + (window.BBW.whatsapp || "") +
@@ -261,9 +294,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("bbwRail").innerHTML = sorted.slice(0, 10).map(bbwCard).join("");
 
-  // collage del hero: producto real en escala de grises
+  // collage del hero: producto real en escala de grises (ver HERO_MEDIA arriba)
   document.getElementById("bbwHeroMedia").innerHTML =
-    sorted.filter(GROUPS.tees).slice(0, 6).map(p => `<img src="${p.img}" alt="" loading="lazy">`).join("");
+    heroImgs(sorted).map(p => `<img src="${p.img}" alt="" loading="lazy">`).join("");
 
   // tabs
   const tabs = document.getElementById("bbwTabs");

@@ -75,6 +75,35 @@ solo cambio de copy y color — sigue siendo una campaña completa.
 
 ---
 
+## 2 bis · El hero y sus fotos
+
+**Altura:** 589 px en escritorio (era 802). Ahora la barra de tabs entra en pantalla
+sin hacer scroll, que es lo que importa: el cliente ve el catálogo de una.
+Se ajusta en `bbw.css` → `.bbw-hero-in { padding-block: 72px 58px }`.
+
+**Las fotos NO son random.** Son producto real de tu catálogo, en escala de grises y
+al 44% de opacidad debajo del degradado. Son textura, no vitrina: no llevan enlace y
+no se hace clic en ellas. Se controlan desde `index.html`, arriba del todo:
+
+```js
+const HERO_MEDIA = { modo: "variado", cantidad: 6, manual: [] };
+```
+
+| modo | qué hace |
+|---|---|
+| `"variado"` | **por defecto** — la playera más nueva de cada familia |
+| `"nuevos"` | las 6 más nuevas, salgan como salgan |
+| `"manual"` | las que tú elijas: `manual: ["bts-arirang","jjk-sukuna"]` (handles) |
+
+⚠️ Por qué existe `variado`: tus 6 productos más nuevos son **todos BTS**. En modo
+`nuevos` el hero mostraba seis veces la misma camisa. Y no se puede agrupar por
+`tags[0]`, porque en los productos nuevos ese tag es el *fit* ("Oversize",
+"Regular Fit", "Fit de mujer"), no la franquicia — tres BTS con tres fits pasaban
+como tres familias. El agrupador usa la **primera palabra del título**, que sí
+identifica la familia (`BTS ARIRANG` → BTS, `JJK | Sukuna` → JJK).
+
+---
+
 ## 3 · Cómo previsualizar sin esperar al mes
 
 ```
