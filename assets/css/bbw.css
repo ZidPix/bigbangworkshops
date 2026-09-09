@@ -16,9 +16,15 @@
   --bbw-steel:#6D6D6D;
   --bbw-concrete:#E8E8E8;
 
-  /* La campaña sobreescribe SOLO estas tres. Nada más. */
+  /* --accent es la MARCA. Ninguna temporada lo toca jamás: es lo que mantiene
+     el logotipo, los botones y los tabs en amarillo BBW todo el año. */
   --accent:#FFC629;
-  --accent-2:#FFC629;
+
+  /* --season es el color de la campaña. Vive SOLO en: la palabra destacada del
+     hero, la banda de campaña, los efectos y el brillo del tab activo.
+     Esto es SEASON-R2: la temporada añade un acento, no repinta la marca. */
+  --season:#FFC629;
+  --season-2:#FFC629;
   --glow:rgba(255,198,41,.32);
 
   --maxw:1440px;
@@ -80,7 +86,7 @@
 .bbw-hero-grid{position:absolute;inset:0}
 .bbw-hero-in{position:relative;padding-block:72px 58px;z-index:3}
 .bbw-hero h1{margin:18px 0 0;font-size:clamp(38px,5vw,76px)}
-.bbw-hero h1 em{font-style:normal;color:var(--accent)}
+.bbw-hero h1 em{font-style:normal;color:var(--season)}
 .bbw-lede{margin:20px 0 0;max-width:440px;color:var(--bbw-gray);font-size:14px;line-height:1.7}
 .bbw-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 .bbw-btn{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.16em;padding:11px 32px;text-decoration:none;transition:.35s var(--ease)}
@@ -113,7 +119,7 @@
 .bbw-tab[aria-selected="true"] b{color:var(--accent)}
 .bbw-tab[aria-selected="true"]::after{left:0;right:0}
 [data-season]:not([data-season="base"]) .bbw-tab[aria-selected="true"]::after{
-  background:linear-gradient(90deg,var(--accent-2),var(--accent),var(--accent-2));box-shadow:0 0 14px var(--accent)}
+  background:linear-gradient(90deg,var(--season-2),var(--season),var(--season-2));box-shadow:0 0 14px var(--season)}
 .bbw-panel{display:none;animation:bbw-fade .5s var(--ease)}
 .bbw-panel.on{display:block}
 @keyframes bbw-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -181,9 +187,9 @@
 .bbw-campaign{position:relative;overflow:hidden;border-bottom:1px solid var(--bbw-line)}
 .bbw-campaign[hidden]{display:none}
 .bbw-campaign .in{position:relative;z-index:3;padding-block:78px;text-align:center}
-.bbw-campaign .kicker{color:var(--accent);margin-bottom:16px}
+.bbw-campaign .kicker{color:var(--season);margin-bottom:16px}
 .bbw-campaign h2{font-size:clamp(40px,7vw,90px);margin:0}
-.bbw-campaign h2 em{font-style:normal;color:var(--accent);text-shadow:0 0 26px var(--glow)}
+.bbw-campaign h2 em{font-style:normal;color:var(--season);text-shadow:0 0 26px var(--glow)}
 .bbw-campaign p{color:var(--bbw-gray);max-width:520px;margin:20px auto 0;font-size:14px;line-height:1.75}
 .bbw-campaign .bg{position:absolute;inset:0;background:radial-gradient(60% 130% at 50% 120%,var(--glow) 0%,transparent 70%),#0D0D0D}
 
@@ -213,7 +219,7 @@
 
 /* brasas / chispas ascendentes */
 .fx-embers i{position:absolute;bottom:-12px;width:2px;height:2px;border-radius:50%;
-  background:var(--accent-2);box-shadow:0 0 7px 1px var(--glow);animation:bbw-rise linear infinite}
+  background:var(--season);box-shadow:0 0 7px 1px var(--glow);animation:bbw-rise linear infinite}
 @keyframes bbw-rise{0%{transform:translateY(0) translateX(0) scale(.5);opacity:0}12%{opacity:.95}75%{opacity:.6}
   100%{transform:translateY(-96vh) translateX(var(--dx,18px)) scale(1.15);opacity:0}}
 
@@ -253,7 +259,7 @@
 
 /* corazones */
 .fx-hearts i{position:absolute;bottom:-20px;width:12px;height:12px;
-  background:var(--accent-2);opacity:.55;transform:rotate(-45deg);animation:bbw-float linear infinite}
+  background:var(--season);opacity:.55;transform:rotate(-45deg);animation:bbw-float linear infinite}
 .fx-hearts i::before,.fx-hearts i::after{content:"";position:absolute;width:12px;height:12px;
   background:inherit;border-radius:50%}
 .fx-hearts i::before{top:-6px;left:0}

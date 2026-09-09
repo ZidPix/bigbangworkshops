@@ -37,7 +37,7 @@ Cada temporada es un objeto:
 ```js
 {
   id:"navidad", label:"Navidad", from:"12-10", to:"12-31",
-  accent:"#FFC629", accent2:"#E63946", glow:"rgba(230,57,70,.28)",
+  color:"#FFC629", color2:"#E63946", glow:"rgba(230,57,70,.28)",
   fx:["snow","lights"],
   ticker:[ … ],                    // la barra de arriba
   hero:{ kicker, title, lede },    // el titular grande
@@ -45,13 +45,23 @@ Cada temporada es un objeto:
 }
 ```
 
+### ⚠️ Dos colores distintos, no confundir
+
+- **`--accent` = `#FFC629`, el amarillo de la marca.** Ninguna temporada lo toca, nunca.
+  Manda en el logotipo, los botones, el tab activo, la barra superior y el contador del carrito.
+- **`color` / `color2` de la temporada** → escriben `--season` / `--season-2`, y viven **solo** en
+  la palabra destacada del hero, la banda de campaña, los efectos y el brillo del tab activo.
+
+Eso es SEASON-R2 en código: la campaña **añade un acento, no repinta la marca**. En Halloween,
+"TALLER." va en naranja y el resto del sitio sigue siendo BBW.
+
 El motor elige por fecha, **el primero que calce manda**, y `base` va siempre al final
 como red de seguridad. No hay que tocar CSS ni HTML: `accent`, `accent2` y `glow`
 son las tres únicas variables que la temporada sobreescribe, y todo el sitio las hereda.
 
 ### Calendario que dejé cargado (Panamá)
 
-| Temporada | Rango | Acento | Efectos |
+| Temporada | Rango | `color` | Efectos |
 |---|---|---|---|
 | San Valentín | 01–15 feb | `#FF4D6D` | corazones |
 | Regreso a clases | 16 feb – 15 mar | amarillo BBW | — (solo copy) |

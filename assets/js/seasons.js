@@ -4,6 +4,8 @@
    El motor decide la temporada por fecha y la aplica al <html>.
 
    PARA CAMBIAR UNA CAMPAÑA: edita SOLO el objeto de abajo.
+   `color` y `color2` son el acento de la temporada. El amarillo BBW de la marca
+   (logotipo, botones, tabs, barra superior) NO se toca nunca desde aquí.
    No se toca el CSS, no se toca el HTML, no se duplican archivos.
 
    PARA PREVISUALIZAR: agrega ?preview=1 a la URL y sale un panel
@@ -17,7 +19,7 @@ window.BBW_SEASONS = [
   /* ---------------- FEBRERO · San Valentín ---------------- */
   {
     id:"sanvalentin", label:"San Valentín", from:"02-01", to:"02-15",
-    accent:"#FF4D6D", accent2:"#FF8FA3", glow:"rgba(255,77,109,.32)",
+    color:"#FF4D6D", color2:"#FF8FA3", glow:"rgba(255,77,109,.32)",
     fx:["hearts"],
     ticker:["Regalos que sí se usan","Personaliza para dos","Entrega antes del 14","Envío gratis en Panamá Norte"],
     hero:{ kicker:"14 de febrero · Edición limitada",
@@ -31,7 +33,7 @@ window.BBW_SEASONS = [
   /* ---------------- FEBRERO–MARZO · Regreso a clases ---------------- */
   {
     id:"regreso", label:"Regreso a clases", from:"02-16", to:"03-15",
-    accent:"#FFC629", accent2:"#FFC629", glow:"rgba(255,198,41,.30)",
+    color:"#FFC629", color2:"#FFC629", glow:"rgba(255,198,41,.30)",
     fx:[],
     ticker:["Colección niños · tallas 2 a 12","Uniformes y grupos","Precio por volumen","Hecho en Panamá"],
     hero:{ kicker:"Regreso a clases · Panamá",
@@ -45,7 +47,7 @@ window.BBW_SEASONS = [
   /* ---------------- JUNIO · Día del Padre (3er domingo) ---------------- */
   {
     id:"padre", label:"Día del Padre", from:"06-01", to:"06-21",
-    accent:"#2F80ED", accent2:"#56CCF2", glow:"rgba(47,128,237,.30)",
+    color:"#2F80ED", color2:"#56CCF2", glow:"rgba(47,128,237,.30)",
     fx:[],
     ticker:["Día del Padre · tercer domingo de junio","Cool Dad Club","Personaliza con su nombre","Entrega en 48 horas"],
     hero:{ kicker:"Día del Padre · Panamá",
@@ -59,7 +61,7 @@ window.BBW_SEASONS = [
   /* ---------------- OCTUBRE · Halloween ---------------- */
   {
     id:"halloween", label:"Halloween", from:"10-05", to:"11-01",
-    accent:"#FF7A18", accent2:"#7B2FF7", glow:"rgba(255,122,24,.38)",
+    color:"#FF7A18", color2:"#7B2FF7", glow:"rgba(255,122,24,.38)",
     fx:["fog","embers","bats","web","candle"],
     ticker:["Drop Halloween · 31.10","Edición limitada · no se repone","Noche de Taller","Packs digitales de temporada","Envío gratis en Panamá Norte"],
     hero:{ kicker:"Drop de Halloween · 31.10",
@@ -73,7 +75,7 @@ window.BBW_SEASONS = [
   /* ---------------- NOVIEMBRE · Mes de la Patria ---------------- */
   {
     id:"patria", label:"Mes de la Patria", from:"11-02", to:"11-20",
-    accent:"#D62828", accent2:"#005293", glow:"rgba(214,40,40,.30)",
+    color:"#D62828", color2:"#005293", glow:"rgba(214,40,40,.30)",
     fx:["confetti"],
     ticker:["3 · 4 · 5 · 10 · 28 de noviembre","Mes de la Patria","Diseños panameños","Hecho en Panamá, para Panamá"],
     hero:{ kicker:"Noviembre · Mes de la Patria",
@@ -87,7 +89,7 @@ window.BBW_SEASONS = [
   /* ---------------- NOVIEMBRE · Black Friday ---------------- */
   {
     id:"blackfriday", label:"Black Friday", from:"11-21", to:"11-30",
-    accent:"#FFC629", accent2:"#FFFFFF", glow:"rgba(255,255,255,.28)",
+    color:"#FFC629", color2:"#FFFFFF", glow:"rgba(255,255,255,.28)",
     fx:["embers"],
     ticker:["Black Friday · solo esta semana","Precios que no se repiten","Packs digitales desde $3","Envío gratis en Panamá Norte"],
     hero:{ kicker:"Black Friday · solo esta semana",
@@ -101,7 +103,7 @@ window.BBW_SEASONS = [
   /* ---------------- DICIEMBRE · Día de la Madre (8 dic, Panamá) ---------------- */
   {
     id:"madre", label:"Día de la Madre", from:"12-01", to:"12-09",
-    accent:"#FF6FA5", accent2:"#FFB3CE", glow:"rgba(255,111,165,.30)",
+    color:"#FF6FA5", color2:"#FFB3CE", glow:"rgba(255,111,165,.30)",
     fx:["hearts"],
     ticker:["8 de diciembre · Día de la Madre","Personaliza con su nombre","Entrega antes del 8","Hecho en Panamá"],
     hero:{ kicker:"8 de diciembre · Día de la Madre",
@@ -115,7 +117,7 @@ window.BBW_SEASONS = [
   /* ---------------- DICIEMBRE · Navidad ---------------- */
   {
     id:"navidad", label:"Navidad", from:"12-10", to:"12-31",
-    accent:"#FFC629", accent2:"#E63946", glow:"rgba(230,57,70,.28)",
+    color:"#FFC629", color2:"#E63946", glow:"rgba(230,57,70,.28)",
     fx:["snow","lights"],
     ticker:["Regalos que sí se usan","Última fecha de pedido: 20 de diciembre","Packs digitales · descarga inmediata","Envío gratis en Panamá Norte"],
     hero:{ kicker:"Navidad · Panamá",
@@ -129,7 +131,7 @@ window.BBW_SEASONS = [
   /* ---------------- RESTO DEL AÑO · marca permanente ---------------- */
   {
     id:"base", label:"Sin campaña", from:"01-01", to:"12-31",
-    accent:"#FFC629", accent2:"#FFC629", glow:"rgba(255,198,41,.32)",
+    color:"#FFC629", color2:"#FFC629", glow:"rgba(255,198,41,.32)",
     fx:[],
     ticker:["Envío gratis en Panamá Norte","Impresión DTF premium","Packs digitales · descarga inmediata","Hecho en Panamá","Nueva colección niños"],
     hero:{ kicker:"Creative Workshop · Panamá",
@@ -215,8 +217,10 @@ window.BBW_SEASONS = [
   /* ---------- aplicar ---------- */
   function apply(season) {
     root.dataset.season = season.id;
-    root.style.setProperty("--accent", season.accent);
-    root.style.setProperty("--accent-2", season.accent2);
+    // SEASON-R2: la temporada NUNCA toca --accent (el amarillo de marca).
+    // Solo pinta su propio token, que vive en el hero, la banda y los efectos.
+    root.style.setProperty("--season", season.color);
+    root.style.setProperty("--season-2", season.color2);
     root.style.setProperty("--glow", season.glow);
 
     // ticker
@@ -252,6 +256,9 @@ window.BBW_SEASONS = [
     // efectos
     const host = document.getElementById("bbwHeroFx");
     if (host) host.innerHTML = season.fx.filter(f => FX[f]).map(f => FX[f]()).join("");
+    // la banda de campaña lleva su propia niebla, para que no se vea plana
+    const bandFx = document.getElementById("bbwCampaignFx");
+    if (bandFx) bandFx.innerHTML = season.fx.includes("fog") ? FX.fog() : "";
     document.querySelectorAll(".fx-web,.fx-candle,.fx-lights").forEach(n => n.remove());
     const hero = document.getElementById("bbwHero");
     if (hero && season.fx.includes("web")) hero.insertAdjacentHTML("beforeend", web());
