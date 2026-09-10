@@ -1,0 +1,320 @@
+/* ============================================================
+   BIG BANG WORKSHOPS — bbw.css
+   Design System de tienda + capa de campaña estacional.
+   Convive con Tailwind (que sigue cargando para el resto del sitio).
+   Reglas: TAB-R1 · CARD-R1 · SEASON-R1/R2 · MOTION-R1 · EMPTY-R1
+   ============================================================ */
+
+:root{
+  --bbw-black:#111111;
+  --bbw-panel:#151515;
+  --bbw-panel-2:#181818;
+  --bbw-line:rgba(255,255,255,.10);
+  --bbw-line-soft:rgba(255,255,255,.06);
+  --bbw-yellow:#FFC629;
+  --bbw-gray:#9A9A9A;
+  --bbw-steel:#6D6D6D;
+  --bbw-concrete:#E8E8E8;
+
+  /* --accent es la MARCA. Ninguna temporada lo toca jamás: es lo que mantiene
+     el logotipo, los botones y los tabs en amarillo BBW todo el año. */
+  --accent:#FFC629;
+
+  /* --season es el color de la campaña. Vive SOLO en: la palabra destacada del
+     hero, la banda de campaña, los efectos y el brillo del tab activo.
+     Esto es SEASON-R2: la temporada añade un acento, no repinta la marca. */
+  --season:#FFC629;
+  --season-2:#FFC629;
+  --glow:rgba(255,198,41,.32);
+
+  --maxw:1440px;
+  --header-h:68px;
+  --tabs-h:60px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+/* ---------- base ---------- */
+.bbw-page{margin:0;background:var(--bbw-black);color:#fff;font-family:Montserrat,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.bbw-wrap{max-width:var(--maxw);margin:0 auto;padding-inline:24px}
+.bbw-main{display:flow-root}
+.bbw-display{font-family:'Bebas Neue',Impact,sans-serif;letter-spacing:.04em;line-height:.92}
+.bbw-rule{font-family:Inter,sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase}
+.bbw-blueprint{
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+/* ---------- ticker de anuncio ---------- */
+.bbw-announce{background:var(--bbw-concrete);color:var(--bbw-black);overflow:hidden;border-bottom:1px solid rgba(0,0,0,.15)}
+[data-season]:not([data-season="base"]) .bbw-announce{background:var(--accent);color:#111}
+.bbw-ticker{display:flex;width:max-content;animation:bbw-slide 34s linear infinite}
+.bbw-ticker span{font-family:Inter,sans-serif;font-size:10px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;padding:9px 0;white-space:nowrap;display:inline-flex;align-items:center;gap:26px}
+.bbw-ticker span::after{content:"◆";font-size:7px;opacity:.55}
+.bbw-ticker span+span{margin-left:26px}
+@keyframes bbw-slide{to{transform:translateX(-50%)}}
+
+/* ---------- header ---------- */
+.bbw-hdr{position:sticky;top:0;z-index:70;height:var(--header-h);background:rgba(17,17,17,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--bbw-line)}
+.bbw-hdr .bar{height:var(--header-h);display:flex;align-items:center;gap:20px}
+.bbw-burger{display:flex;flex-direction:column;gap:5px;padding:6px 2px;background:none;border:0;cursor:pointer}
+.bbw-burger i{display:block;width:20px;height:1.5px;background:#fff;transition:.3s var(--ease)}
+.bbw-burger:hover i:nth-child(1){transform:translateX(3px)}
+.bbw-burger:hover i:nth-child(3){transform:translateX(-3px)}
+.bbw-wordmark{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.16em;white-space:nowrap;color:#fff;text-decoration:none}
+.bbw-wordmark em{font-style:normal;color:var(--accent)}
+.bbw-nav{gap:30px;margin:0 auto;display:none}   /* Tailwind (hidden md:flex) manda; esto es el respaldo si el CDN falla */
+@media(min-width:768px){.bbw-nav{display:flex}}
+.bbw-nav a{position:relative;color:rgba(255,255,255,.82);text-decoration:none;transition:color .25s}
+.bbw-nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--accent);transition:right .35s var(--ease)}
+.bbw-nav a:hover{color:var(--accent)}
+.bbw-nav a:hover::after{right:0}
+.bbw-iconlink{padding:8px;color:#fff;background:none;border:0;cursor:pointer;transition:color .25s;display:inline-flex}
+.bbw-iconlink:hover{color:var(--accent)}
+.bbw-spacer{margin-left:auto}
+.bbw-ico{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.5}
+.bbw-cartwrap{position:relative}
+.bbw-cartn{position:absolute;top:1px;right:1px;background:var(--accent);color:#111;font-size:9px;font-weight:800;min-width:15px;height:15px;border-radius:99px;display:grid;place-items:center;font-family:Inter,sans-serif}
+
+/* ---------- hero ---------- */
+.bbw-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--bbw-line);isolation:isolate}
+.bbw-hero-media{position:absolute;inset:0;display:grid;grid-template-columns:repeat(6,1fr);opacity:.44}
+.bbw-hero-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15)}
+.bbw-hero-scrim{position:absolute;inset:0;background:
+  radial-gradient(120% 95% at 16% 42%,rgba(17,17,17,.62) 0%,rgba(17,17,17,.90) 52%,rgba(17,17,17,.97) 100%),
+  linear-gradient(90deg,#111 0%,rgba(17,17,17,.30) 62%,rgba(17,17,17,.80) 100%)}
+.bbw-hero-grid{position:absolute;inset:0}
+.bbw-hero-in{position:relative;padding-block:72px 58px;z-index:3}
+.bbw-hero h1{margin:18px 0 0;font-size:clamp(38px,5vw,76px)}
+.bbw-hero h1 em{font-style:normal;color:var(--season)}
+.bbw-lede{margin:20px 0 0;max-width:440px;color:var(--bbw-gray);font-size:14px;line-height:1.7}
+.bbw-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.bbw-btn{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.16em;padding:11px 32px;text-decoration:none;transition:.35s var(--ease)}
+.bbw-btn-solid{background:var(--accent);color:#111}
+.bbw-btn-solid:hover{background:#fff}
+.bbw-btn-ghost{border:1px solid rgba(255,255,255,.28);color:#fff}
+.bbw-btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.bbw-hero-foot{display:flex;align-items:center;gap:14px;margin-top:44px;color:rgba(255,255,255,.32)}
+.bbw-hero-foot span.l{flex:1;height:1px;background:rgba(255,255,255,.14)}
+.bbw-corner{position:absolute;width:18px;height:18px;z-index:4;pointer-events:none;border-color:rgba(255,255,255,.22)}
+.bbw-c-tl{top:18px;left:18px;border-left:1px solid;border-top:1px solid}
+.bbw-c-tr{top:18px;right:18px;border-right:1px solid;border-top:1px solid}
+.bbw-c-bl{bottom:18px;left:18px;border-left:1px solid;border-bottom:1px solid}
+.bbw-c-br{bottom:18px;right:18px;border-right:1px solid;border-bottom:1px solid}
+.bbw-spot{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .6s;
+  background:radial-gradient(340px 340px at var(--mx,50%) var(--my,50%),var(--glow) 0%,transparent 70%);mix-blend-mode:screen}
+.bbw-hero:hover .bbw-spot{opacity:.7}
+
+/* ---------- TAB-R1 · tabs de catálogo ---------- */
+#bbw-cat{scroll-margin-top:var(--header-h)}
+.bbw-tabsbar{position:sticky;top:var(--header-h);z-index:60;background:rgba(13,13,13,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--bbw-line)}
+.bbw-tabs{display:flex;overflow-x:auto;scrollbar-width:none}
+.bbw-tabs::-webkit-scrollbar{display:none}
+.bbw-tab{position:relative;display:flex;flex-direction:column;gap:3px;padding:15px 30px 14px;white-space:nowrap;background:none;border:0;border-right:1px solid var(--bbw-line-soft);cursor:pointer;transition:background .3s var(--ease)}
+.bbw-tab:first-child{padding-left:0}
+.bbw-tab b{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.12em;color:rgba(255,255,255,.62);transition:color .3s}
+.bbw-tab small{font-family:Inter,sans-serif;font-size:9px;letter-spacing:.2em;color:var(--bbw-steel);text-transform:uppercase}
+.bbw-tab:hover b{color:#fff}
+.bbw-tab::after{content:"";position:absolute;left:50%;right:50%;bottom:-1px;height:2px;background:var(--accent);transition:left .4s var(--ease),right .4s var(--ease)}
+.bbw-tab[aria-selected="true"] b{color:var(--accent)}
+.bbw-tab[aria-selected="true"]::after{left:0;right:0}
+[data-season]:not([data-season="base"]) .bbw-tab[aria-selected="true"]::after{
+  background:linear-gradient(90deg,var(--season-2),var(--season),var(--season-2));box-shadow:0 0 14px var(--season)}
+.bbw-panel{display:none;animation:bbw-fade .5s var(--ease)}
+.bbw-panel.on{display:block}
+@keyframes bbw-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- encabezado de sección ---------- */
+.bbw-sechead{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:56px 0 26px}
+.bbw-sechead h2{margin:6px 0 0;font-size:clamp(30px,4vw,46px)}
+.bbw-sechead .bbw-rule{color:var(--bbw-steel)}
+.bbw-sechead a{color:var(--bbw-gray);text-decoration:none;transition:color .25s}
+.bbw-sechead a:hover{color:var(--accent)}
+
+/* ---------- CARD-R1 · grid y tarjeta ---------- */
+.bbw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bbw-line-soft);border:1px solid var(--bbw-line-soft)}
+.bbw-card{position:relative;display:block;background:var(--bbw-panel);color:#fff;text-decoration:none;transition:background .35s var(--ease)}
+.bbw-card:hover{background:var(--bbw-panel-2);box-shadow:inset 0 0 0 1px var(--accent)}
+.bbw-shot{position:relative;aspect-ratio:4/5;overflow:hidden;background:#0F0F0F}
+.bbw-shot img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.bbw-card:hover .bbw-shot img{transform:scale(1.06)}
+.bbw-card.is-digital .bbw-shot{background:#0C0C0C}
+.bbw-card.is-digital .bbw-shot img{object-fit:contain;padding:10px}
+.bbw-badge{position:absolute;top:12px;left:12px;z-index:3;font-family:Inter,sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;padding:5px 9px;background:var(--bbw-concrete);color:#111}
+.bbw-badge.y{background:var(--bbw-yellow)}
+.bbw-badge.k{background:#fff}
+.bbw-quick{position:absolute;top:10px;right:10px;z-index:3;width:32px;height:32px;display:grid;place-items:center;background:rgba(17,17,17,.8);border:1px solid var(--bbw-line);color:#fff;font-size:16px;cursor:pointer;opacity:0;transform:translateY(-6px);transition:.35s var(--ease)}
+.bbw-card:hover .bbw-quick{opacity:1;transform:none}
+.bbw-quick:hover{background:var(--accent);color:#111;border-color:var(--accent)}
+.bbw-strip{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;background:rgba(11,11,11,.88);backdrop-filter:blur(6px);transform:translateY(101%);transition:transform .4s var(--ease);border-top:1px solid var(--bbw-line)}
+.bbw-card:hover .bbw-strip{transform:none}
+.bbw-strip b{flex:1;text-align:center;padding:11px 4px;font-family:Inter,sans-serif;font-size:10px;font-weight:600;letter-spacing:.14em;color:rgba(255,255,255,.72)}
+.bbw-strip b+b{border-left:1px solid var(--bbw-line-soft)}
+.bbw-meta{padding:15px 16px 17px}
+.bbw-stars{display:block;margin-top:7px}
+.bbw-meta h3{margin:0;font-size:12.5px;font-weight:600;line-height:1.45;min-height:36px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bbw-price{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+.bbw-price .p{color:var(--bbw-yellow);font-weight:700;font-size:14px}
+.bbw-price .t{font-family:Inter,sans-serif;font-size:9px;letter-spacing:.18em;color:var(--bbw-steel);text-transform:uppercase}
+
+/* ---------- riel horizontal ---------- */
+.bbw-rail{display:flex;gap:14px;overflow-x:auto;padding-bottom:14px;scroll-snap-type:x mandatory}
+.bbw-rail::-webkit-scrollbar{height:2px}
+.bbw-rail::-webkit-scrollbar-thumb{background:var(--bbw-line)}
+.bbw-rail .bbw-card{flex:0 0 clamp(190px,22vw,268px);scroll-snap-align:start;border:1px solid var(--bbw-line-soft)}
+
+/* ---------- EMPTY-R1 · colección naciente ---------- */
+.bbw-empty{grid-column:span 2;display:flex;flex-direction:column;justify-content:center;padding:56px 32px;text-align:center;background:var(--bbw-panel)}
+.bbw-empty .bbw-display{font-size:34px;margin:14px 0 8px}
+.bbw-empty p{color:var(--bbw-gray);font-size:13px;max-width:420px;margin:0 auto;line-height:1.7}
+.bbw-empty form{display:flex;max-width:420px;margin:26px auto 0}
+.bbw-empty input{flex:1;background:#0F0F0F;border:1px solid var(--bbw-line);color:#fff;padding:13px 16px;font-size:12px;font-family:Inter,sans-serif}
+.bbw-empty input:focus{outline:none;border-color:var(--accent)}
+.bbw-empty button{background:var(--accent);color:#111;border:0;padding:0 24px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.14em;cursor:pointer}
+
+/* ---------- pilares ---------- */
+.bbw-pillars{border-top:1px solid var(--bbw-line);border-bottom:1px solid var(--bbw-line);background:#0D0D0D;margin-top:80px}
+.bbw-campaign+.bbw-pillars{margin-top:0;border-top:0}
+.bbw-pillars .in{display:grid;grid-template-columns:repeat(3,1fr);padding-block:64px}
+.bbw-pillars .col{padding:0 40px}
+.bbw-pillars .col+.col{border-left:1px solid var(--bbw-line)}
+.bbw-pillars .col:first-child{padding-left:0}
+.bbw-pillars p.k{color:var(--accent);margin:0 0 12px}
+.bbw-pillars .bbw-display{font-size:30px;margin:0}
+.bbw-pillars p.d{color:var(--bbw-gray);font-size:13px;line-height:1.75;margin-top:12px}
+
+/* ---------- SEASON-R1 · banda de campaña ---------- */
+.bbw-campaign{position:relative;overflow:hidden;border-bottom:1px solid var(--bbw-line)}
+.bbw-campaign[hidden]{display:none}
+.bbw-campaign .in{position:relative;z-index:3;padding-block:78px;text-align:center}
+.bbw-campaign .kicker{color:var(--season);margin-bottom:16px}
+.bbw-campaign h2{font-size:clamp(40px,7vw,90px);margin:0}
+.bbw-campaign h2 em{font-style:normal;color:var(--season);text-shadow:0 0 26px var(--glow)}
+.bbw-campaign p{color:var(--bbw-gray);max-width:520px;margin:20px auto 0;font-size:14px;line-height:1.75}
+.bbw-campaign .bg{position:absolute;inset:0;background:radial-gradient(60% 130% at 50% 120%,var(--glow) 0%,transparent 70%),#0D0D0D}
+
+/* ---------- footer ---------- */
+.bbw-footer{padding-block:60px 40px}
+.bbw-fgrid{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bbw-line);padding-bottom:30px}
+.bbw-flinks{display:flex;gap:30px;color:var(--bbw-gray)}
+.bbw-flinks a{color:inherit;text-decoration:none}
+.bbw-flinks a:hover{color:var(--accent)}
+.bbw-fbot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;padding-top:22px;font-size:11px;color:var(--bbw-steel)}
+.bbw-fbot a{color:var(--accent);font-weight:600;text-decoration:none}
+
+/* ============================================================
+   SEASON-R2 · BIBLIOTECA DE EFECTOS (MOTION-R1: solo CSS/SVG)
+   El JS inyecta únicamente los nodos que la temporada declara.
+   ============================================================ */
+.bbw-fx{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}
+
+/* niebla */
+.fx-fog{position:absolute;left:-25%;width:150%;height:100%;opacity:.5}
+.fx-fog i{position:absolute;bottom:-30%;width:60%;height:80%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(190,190,210,.13),transparent 72%);filter:blur(26px)}
+.fx-fog i:nth-child(1){left:0;animation:bbw-drift 46s linear infinite}
+.fx-fog i:nth-child(2){left:34%;animation:bbw-drift 66s linear infinite reverse;opacity:.75}
+.fx-fog i:nth-child(3){left:66%;animation:bbw-drift 54s linear infinite;animation-delay:-20s}
+@keyframes bbw-drift{0%{transform:translateX(-14%) translateY(0) scale(1)}50%{transform:translateX(14%) translateY(-7%) scale(1.14)}100%{transform:translateX(-14%) translateY(0) scale(1)}}
+
+/* brasas / chispas ascendentes */
+.fx-embers i{position:absolute;bottom:-12px;width:2px;height:2px;border-radius:50%;
+  background:var(--season);box-shadow:0 0 7px 1px var(--glow);animation:bbw-rise linear infinite}
+@keyframes bbw-rise{0%{transform:translateY(0) translateX(0) scale(.5);opacity:0}12%{opacity:.95}75%{opacity:.6}
+  100%{transform:translateY(-96vh) translateX(var(--dx,18px)) scale(1.15);opacity:0}}
+
+/* murciélagos */
+.fx-bat{position:absolute;animation:bbw-fly linear infinite}
+.fx-bat svg{width:100%;overflow:visible}
+.fx-bat .wing{transform-origin:50% 50%;animation:bbw-flap .34s ease-in-out infinite alternate}
+.fx-bat .wr{animation-delay:-.17s}
+@keyframes bbw-flap{from{transform:scaleY(1) rotate(0)}to{transform:scaleY(.34) rotate(-9deg)}}
+@keyframes bbw-fly{0%{transform:translate(-14vw,26vh) scale(.55);opacity:0}10%{opacity:.85}
+  35%{transform:translate(28vw,6vh) scale(.85)}65%{transform:translate(62vw,30vh) scale(.7)}
+  90%{opacity:.75}100%{transform:translate(116vw,-6vh) scale(.5);opacity:0}}
+
+/* telaraña de esquina */
+.fx-web{position:absolute;top:0;width:150px;height:150px;opacity:.20;z-index:4;pointer-events:none}
+.fx-web.l{left:0}
+.fx-web.r{right:0;transform:scaleX(-1)}
+.fx-web path{stroke:rgba(255,255,255,.9);fill:none;stroke-width:.7}
+
+/* viñeta de vela (fija, cubre toda la página) */
+.fx-candle{position:fixed;inset:0;z-index:65;pointer-events:none;
+  box-shadow:inset 0 0 165px 8px rgba(0,0,0,.48);animation:bbw-breathe 7s ease-in-out infinite}
+@keyframes bbw-breathe{0%,100%{opacity:.85}50%{opacity:1}}
+
+/* nieve */
+.fx-snow i{position:absolute;top:-14px;border-radius:50%;background:#fff;opacity:.85;
+  filter:blur(.3px);animation:bbw-fall linear infinite}
+@keyframes bbw-fall{0%{transform:translateY(0) translateX(0);opacity:0}
+  10%{opacity:.9}100%{transform:translateY(110vh) translateX(var(--dx,24px));opacity:.15}}
+
+/* guirnalda de luces */
+.fx-lights{position:absolute;top:0;left:0;right:0;height:46px;z-index:4}
+.fx-lights svg{width:100%;height:46px}
+.fx-lights path{stroke:rgba(255,255,255,.28);fill:none;stroke-width:1.2}
+.fx-lights circle{animation:bbw-blink 2.6s ease-in-out infinite}
+@keyframes bbw-blink{0%,100%{opacity:1}50%{opacity:.28}}
+
+/* corazones */
+.fx-hearts i{position:absolute;bottom:-20px;width:12px;height:12px;
+  background:var(--season);opacity:.55;transform:rotate(-45deg);animation:bbw-float linear infinite}
+.fx-hearts i::before,.fx-hearts i::after{content:"";position:absolute;width:12px;height:12px;
+  background:inherit;border-radius:50%}
+.fx-hearts i::before{top:-6px;left:0}
+.fx-hearts i::after{top:0;left:6px}
+@keyframes bbw-float{0%{transform:translateY(0) rotate(-45deg) scale(.6);opacity:0}
+  15%{opacity:.6}100%{transform:translateY(-92vh) translateX(var(--dx,20px)) rotate(-45deg) scale(1);opacity:0}}
+
+/* confeti */
+.fx-confetti i{position:absolute;top:-16px;width:6px;height:11px;opacity:.9;animation:bbw-drop linear infinite}
+@keyframes bbw-drop{0%{transform:translateY(0) rotate(0);opacity:0}
+  8%{opacity:.95}100%{transform:translateY(108vh) translateX(var(--dx,30px)) rotate(720deg);opacity:.2}}
+
+/* aberración cromática en hover, solo con campaña activa */
+[data-season]:not([data-season="base"]) .bbw-card:hover .bbw-shot::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(115deg,var(--glow),transparent 45%,var(--glow));mix-blend-mode:screen}
+
+/* parpadeo de lámpara */
+[data-season="halloween"] .bbw-flicker{animation:bbw-flick 6.5s infinite steps(1)}
+@keyframes bbw-flick{0%,96%,100%{opacity:1}96.5%{opacity:.35}97%{opacity:1}97.5%{opacity:.5}98%{opacity:1}}
+
+/* ---------- panel de previsualización (solo con ?preview=1) ---------- */
+.bbw-preview{position:fixed;left:14px;bottom:14px;z-index:200;display:flex;flex-wrap:wrap;gap:6px;
+  max-width:340px;padding:12px;background:rgba(11,11,11,.95);border:1px solid var(--bbw-line);backdrop-filter:blur(8px)}
+.bbw-preview b{width:100%;font-family:Inter,sans-serif;font-size:9px;letter-spacing:.2em;color:var(--bbw-steel);text-transform:uppercase;margin-bottom:2px}
+.bbw-preview button{font-family:Inter,sans-serif;font-size:10px;letter-spacing:.08em;padding:6px 10px;
+  background:#181818;border:1px solid var(--bbw-line);color:#ddd;cursor:pointer}
+.bbw-preview button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#111;font-weight:700}
+
+/* ---------- MOTION-R1 · accesibilidad ---------- */
+@media (prefers-reduced-motion:reduce){
+  .bbw-page *,.bbw-page *::before,.bbw-page *::after{animation:none!important;transition-duration:.01ms!important}
+  .bbw-fx{display:none}
+}
+
+/* ---------- responsivo ---------- */
+@media (max-width:1024px){
+  .bbw-grid{grid-template-columns:repeat(3,1fr)}
+  .bbw-pillars .in{grid-template-columns:1fr}
+  .bbw-pillars .col{padding:26px 0}
+  .bbw-pillars .col+.col{border-left:0;border-top:1px solid var(--bbw-line)}
+  .bbw-nav{display:none}
+}
+@media (max-width:640px){
+  :root{--header-h:60px}
+  .bbw-wrap{padding-inline:16px}
+  .bbw-wordmark{font-size:16px;letter-spacing:.12em}
+  .bbw-iconlink{padding:7px}
+  .bbw-grid{grid-template-columns:repeat(2,1fr)}
+  .bbw-empty{grid-column:1/-1;padding:44px 20px}
+  .bbw-hero-in{padding-block:52px 42px}
+  .bbw-hero h1{font-size:clamp(34px,9.5vw,52px)}
+  .bbw-hero-media{grid-template-columns:repeat(3,1fr)}
+  .bbw-hero-foot{display:none}
+  .bbw-tab{padding:12px 18px 11px}
+  .bbw-sechead{margin:38px 0 20px}
+  .fx-candle{box-shadow:inset 0 0 90px 4px rgba(0,0,0,.45)}
+}
