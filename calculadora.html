@@ -3,7 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Pedidos — Big Bang Workshops</title>
+<!-- BBW-SEO:INICIO -->
+  <title>Calculadora de pedidos DTF | Big Bang Workshops</title>
+  <meta name="description" content="Calcula el precio de tu pedido de apparel personalizado según prenda, cantidad y tamaño de estampado. Resultado inmediato, sin registro ni compromiso.">
+  <link rel="canonical" href="https://www.bigbangworkshops.com/calculadora.html">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Big Bang Workshops">
+  <meta property="og:locale" content="es_PA">
+  <meta property="og:title" content="Calculadora de pedidos DTF | Big Bang Workshops">
+  <meta property="og:description" content="Calcula el precio de tu pedido de apparel personalizado según prenda, cantidad y tamaño de estampado. Resultado inmediato, sin registro ni compromiso.">
+  <meta property="og:url" content="https://www.bigbangworkshops.com/calculadora.html">
+  <meta property="og:image" content="https://www.bigbangworkshops.com/assets/brand/bbw-og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Big Bang Workshops — taller creativo en Panamá">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Calculadora de pedidos DTF | Big Bang Workshops">
+  <meta name="twitter:description" content="Calcula el precio de tu pedido de apparel personalizado según prenda, cantidad y tamaño de estampado. Resultado inmediato, sin registro ni compromiso.">
+  <meta name="twitter:image" content="https://www.bigbangworkshops.com/assets/brand/bbw-og.png">
+  <link rel="icon" href="/assets/brand/bbw-favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/assets/brand/bbw-favicon-16.png" sizes="16x16" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/brand/bbw-favicon-180.png">
+  <meta name="theme-color" content="#111111">
+<!-- BBW-SEO:FIN -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="assets/js/config.js"></script>
   <script src="assets/js/app.js?v=4" defer></script>
@@ -120,6 +143,11 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .brow.ship-row .lbl { color: var(--neon); font-size: 12px; } .brow.ship-row .val { color: var(--neon); }
 .brow.ttl { border-top: 2px solid var(--border); margin-top: 6px; padding-top: 10px; font-size: 15px; font-weight: 800; }
 .brow.ttl .val { color: var(--yellow); font-size: 17px; }
+.tip-box { margin-top: 12px; padding: 11px 14px; border-radius: 10px; background: rgba(255,198,41,.08); border: 1px solid rgba(255,198,41,.35); font-size: 12px; line-height: 1.55; color: #E8E8E8; display: none; }
+.tip-box.show { display: block; }
+.tip-box b { color: #FFC629; font-weight: 700; }
+.tip-box .tip-head { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #FFC629; font-weight: 700; margin-bottom: 4px; }
+.cap-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,198,41,.12); border: 1px solid rgba(255,198,41,.4); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 700; color: #FFC629; margin-top: 10px; }
 .eff-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(232,232,232,.08); border: 1px solid rgba(232,232,232,.25); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 700; color: var(--neon); margin-top: 14px; }
 .upload-zone { border: 2px dashed var(--border); border-radius: var(--r); padding: 32px 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--surface2); position: relative; }
 .upload-zone:hover, .upload-zone.drag-over { border-color: var(--yellow); background: rgba(255,198,41,.04); }
@@ -189,7 +217,7 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
   <div class="card">
     <div class="ctitle">
 <span>👕</span> 2. Tipo de prenda</div>
-    <div class="slabel">Las mismas bases que en Tu Diseño Personalizado</div>
+    <div class="slabel">Las mismas bases que en Sube tu diseño</div>
     <div class="stype-grid">
       <button class="stype-btn active" onclick="selShirt(this,'regular','UNICRESE Prime 155g')"><span class="stype-icon">👕</span><div class="stype-name">Prime 155g</div>
 <div class="stype-price">UNICRESE · Regular</div></button>
@@ -346,7 +374,10 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 <span class="lbl" id="shirtTypeLabel">UNICRESE Prime 155g</span><span class="val" id="shirtCostDisplay">$4.50 / u</span>
 </div>
       <div class="brow ship-row">
-<span class="lbl">📦 Envio (cargo unico por pedido)</span><span class="val">$3.50</span>
+<span class="lbl">📦 Envío — elige tu zona</span><span class="val"><select id="envioZona" onchange="calc()" style="background:transparent;border:1px solid rgba(154,154,154,.45);color:inherit;font:inherit;font-size:12px;border-radius:6px;padding:3px 6px;max-width:190px"></select></span>
+</div>
+      <div class="brow" id="xxlRow" style="display:none">
+<span class="lbl">➕ Recargo tallas XXL</span><span class="val" id="xxlVal">—</span>
 </div>
       <div class="brow hl" id="surchargeRow" style="display:none">
 <span class="lbl">⚠️ Precio especial pedido pequeño</span><span class="val" id="surchargeVal">—</span>
@@ -357,8 +388,9 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
     </div>
     <div class="eff-tag"><span id="effText"></span>
 </div>
+    <div class="tip-box" id="tipBox"></div>
     <div class="min-notice" id="minNotice">
-<span>⚠️</span> 1-2 piezas: precio fijo · 3-5 piezas: precio fijo</div>
+<span>⚠️</span> 1-2 piezas: precio fijo · 3-5 piezas: precio fijo · desde 12 piezas nunca pagas mas del tope por unidad</div>
   </div>
 
   <div class="card">
@@ -418,11 +450,19 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 </div>
 </div>
 
+<!-- El motor de precios vive en bbw-motor.js, compartido con el cotizador.
+     Mientras los dos carguen este archivo, no se pueden desalinear. -->
+<script src="bbw-motor.js"></script>
 <script>
-var YARD=11.50,PROFIT=5.00,PROFIT_OVR=8.00,PROFIT_HOD=8.00,SHIP=3.50;
-var SHIRT_REG=4.50,SHIRT_OVR=12.75,SHIRT_HOD=12.00;
-var SHIRT=SHIRT_REG;
-var YA=5265,BPPY=3,FPPY=45;
+/* Ni una constante de precio en esta página: todas salen de bbw-motor.js */
+var P=BBW.P;
+/* === BBW · REGLA DE PRECIO UNICO (PR-1) =======================================
+   Producto estandar = camiseta regular fit + impresion de UNA ubicacion (30x30).
+   Desde 12 piezas el precio unitario NUNCA supera el tope.
+   El tope, el margen y los costos se cambian en precios.json, no aqui.          */
+var PRICE_CAP=P.tope_producto_estandar.precio, CAP_MIN_QTY=P.tope_producto_estandar.cantidad_minima;
+var SHIRT_REG=P.insumos.prenda.regular.costo, SHIRT_OVR=P.insumos.prenda.oversize.costo, SHIRT_HOD=P.insumos.prenda.hoodie.costo;
+var LABOR=P.insumos.mano_de_obra.costo;
 var CMAP={black:['#2a2a2a','#141414','#222222','#111111'],white:['#EFEFEB','#D0D0CC','#E0E0DC','#C8C8C4'],blue:['#4A90D9','#2E6DB4','#3A80C9','#1E5DA4'],navy:['#1E3A5F','#122340','#183050','#0E1E38'],cream:['#F0E0C0','#D8C8A8','#E4D4B4','#CCC09C'],red:['#8B1A1A','#5C0F0F','#7A1515','#4A0C0C'],pink:['#C4547A','#8B3055','#B04A6A','#7A2545']};
 var curColor='black',curPrint='back',curShirt='regular',files=[],sizes={S:0,M:0,L:0,XL:0,XXL:0};
 var curShirtModel='UNICRESE Prime 155g';
@@ -431,6 +471,73 @@ var uploadedLinks=[];
 var isUploading=false;
 
 function g(id){return document.getElementById(id);}
+
+/* --- Motor de precio: todo pasa por bbw-motor.js ---------------------------
+   precio = prenda + material REAL de hoja + mano de obra + margen
+   El material se cuenta por acomodo real en la hoja, no repartiendo el area. */
+function shirtCost(t){return P.insumos.prenda[BBW.fitOk(t)].costo;}
+function isStandard(shirt,print){return BBW.fitOk(shirt)==='regular'&&(print==='back'||print==='front30');}
+function unitFor(q,shirt,print){return BBW.unitarioEstandar(P,q,shirt,print).unitario;}
+function transferFor(q,print){return BBW.material(print,q).porUnidad;}
+
+/* Envio por zona: lo elige el cliente. Los montos salen de precios.json. */
+function llenarZonas(){
+  var sel=g('envioZona'); if(!sel)return;
+  var html='<option value="-1">Por confirmar segun zona</option>';
+  (BBW.zonas||[]).forEach(function(z){
+    html+='<option value="'+z.monto+'">'+z.etiqueta+' \u2014 $'+z.monto.toFixed(2)+'</option>';
+  });
+  sel.innerHTML=html;
+}
+function envioMonto(){var sel=g('envioZona');var v=sel?parseFloat(sel.value):-1;return v>0?v:0;}
+function envioTexto(){var sel=g('envioZona');if(!sel)return 'por confirmar';
+  var v=parseFloat(sel.value);return v<0?'por confirmar segun zona':'$'+v.toFixed(2)+' \u2014 '+sel.options[sel.selectedIndex].text.split('\u2014')[0].trim();}
+function totalFor(q,shirt,print){return unitFor(q,shirt,print)*q+envioMonto();}
+
+/* Mezcla de tallas: mientras no las llenen, se cotiza parejo como M (sin recargo). */
+function mezclaTallas(q){
+  var t={},tot=0;
+  ['S','M','L','XL','XXL'].forEach(function(z){t[z]=sizes[z]||0;tot+=t[z];});
+  return (tot===q&&tot>0)?t:{M:q};
+}
+/* Etiqueta legible de la impresion, sacada de precios.json */
+function impresionTexto(print){
+  var imp=P.impresiones[print]; if(!imp)return '';
+  return imp.etiqueta+' \u00b7 '+imp.piezas.map(function(pz){return pz[0]+'\u00d7'+pz[1]+' cm';}).join(' + ');
+}
+/* Hojas de DTF de verdad, para el correo interno. */
+function hojasTexto(print,q){
+  var d=BBW.material(print,q).detalle,out=[];
+  d.forEach(function(p){
+    var partes=[];
+    Object.keys(p.hojas).forEach(function(k){
+      var n=p.hojas[k];
+      partes.push(n+' '+(k==='yarda'?(n>1?'yardas':'yarda'):(n>1?'medias yardas':'media yarda')));
+    });
+    out.push(partes.join(' + ')+' ('+p.pieza+' cm)');
+  });
+  return out.join(' + ');
+}
+
+/* --- Sugerencia: "con N piezas te sale mejor" (aprovechar la yarda ya pagada) --- */
+function buildTip(q,shirt,print){
+  var box=g('tipBox'); if(!box)return;
+  var uNow=unitFor(q,shirt,print), tNow=totalFor(q,shirt,print);
+  var best=null;
+  for(var n=q+1;n<=q+8;n++){
+    var un=unitFor(n,shirt,print);
+    if(un<uNow-0.049&&(best===null||un<best.u-0.001)){best={n:n,u:un,t:totalFor(n,shirt,print)};}
+  }
+  if(!best){box.classList.remove('show');box.innerHTML='';return;}
+  var extraPcs=best.n-q, extraTot=best.t-tNow, perExtra=extraTot/extraPcs;
+  box.innerHTML='<div class="tip-head">Te conviene saber</div>'+
+    'Con <b>'+best.n+' piezas</b> el precio baja a <b>$'+best.u.toFixed(2)+' c/u</b> '+
+    '(ahora vas en $'+uNow.toFixed(2)+'). '+
+    'Las '+extraPcs+' camiseta'+(extraPcs>1?'s':'')+' extra te sale'+(extraPcs>1?'n':'')+
+    ' a <b>$'+perExtra.toFixed(2)+' cada una</b>, porque la yarda que ya estas pagando todavia tiene espacio. '+
+    'Total: $'+best.t.toFixed(2)+' en vez de $'+tNow.toFixed(2)+'.';
+  box.classList.add('show');
+}
 
 function setUploadStatus(type,msg){
   var bar=g('uploadStatusBar');
@@ -516,44 +623,43 @@ function applyMockup(){
 
 function changeQty(d){var i=g('qtyInput');i.value=Math.max(1,(parseInt(i.value)||1)+d);calc();updateSizeHint();}
 function setQty(q,btn){document.querySelectorAll('.preset').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');g('qtyInput').value=q;calc();updateSizeHint();}
-function changeSize(sz,d){sizes[sz]=Math.max(0,(sizes[sz]||0)+d);g('sz_'+sz).value=sizes[sz];updateSizeHint();}
-function updateSizeFromInput(sz){sizes[sz]=Math.max(0,parseInt(g('sz_'+sz).value)||0);updateSizeHint();}
+function changeSize(sz,d){sizes[sz]=Math.max(0,(sizes[sz]||0)+d);g('sz_'+sz).value=sizes[sz];updateSizeHint();calc();}
+function updateSizeFromInput(sz){sizes[sz]=Math.max(0,parseInt(g('sz_'+sz).value)||0);updateSizeHint();calc();}
 function updateSizeHint(){var t=0;['S','M','L','XL','XXL'].forEach(function(s){t+=sizes[s];});g('sizeTotal').textContent=t;var q=parseInt(g('qtyInput').value)||0,h=g('sizeHint');if(t===0){h.textContent='';}else if(t===q){h.textContent='✓ coincide';h.style.color='var(--neon)';}else{h.textContent='⚠ '+t+' vs '+q+' pedido';h.style.color='var(--mag)';}}
 
 function calc(){
-  var q=parseInt(g('qtyInput').value)||1;
+  var q=parseInt(g('qtyInput').value)||1; if(q<1)q=1;
   _qty=q;
   g('qtyDisplay').textContent=q;
   document.querySelectorAll('.preset').forEach(function(b){b.classList.toggle('active',parseInt(b.textContent)===q);});
-  var eff='',yardsN=1;
-  if(curPrint==='back'||curPrint==='front30'){
-    yardsN=Math.ceil(q*900/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · 30x30cm';
-  }else if(curPrint==='both30'){
-    yardsN=Math.ceil(q*1800/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · T+F 30x30';
-  }else if(curPrint==='front'){
-    yardsN=Math.ceil(q*100/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · logo 10x10';
-  }else if(curPrint==='both'){
-    yardsN=Math.ceil(q*900/YA)+Math.ceil(q*100/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · tras+logo';
-  }else if(curPrint==='fullback'){
-    yardsN=Math.ceil(q*1575/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · Full Back 35x45cm';
-  }else if(curPrint==='fullback_logo'){
-    yardsN=Math.ceil(q*1575/YA)+Math.ceil(q*100/YA); eff=yardsN+(yardsN>1?' yardas':' yarda')+' · Full Back + Logo';
-  }
-  _yardsN=yardsN;
-  var yardCostPerUnit=yardsN*YARD/q;
-  var currentProfit=(curShirt==='over'||curShirt==='hoodie'?PROFIT_OVR:PROFIT);
-  var u,internalCost;
-  if(q<=2){u=SHIRT+yardCostPerUnit+currentProfit+2;internalCost=SHIRT+yardCostPerUnit;}
-  else if(q<=5){u=SHIRT+yardCostPerUnit+currentProfit+1;internalCost=SHIRT+yardCostPerUnit;}
-  else{u=yardCostPerUnit+SHIRT+currentProfit;internalCost=SHIRT+yardCostPerUnit;}
-  _unitPrice=u;_unitCost=internalCost;
-  var tot=u*q+SHIP;
+
+  var cot=BBW.cot({modo:'estandar',fit:curShirt,impresion:curPrint,
+                   tallas:mezclaTallas(q),envio:envioMonto()});
+  window._cot=cot;
+
+  var u=cot.detalle.unitario;
+  var transfer=cot.detalle.transfer;
+  _unitPrice=u; _unitCost=shirtCost(curShirt)+transfer; _yardsN=0;
+
   g('priceUnit').textContent=u.toFixed(2);
-  g('priceTotal').textContent=tot.toFixed(2);
-  g('bdTotal').textContent='$'+tot.toFixed(2);
-  g('effText').textContent=eff;
+  g('priceTotal').textContent=cot.total.toFixed(2);
+  g('bdTotal').textContent='$'+cot.total.toFixed(2);
+  g('effText').textContent=hojasTexto(curPrint,q)+' \u00b7 '+impresionTexto(curPrint);
+
+  /* recargo de tallas grandes: solo aparece si de verdad hay XXL en la mezcla */
+  var xxl=cot.detalle.lineas.filter(function(l){return l.recargoTalla>0;});
+  var nXxl=xxl.reduce(function(a,l){return a+l.cantidad;},0);
+  var xr=g('xxlRow');
+  if(xr){
+    if(nXxl>0){xr.style.display='flex';g('xxlVal').textContent='+$'+(P.recargo_talla.monto).toFixed(2)+' \u00d7 '+nXxl+' pcs';}
+    else xr.style.display='none';
+  }
+
   var mn=g('minNotice'),sr=g('surchargeRow'),sv=g('surchargeVal');
-  if(q<=5){mn.classList.add('show');sr.style.display='flex';if(sv)sv.textContent='precio especial pedido pequeño';}else{mn.classList.remove('show');sr.style.display='none';}
+  if(q<=5){mn.classList.add('show');sr.style.display='flex';if(sv)sv.textContent='precio especial pedido peque\u00f1o';}
+  else if(cot.detalle.topeAplicado){mn.classList.remove('show');sr.style.display='flex';if(sv)sv.textContent='tope $'+PRICE_CAP.toFixed(2)+' aplicado (12+ piezas)';}
+  else{mn.classList.remove('show');sr.style.display='none';}
+  buildTip(q,curShirt,curPrint);
 }
 
 function showToast(msg,type){
@@ -585,19 +691,16 @@ function sendOrder(){
   var shirtLabel=(curShirtModel?curShirtModel+' — ':'')+(curShirt==='over'?'Oversize ($12.75/u)':curShirt==='hoodie'?'Hoodie ($12.00/u)':'Regular ($4.50/u)');
   var tot=0;['S','M','L','XL','XXL'].forEach(function(s){tot+=sizes[s];});
   var sl='';if(tot>0){['S','M','L','XL','XXL'].forEach(function(s){if(sizes[s]>0)sl+='  '+s+': '+sizes[s]+' pcs\n';});}else{sl='  (no especificadas)\n';}
-  var yl='';
-  if(curPrint==='back'||curPrint==='front30'){var y=Math.ceil(q/BPPY);yl=y+(y>1?' yardas':' yarda')+' ('+BPPY+' impr/yarda)';}
-  else if(curPrint==='both30'){var y=Math.ceil(q/BPPY);yl=(y*2)+' yardas — '+y+' trasera + '+y+' frontal';}
-  else if(curPrint==='front'){var y=Math.ceil(q/FPPY);yl=y+(y>1?' yardas':' yarda')+' ('+FPPY+' logos/yarda)';}
-  else if(curPrint==='fullback'){var ppy=Math.floor(YA/1575);var y=Math.ceil(q/ppy);yl=y+(y>1?' yardas':' yarda')+' Full Back ('+ppy+'/yarda)';}
-  else if(curPrint==='fullback_logo'){var ppy=Math.floor(YA/1575);var yFB=Math.ceil(q/ppy);var yL=Math.ceil(q/FPPY);yl=yFB+' yardas Full Back + '+yL+' yardas logo';}
-  else{var yB=Math.ceil(q/BPPY),yL=Math.ceil(q/FPPY);yl=yB+' trasera + '+yL+' logo';}
-  var totalRevenue=parseFloat(total);
-  var yardsCost=_yardsN*YARD;
-  var shirtsCost=SHIRT*q;
-  var totalCost=yardsCost+shirtsCost+SHIP;
-  var netProfit=totalRevenue-totalCost;
-  var abonoRequerido=totalRevenue*0.5;
+  var cot=window._cot||BBW.cot({modo:'estandar',fit:curShirt,impresion:curPrint,tallas:mezclaTallas(q),envio:envioMonto()});
+  var yl=hojasTexto(curPrint,q);
+  var mat=BBW.material(curPrint,q);
+  var totalRevenue=cot.total;
+  var yardsCost=mat.costo;
+  var shirtsCost=shirtCost(curShirt)*q;
+  var laborCost=LABOR*q;
+  var totalCost=yardsCost+shirtsCost+laborCost;
+  var netProfit=cot.subtotal-totalCost;
+  var abonoRequerido=totalRevenue*(P.abono.porcentaje/100);
   var linksSection='';
   if(uploadedLinks.length>0){
     linksSection='\n--- ARCHIVOS DE DISENO ---\n';
@@ -622,14 +725,19 @@ function sendOrder(){
   lines.push(sl.trim());
   if(notes){lines.push('');lines.push('Notas: '+notes);}
   lines.push(linksSection);
-  lines.push('--- PRODUCCION ---');
-  lines.push('Yardas: '+yl);
-  lines.push('Costo yardas: $'+yardsCost.toFixed(2));
-  lines.push('Camisetas: $'+shirtsCost.toFixed(2)+' ('+q+' x $'+SHIRT.toFixed(2)+')');
-  lines.push('Envio: $'+SHIP.toFixed(2));
+  lines.push('--- PRODUCCION (acomodo real de hoja) ---');
+  lines.push('Material DTF: '+yl);
+  lines.push('Costo material: $'+yardsCost.toFixed(2));
+  lines.push('Prendas: $'+shirtsCost.toFixed(2)+' ('+q+' x $'+shirtCost(curShirt).toFixed(2)+')');
+  lines.push('Mano de obra: $'+laborCost.toFixed(2)+' ('+q+' x $'+LABOR.toFixed(2)+')');
   lines.push('TOTAL COSTO: $'+totalCost.toFixed(2));
-  lines.push('Ganancia neta: $'+netProfit.toFixed(2));
-  lines.push('ABONO 50%: $'+abonoRequerido.toFixed(2));
+  lines.push('Ganancia real: $'+netProfit.toFixed(2)+'  ($'+(q?netProfit/q:0).toFixed(2)+' por pieza)');
+  lines.push('Envio cobrado: '+envioTexto());
+  lines.push('Descuento maximo antes de perder dinero: '+cot.auditoria.descuentoMaximoPct+'%');
+  lines.push('Vigencia de la cotizacion: '+cot.vigenciaDias+' dias');
+  lines.push('Motor de precios v'+BBW.version);
+  (cot.auditoria.alertas||[]).forEach(function(a){lines.push('AVISO: '+a);});
+  lines.push('ABONO '+P.abono.porcentaje+'%: $'+abonoRequerido.toFixed(2));
   var reportText=lines.join('\n');
   var btn=document.querySelector('.cta');
   if(btn){btn.disabled=true;btn.textContent='Enviando...';}
@@ -674,7 +782,7 @@ function sendOrder(){
     if(c&&sw){sw.style.cssText='background:'+c+';border-radius:50%;width:100%;height:100%;display:block;box-sizing:border-box;'+(SB[btn.dataset.color]?'border:'+SB[btn.dataset.color]+';':'');}
   });
 })();
-calc();applyMockup();applyColor();
+llenarZonas();calc();applyMockup();applyColor();
 </script>
 
   <footer style="max-width:80rem;margin:0 auto;padding:48px 16px;font-size:13px;color:#9A9A9A;text-align:center">© Big Bang Workshops · Panamá</footer>
