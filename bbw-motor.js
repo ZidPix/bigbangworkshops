@@ -1,21 +1,83 @@
 /* =========================================================================
    bbw-motor.js — el motor de precios de Big Bang Workshops, en un archivo.
-   Generado el 15 sep 2026 desde precios.json + calculo.js. NO editar a mano:
-   se regenera con  node construir.js  y se vuelve a copiar a los dos HTML.
+   GENERADO por construir.js el 2026-09-20. No editar a mano.
 
    Lo cargan la calculadora del sitio y el cotizador del Master Console.
    Mientras los dos carguen ESTE archivo, no se pueden desalinear.
 
         <script src="bbw-motor.js"></script>
-
-   Uso:   BBW.cot({ modo:'estandar', fit:'regular', impresion:'front30',
-                    tallas:{ S:4, M:8, XXL:4 }, envio:3.50 })
    ========================================================================= */
 
 window.BBW_PRECIOS = {
+
+  /* ===================================================================
+     ITBMS — impuesto. Un solo lugar, se aplica UNA sola vez.
+     Por defecto apagado en textil para no mover ningún precio vigente.
+     =================================================================== */
+  "itbms": {
+    "tasa": 0.07,
+    "etiqueta": "ITBMS 7%",
+    "base": "subtotal + diseño - descuento",
+    "incluye_envio": false,
+    "aplicar_por_defecto": { "estandar": false, "proporcional": false, "legacy": false, "bbw3d": true },
+    "_regla": "Se calcula con itbmsDe(). Ninguna otra función lo suma: si aparece dos veces, es un bug."
+  },
+
+  /* ===================================================================
+     BBW3D — línea de impresión 3D. Añadida 26 sep 2026.
+     Manda el PRECIO COMERCIAL. El filamento solo sirve para auditar
+     rentabilidad, nunca para construir el precio que ve el cliente.
+     =================================================================== */
+  "bbw3d": {
+    "_uso": "Productos fabricados con impresión 3D. Catálogo con precio de venta fijo + dos modos de excepción: tabla de volumen (llaveros) y precio por peso (piezas sin precio definido).",
+    "filamento": {
+      "costo_por_gramo": 0.032,
+      "_origen": "5 rollos de 250 g = 1250 g por $40.00 → 40/1250 = $0.032/g",
+      "_uso": "Solo auditoría interna. No entra en el precio al cliente."
+    },
+    "diseno_personalizado": {
+      "monto": 5.00,
+      "_regla": "Se cobra UNA vez por cotización, no por pieza — igual que el servicio de diseño del textil."
+    },
+    "catalogo": {
+      "topper_sencillo":       { "etiqueta": "Topper de cumpleaños",              "modo": "fijo",    "precio": 5.00,  "rango": [4, 5],   "grupo": "topper" },
+      "topper_personalizado":  { "etiqueta": "Topper personalizado con nombre",   "modo": "fijo",    "precio": 7.00,  "rango": [6, 8],   "grupo": "topper" },
+      "topper_complejo":       { "etiqueta": "Topper complejo / multicapa",       "modo": "fijo",    "precio": 10.00, "rango": [8, 12],  "grupo": "topper" },
+      "placa_decorativa":      { "etiqueta": "Placa decorativa pequeña",          "modo": "fijo",    "precio": 9.00,  "rango": [8, 10],  "grupo": "placa" },
+      "placa_auto":            { "etiqueta": "Placa personalizada para auto",     "modo": "fijo",    "precio": 15.00, "rango": [12, 18], "grupo": "placa" },
+      "nombre_3d_pequeno":     { "etiqueta": "Nombre 3D — pequeño",               "modo": "fijo",    "precio": 6.00,  "rango": [6, 12],  "grupo": "nombre" },
+      "nombre_3d_mediano":     { "etiqueta": "Nombre 3D — mediano",               "modo": "fijo",    "precio": 9.00,  "rango": [6, 12],  "grupo": "nombre" },
+      "nombre_3d_grande":      { "etiqueta": "Nombre 3D — grande",                "modo": "fijo",    "precio": 12.00, "rango": [6, 12],  "grupo": "nombre" },
+      "llavero":               { "etiqueta": "Llavero personalizado",             "modo": "volumen", "grupo": "llavero" },
+      "pieza_peso":            { "etiqueta": "Pieza 3D por peso",                 "modo": "peso",    "grupo": "peso" },
+      "figura_personalizada":  { "etiqueta": "Figura / pieza 3D personalizada",   "modo": "peso",    "grupo": "peso" },
+      "otro":                  { "etiqueta": "Otro producto 3D",                  "modo": "manual",  "grupo": "otro" }
+    },
+    "llaveros_por_volumen": [
+      { "cantidad": 1,   "precio": 8.00 },
+      { "cantidad": 6,   "precio": 5.00 },
+      { "cantidad": 12,  "precio": 4.00 },
+      { "cantidad": 20,  "precio": 3.50 },
+      { "cantidad": 50,  "precio": 3.00 },
+      { "cantidad": 100, "precio": 2.75 },
+      { "cantidad": 250, "precio": 2.50 },
+      { "cantidad": 500, "precio": 2.25 }
+    ],
+    "_regla_volumen": "Sin interpolar. Una cantidad que no cae exacto en un nivel usa el NIVEL SIGUIENTE (7 → nivel 12 = $4.00). Por encima de 500 se mantiene $2.25.",
+    "por_peso": {
+      "base": 2.00,
+      "por_gramo": 0.10,
+      "minimo": 4.00,
+      "_formula": "Math.max(4, 2 + gramos * 0.10), luego redondeo comercial al siguiente $0.50",
+      "_uso": "SOLO para piezas sin precio comercial definido. Nunca para toppers ni llaveros."
+    },
+    "_pendiente": "Descuentos por volumen en toppers: no definidos aún. Hoy el precio fijo es plano en cualquier cantidad."
+  },
+
   "_meta": {
-    "version": "2.0.0",
-    "fecha": "2026-09-15",
+    "version": "2.1.0",
+    "fecha": "2026-09-26",
+    "_cambio_2_1_0": "Se añade la línea BBW3D (impresión 3D) y el bloque ITBMS. Nada del textil cambia: unitarioEstandar, precioProporcional, unitarioLegacy y cotizar() quedan idénticos.",
     "descripcion": "Único lugar donde viven los números del precio de BBW. Ni Tyler ni ningún modelo calcula precios: los lee de aquí y los pasa por calculo.js.",
     "fuentes": {
       "motor_publico": "BBW_Cotizador.html (copia exacta de calculadora.html del sitio), leído 14 sep 2026",
@@ -26,7 +88,7 @@ window.BBW_PRECIOS = {
     "decisiones_de_zid_15_sep_2026": {
       "1_margen": "Bajar el margen en vez de subir el precio. Estándar: $1.50 regular / $5.00 oversize y hoodie. Con el costo honesto los precios quedan donde estaban (12 y 24 pzs bajan $0.06, 50 sube $0.17).",
       "2_yarda": "La yarda cuesta $11.76. Se elimina el $11.50 del código.",
-      "3_envio": "El sitio NO debe sumar $3.50 fijo. Hay precios por zona y los elige el cliente. Faltan los montos por zona.",
+      "3_envio": "El sitio NO debe sumar $3.50 fijo. Hay precios por zona y los elige el cliente. RESUELTO el 16 sep 2026: los montos estaban en el doc 07. Norte gratis, Condado $3.50, Centro $5.00, Interior $6.50.",
       "4_recargo_talla": "Se aplica en las herramientas (antes se hacía a mano).",
       "5_vigencia": "15 días por defecto en la página.",
       "6_diseno": "Se regala solo si el cliente es recurrente O si el arte no necesita ajustes del diseñador. Si necesita ajustes, el monto lo define el diseñador DESPUÉS de revisar el arte: es variable, no una tarifa fija."
@@ -49,7 +111,17 @@ window.BBW_PRECIOS = {
       },
       "_variantes_color": {
         "confirmado": false,
-        "nota": "Beige/Sand sin costo confirmado; doc 11 §5 solo confirma $4.50 genérico"
+        "colores_disponibles": [
+          "blanco",
+          "negro",
+          "azul",
+          "navy",
+          "crema/sand/beige",
+          "rojo",
+          "rosado"
+        ],
+        "_disponibilidad": "Zid, 16 sep 2026: estos son los colores que se manejan. Otros se consultan con el proveedor.",
+        "nota": "La DISPONIBILIDAD esta confirmada; el COSTO por color no. doc 11 §5 solo confirma $4.50 generico. Si un color cuesta distinto, el margen de esa pieza esta mal calculado."
       }
     },
     "mano_de_obra": {
@@ -310,15 +382,37 @@ window.BBW_PRECIOS = {
     "modo": "por_zona",
     "lo_elige_el_cliente": true,
     "_decidido": "Zid, 15 sep 2026: el sitio NO puede sumar $3.50 fijo. El cliente elige su zona.",
+    "_fuente": "Web System (doc 07) §3 'Zonas de envío (Panamá)' y config.js shippingZones. Confirmado por Zid el 16 sep 2026.",
     "zonas": [
       {
         "id": "retiro",
         "etiqueta": "Retiro en taller",
         "monto": 0.0
+      },
+      {
+        "id": "norte",
+        "etiqueta": "Panamá Norte · San Antonio · Villa Lucre",
+        "monto": 0.0,
+        "nota": "envio gratis"
+      },
+      {
+        "id": "condado",
+        "etiqueta": "Condado del Rey · Tumba Muerto · Betania",
+        "monto": 3.5
+      },
+      {
+        "id": "centro",
+        "etiqueta": "Panamá Centro · Punta Pacífica · Costa del Este",
+        "monto": 5.0
+      },
+      {
+        "id": "interior",
+        "etiqueta": "Interior del País",
+        "monto": 6.5
       }
     ],
-    "_pendiente": "FALTAN LOS MONTOS POR ZONA. Están en Web System (doc 07). Hasta tenerlos, el selector solo ofrece retiro en taller y 'por confirmar'.",
-    "permitir_por_confirmar": true
+    "permitir_por_confirmar": true,
+    "_regla": "Si el cliente no dice su zona, Tyler pregunta. Nunca asume una zona ni promedia montos."
   },
   "abono": {
     "porcentaje": 50,
@@ -351,6 +445,27 @@ window.BBW_PRECIOS = {
       "costo_documentado": false,
       "_pendiente": "No existe estructura de costo para esta línea. El precio de $1.00 no se puede verificar ni recalcular."
     }
+  },
+  "tiempos_entrega": {
+    "_decidido": "Zid, 16 sep 2026.",
+    "_regla": "Corre desde arte aprobado y abono confirmado, no desde la cotizacion.",
+    "tramos": [
+      {
+        "hasta": 6,
+        "dias_min": 3,
+        "dias_max": 5
+      },
+      {
+        "desde": 7,
+        "dias_min": 7,
+        "dias_max": 10
+      }
+    ]
+  },
+  "cantidad_minima": {
+    "valor": 1,
+    "maximo_habitual": 500,
+    "_decidido": "Zid, 16 sep 2026: no hay minimo. Desde 1 pieza hasta 500, ya contemplado en la calculadora."
   }
 };
 
@@ -768,7 +883,123 @@ window.BBW_PRECIOS = {
     return out;
   }
 
+  /* ---------------------------------------------------------------------
+     7. ITBMS — un solo lugar. Si esto se suma dos veces, es un bug.
+     --------------------------------------------------------------------- */
+  function itbmsDe(P, base, incluir) {
+    var tasa = P.itbms.tasa;
+    if (!incluir) return { incluido: false, tasa: tasa, monto: 0, base: r2(base), etiqueta: P.itbms.etiqueta };
+    return { incluido: true, tasa: tasa, base: r2(base), monto: r2(base * tasa), etiqueta: P.itbms.etiqueta };
+  }
+
+  /* ---------------------------------------------------------------------
+     8. BBW3D — impresión 3D. Manda el precio comercial; el filamento
+     solo audita. Nada de aquí toca el textil.
+     --------------------------------------------------------------------- */
+  function nivelLlavero(P, cantidad) {
+    var tabla = P.bbw3d.llaveros_por_volumen;
+    var q = Math.max(1, Math.floor(cantidad || 1));
+    var nivel = null;
+    for (var i = 0; i < tabla.length; i++) { if (q <= tabla[i].cantidad) { nivel = tabla[i]; break; } }
+    if (!nivel) nivel = tabla[tabla.length - 1];           /* más de 500 mantiene el último nivel */
+    return { unitario: nivel.precio, nivel: nivel.cantidad, exacto: nivel.cantidad === q };
+  }
+
+  function precioPorPeso(P, gramos) {
+    var c = P.bbw3d.por_peso, gr = Math.max(0, gramos || 0);
+    var bruto = c.base + gr * c.por_gramo;
+    var minimoAplicado = bruto < c.minimo;
+    var precio = Math.max(c.minimo, bruto);
+    return { unitario: redondearCliente(P, precio), bruto: r2(bruto), minimoAplicado: minimoAplicado, gramos: gr };
+  }
+
+  function precio3D(P, item) {
+    var key = item.producto;
+    var prod = P.bbw3d.catalogo[key];
+    if (!prod) throw new Error('Producto BBW3D desconocido: ' + key);
+    var q = Math.max(1, Math.floor(item.cantidad || 1));
+    var out = { producto: key, etiqueta: prod.etiqueta, modo: prod.modo, cantidad: q, avisos: [] };
+
+    if (prod.modo === 'volumen') {
+      var n = nivelLlavero(P, q);
+      out.unitario = n.unitario; out.nivel = n.nivel;
+      if (!n.exacto) out.avisos.push('Cantidad ' + q + ': se cobra al nivel de ' + n.nivel + ' unidades ($' + n.unitario.toFixed(2) + ' c/u), como manda la tabla.');
+    } else if (prod.modo === 'peso') {
+      var pw = precioPorPeso(P, item.gramos);
+      out.unitario = pw.unitario; out.gramos = pw.gramos;
+      if (pw.minimoAplicado) out.avisos.push('Pieza de ' + pw.gramos + ' g: se aplica el precio mínimo de $' + P.bbw3d.por_peso.minimo.toFixed(2) + '.');
+      if (!item.gramos) out.avisos.push('Falta el peso estimado: el precio sale al mínimo.');
+    } else if (prod.modo === 'manual') {
+      var pm = parseFloat(item.precioManual);
+      if (isNaN(pm) || pm <= 0) { out.unitario = 0; out.avisos.push('Este producto necesita un precio puesto a mano.'); }
+      else out.unitario = r2(pm);
+    } else {
+      out.unitario = prod.precio;
+      if (item.gramos) out.gramos = item.gramos;
+    }
+
+    out.subtotal = r2(out.unitario * q);
+    return out;
+  }
+
+  function auditar3D(P, lineas, descuento, diseno) {
+    var cpg = P.bbw3d.filamento.costo_por_gramo;
+    var ingreso = 0, costoFil = 0, piezas = 0, conPeso = 0, alertas = [];
+    lineas.forEach(function (l) {
+      ingreso += l.subtotal; piezas += l.cantidad;
+      if (l.gramos) { costoFil += l.gramos * l.cantidad * cpg; conPeso += l.cantidad; }
+      (l.avisos || []).forEach(function (a) { alertas.push(a); });
+    });
+    ingreso += (diseno || 0);
+    var ingresoNeto = ingreso - (descuento || 0);
+    var out = {
+      piezas: piezas, costoPorGramo: cpg,
+      costoFilamento: r2(costoFil),
+      pesoConocido: conPeso === piezas && piezas > 0,
+      ingresoNeto: r2(ingresoNeto),
+      margenSobreFilamento: r2(ingresoNeto - costoFil),
+      alertas: alertas
+    };
+    if (conPeso === 0) out.alertas.push('Sin peso estimado no se puede leer la rentabilidad: el costo de filamento sale en cero.');
+    if (out.pesoConocido && ingresoNeto > 0 && costoFil / ingresoNeto > 0.35)
+      out.alertas.push('El filamento se lleva el ' + Math.round(costoFil / ingresoNeto * 100) + '% del ingreso. Revisar precio o peso de la pieza.');
+    return out;
+  }
+
+  function cotizar3D(P, pedido) {
+    var items = (pedido.items || []).filter(function (i) { return i && i.producto && (i.cantidad || 0) > 0; });
+    if (!items.length) throw new Error('El pedido BBW3D no tiene productos.');
+    var lineas = items.map(function (i) { return precio3D(P, i); });
+    var subtotal = r2(lineas.reduce(function (a, l) { return a + l.subtotal; }, 0));
+    var diseno = pedido.disenoPersonalizado ? P.bbw3d.diseno_personalizado.monto : 0;
+    var base = r2(subtotal + diseno);
+    var pct = pedido.descuentoPct || 0;
+    var descuento = r2(base * pct / 100);
+    var baseImp = r2(base - descuento);
+    var incluirItbms = pedido.itbms != null ? pedido.itbms : P.itbms.aplicar_por_defecto.bbw3d;
+    var imp = itbmsDe(P, baseImp, incluirItbms);
+    var envio = pedido.envio != null ? pedido.envio : 0;
+    var total = r2(baseImp + imp.monto + envio);
+    var abonoPct = pedido.abonoPct != null ? pedido.abonoPct : P.abono.porcentaje;
+    return {
+      linea: 'bbw3d', piezas: lineas.reduce(function (a, l) { return a + l.cantidad; }, 0),
+      lineas: lineas, subtotal: subtotal,
+      diseno: { monto: diseno, gratis: diseno === 0 },
+      descuentoPct: pct, descuento: descuento,
+      itbms: imp, envio: r2(envio), total: total,
+      abonoPct: abonoPct, abono: r2(total * abonoPct / 100),
+      vigenciaDias: P.vigencia_dias.valor,
+      auditoria: auditar3D(P, lineas, descuento, diseno)
+    };
+  }
+
   return {
+    itbmsDe: itbmsDe,
+    nivelLlavero: nivelLlavero,
+    precioPorPeso: precioPorPeso,
+    precio3D: precio3D,
+    cotizar3D: cotizar3D,
+    auditar3D: auditar3D,
     fitOk: fitOk,
     piezasPorHoja: piezasPorHoja,
     planMaterial: planMaterial,
@@ -793,13 +1024,13 @@ window.BBW_PRECIOS = {
   window.BBW = {
     P: P,
     version: P._meta.version,
-    /* atajo: no hay que pasar precios.json en cada llamada */
     cot: function (pedido) { return api.cotizar(P, pedido); },
-    /* ZONAS DE ENVÍO — llenar con los montos reales del doc 07 (Web System).
-       Mientras estén vacías el selector solo ofrece retiro y "por confirmar". */
     zonas: (P.envio.zonas || []),
     material: function (impresion, cantidad) { return api.materialReal(P, impresion, cantidad); },
-    diseno: function (ctx) { return api.servicioDiseno(P, ctx); }
+    diseno: function (ctx) { return api.servicioDiseno(P, ctx); },
+    cot3D: function (pedido) { return api.cotizar3D(P, pedido); },
+    cat3D: P.bbw3d.catalogo,
+    itbms: function (base, incluir) { return api.itbmsDe(P, base, incluir); }
   };
   Object.keys(api).forEach(function (k) { if (!(k in window.BBW)) window.BBW[k] = api[k]; });
 })();

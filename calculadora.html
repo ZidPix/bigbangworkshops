@@ -511,7 +511,7 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 
 <!-- El motor de precios vive en bbw-motor.js, compartido con el cotizador.
      Mientras los dos carguen este archivo, no se pueden desalinear. -->
-<script src="bbw-motor.js"></script>
+<script src="bbw-motor.js?v=2.1.0"></script>
 <script>
 /* Ni una constante de precio en esta página: todas salen de bbw-motor.js */
 var P=BBW.P;
@@ -702,7 +702,17 @@ var P3_GRUPOS=[
 ];
 var p3grupo='topper', p3key='topper_sencillo';
 
+function motor3Dok(){ return !!(window.BBW && BBW.cot3D && BBW.cat3D && BBW.P && BBW.P.bbw3d); }
+function avisarMotorViejo(){
+  var r=g('p3grid');
+  if(r) r.innerHTML='<div style="grid-column:1/-1;padding:18px;border:1px solid rgba(255,138,61,.5);border-radius:12px;'+
+    'background:rgba(255,138,61,.1);color:#ffcfae;font-size:13px;line-height:1.6">'+
+    '<b>La línea BBW3D todavía no está disponible.</b><br>El motor de precios publicado es la versión '+
+    ((window.BBW&&BBW.version)||'anterior')+' y no trae los productos 3D. Sube <code>bbw-motor.js</code> actualizado al sitio.</div>';
+  var b=g('lb3d'); if(b){ b.style.opacity='.55'; b.title='Falta subir bbw-motor.js v2.1.0'; }
+}
 function setLinea(l){
+  if(l==='3d' && !motor3Dok()){ avisarMotorViejo(); }
   LINEA=l;
   g('lbTshirt').classList.toggle('active',l==='tshirt');
   g('lb3d').classList.toggle('active',l==='3d');
@@ -711,8 +721,9 @@ function setLinea(l){
   g('subTitulo').textContent = l==='3d'
     ? 'Calculadora BBW3D — toppers, llaveros y piezas impresas en 3D'
     : 'Calculadora de pedidos mayoristas — T-Shirts personalizados';
-  if(l==='3d'&&!g('p3grid').innerHTML) pintarGrid3D();
-  calc();
+  try{ if(l==='3d'&&motor3Dok()&&!g('p3grid').innerHTML.trim()) pintarGrid3D(); }
+  catch(e){ console.error('BBW3D:',e); avisarMotorViejo(); }
+  try{ calc(); }catch(e){ console.error('BBW3D calc:',e); }
 }
 function pintarGrid3D(){
   g('p3grid').innerHTML=P3_GRUPOS.map(function(x){
@@ -799,7 +810,7 @@ function calc3D(){
 }
 
 function calc(){
-  if(LINEA==='3d'){ calc3D(); return; }
+  if(LINEA==='3d'){ if(motor3Dok()) calc3D(); return; }
   g('p3Row').style.display='none';
   g('shirtTypeLabel').parentElement.style.display='flex';
   var q=parseInt(g('qtyInput').value)||1; if(q<1)q=1;
