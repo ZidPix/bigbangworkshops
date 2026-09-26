@@ -71,6 +71,22 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 .ctitle { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--yellow); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
 .slabel { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-bottom: 12px; }
 .colors { display: flex; flex-wrap: wrap; gap: 20px; padding-bottom: 22px; }
+.linea-sw { display:flex; gap:10px; justify-content:center; margin:18px auto 0; max-width:420px; }
+.lbtn { flex:1; background:rgba(255,255,255,.04); border:1px solid rgba(154,154,154,.35); color:var(--gray);
+        border-radius:12px; padding:12px 10px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:800;
+        letter-spacing:.02em; transition:all .18s; }
+.lbtn:hover { border-color:rgba(255,198,41,.5); color:#eee; }
+.lbtn.active { background:var(--yellow); border-color:var(--yellow); color:#111; box-shadow:0 0 16px rgba(255,198,41,.35); }
+.vol3d { width:100%; border-collapse:collapse; margin-top:10px; font-size:12px; }
+.vol3d th { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray); text-align:left;
+            padding:6px 8px; border-bottom:1px solid rgba(154,154,154,.25); font-weight:700; }
+.vol3d td { padding:6px 8px; border-bottom:1px solid rgba(154,154,154,.12); color:#cfcfcf; }
+.vol3d td:last-child { text-align:right; }
+.vol3d tr.on td { background:rgba(255,198,41,.14); color:#fff; font-weight:800; }
+.vol3d tr.on td:first-child { color:var(--yellow); }
+.g3d-wrap { display:flex; align-items:center; gap:10px; }
+.g3d-wrap input { flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(154,154,154,.35); color:#fff;
+                  border-radius:10px; padding:12px 14px; font-family:inherit; font-size:15px; font-weight:700; }
 .cbtn { position: relative; width: 52px; height: 52px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; background: none; padding: 0; transition: all .2s; }
 .cbtn::after { content: attr(data-label); position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--gray); white-space: nowrap; }
 .cbtn.active { border-color: var(--yellow); box-shadow: 0 0 14px rgba(255,198,41,.5); transform: scale(1.1); }
@@ -195,10 +211,16 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
   <div class="brand">BIG BANG <span>WORKSHOPS</span>
 </div>
   <div class="divider"></div>
-  <div class="subtitle">Calculadora de pedidos mayoristas — T-Shirts personalizados</div>
+  <div class="subtitle" id="subTitulo">Calculadora de pedidos mayoristas — T-Shirts personalizados</div>
+  <div class="linea-sw">
+    <button class="lbtn active" id="lbTshirt" onclick="setLinea('tshirt')">👕 T-Shirts</button>
+    <button class="lbtn" id="lb3d" onclick="setLinea('3d')">🖨️ BBW3D</button>
+  </div>
 </div>
 
 <div class="wrap">
+
+  <div id="grpTshirt">
   <div class="card">
     <div class="ctitle">
 <span>🎨</span> 1. Color de camiseta</div>
@@ -350,6 +372,40 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 <span class="size-bar-val"><span id="sizeTotal">0</span> pcs</span>
 </div>
   </div>
+  </div><!-- /grpTshirt -->
+
+  <!-- ==================== BBW3D ==================== -->
+  <div id="grp3D" style="display:none">
+    <div class="card">
+      <div class="ctitle"><span>🖨️</span> 1. Producto 3D</div>
+      <div class="slabel">Elige qué quieres imprimir</div>
+      <div class="stype-grid" id="p3grid"></div>
+    </div>
+
+    <div class="card" id="p3varCard">
+      <div class="ctitle"><span>🎛️</span> 2. Tipo</div>
+      <div class="slabel">El precio cambia según el tipo</div>
+      <div class="prints" id="p3vars"></div>
+    </div>
+
+    <div class="card">
+      <div class="ctitle"><span>📦</span> 3. Cantidad</div>
+      <div class="slabel">Mientras más piezas, menor el precio por unidad</div>
+      <div class="qty-wrap">
+        <button class="qbtn" onclick="chg3D(-1)">−</button>
+        <input type="number" class="qinp" id="q3Input" value="1" min="1" max="9999" oninput="calc()">
+        <button class="qbtn" onclick="chg3D(1)">+</button>
+      </div>
+      <div class="presets" id="p3presets"></div>
+      <div id="p3tablaVol"></div>
+    </div>
+
+    <div class="card" id="p3pesoCard" style="display:none">
+      <div class="ctitle"><span>⚖️</span> 4. Peso estimado</div>
+      <div class="slabel">Si no lo sabes, lo calculamos nosotros al revisar el archivo</div>
+      <div class="g3d-wrap"><input type="number" id="q3Gram" min="0" placeholder="Gramos de la pieza" oninput="calc()"></div>
+    </div>
+  </div>
 
   <div class="results">
     <div class="rhead">TU COTIZACION BIGBANG</div>
@@ -375,6 +431,9 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
 </div>
       <div class="brow ship-row">
 <span class="lbl">📦 Envío — elige tu zona</span><span class="val"><select id="envioZona" onchange="calc()" style="background:transparent;border:1px solid rgba(154,154,154,.45);color:inherit;font:inherit;font-size:12px;border-radius:6px;padding:3px 6px;max-width:190px"></select></span>
+</div>
+      <div class="brow" id="p3Row" style="display:none">
+<span class="lbl" id="p3RowLbl">Producto</span><span class="val" id="p3RowVal">—</span>
 </div>
       <div class="brow" id="xxlRow" style="display:none">
 <span class="lbl">➕ Recargo tallas XXL</span><span class="val" id="xxlVal">—</span>
@@ -627,7 +686,122 @@ function changeSize(sz,d){sizes[sz]=Math.max(0,(sizes[sz]||0)+d);g('sz_'+sz).val
 function updateSizeFromInput(sz){sizes[sz]=Math.max(0,parseInt(g('sz_'+sz).value)||0);updateSizeHint();calc();}
 function updateSizeHint(){var t=0;['S','M','L','XL','XXL'].forEach(function(s){t+=sizes[s];});g('sizeTotal').textContent=t;var q=parseInt(g('qtyInput').value)||0,h=g('sizeHint');if(t===0){h.textContent='';}else if(t===q){h.textContent='✓ coincide';h.style.color='var(--neon)';}else{h.textContent='⚠ '+t+' vs '+q+' pedido';h.style.color='var(--mag)';}}
 
+/* =====================================================================
+   BBW3D en el sitio. Todos los precios salen de bbw-motor.js (BBW.cot3D).
+   Sin ITBMS en pantalla: igual que las camisetas. El impuesto se suma al
+   facturar, no en el precio público (decisión de Zid, 26 sep 2026).
+   ===================================================================== */
+var LINEA='tshirt';
+var P3_GRUPOS=[
+  {id:'topper', icono:'🎂', nombre:'Topper',          sub:'Para tortas',         keys:['topper_sencillo','topper_personalizado','topper_complejo']},
+  {id:'placa',  icono:'🪧', nombre:'Placa',           sub:'Decorativa o de auto',keys:['placa_decorativa','placa_auto']},
+  {id:'llavero',icono:'🔑', nombre:'Llaveros',        sub:'Precio por volumen',  keys:['llavero']},
+  {id:'nombre', icono:'🔤', nombre:'Nombre 3D',       sub:'Letras en relieve',   keys:['nombre_3d_pequeno','nombre_3d_mediano','nombre_3d_grande']},
+  {id:'peso',   icono:'⚙️', nombre:'Pieza por peso',  sub:'Según gramos',        keys:['pieza_peso']},
+  {id:'figura', icono:'🗿', nombre:'Figura',          sub:'Personalizada',       keys:['figura_personalizada']}
+];
+var p3grupo='topper', p3key='topper_sencillo';
+
+function setLinea(l){
+  LINEA=l;
+  g('lbTshirt').classList.toggle('active',l==='tshirt');
+  g('lb3d').classList.toggle('active',l==='3d');
+  g('grpTshirt').style.display = l==='tshirt'?'block':'none';
+  g('grp3D').style.display     = l==='3d'?'block':'none';
+  g('subTitulo').textContent = l==='3d'
+    ? 'Calculadora BBW3D — toppers, llaveros y piezas impresas en 3D'
+    : 'Calculadora de pedidos mayoristas — T-Shirts personalizados';
+  if(l==='3d'&&!g('p3grid').innerHTML) pintarGrid3D();
+  calc();
+}
+function pintarGrid3D(){
+  g('p3grid').innerHTML=P3_GRUPOS.map(function(x){
+    return '<button class="stype-btn'+(x.id===p3grupo?' active':'')+'" data-g="'+x.id+'" onclick="selGrupo3D(this)">'+
+      '<span class="stype-icon">'+x.icono+'</span><div class="stype-name">'+x.nombre+'</div>'+
+      '<div class="stype-price">'+x.sub+'</div></button>';
+  }).join('');
+  pintarVars3D();
+}
+function pintarVars3D(){
+  var gr=P3_GRUPOS.filter(function(x){return x.id===p3grupo;})[0];
+  if(gr.keys.indexOf(p3key)<0) p3key=gr.keys[0];
+  g('p3varCard').style.display = gr.keys.length>1?'block':'none';
+  g('p3vars').innerHTML = gr.keys.map(function(k){
+    var c=BBW.cat3D[k], precio = c.modo==='fijo' ? '$'+c.precio.toFixed(2) : '';
+    return '<button class="pbtn'+(k===p3key?' active':'')+'" data-k="'+k+'" onclick="selVar3D(this)">'+
+      '<div class="pname">'+c.etiqueta.replace(/^.*— /,'').replace('Topper ','').replace('Placa ','')+'</div>'+
+      '<div class="pdesc">'+precio+'</div></button>';
+  }).join('');
+  var modo=BBW.cat3D[p3key].modo;
+  g('p3pesoCard').style.display = modo==='peso'?'block':'none';
+  g('p3presets').innerHTML = (modo==='volumen'
+      ? [1,6,12,20,50,100,250,500] : [1,2,3,5,10,25])
+      .map(function(n){return '<button class="preset" onclick="setQ3('+n+',this)">'+n+' u</button>';}).join('');
+}
+function selGrupo3D(b){
+  document.querySelectorAll('#p3grid .stype-btn').forEach(function(x){x.classList.remove('active');});
+  b.classList.add('active'); p3grupo=b.dataset.g; p3key=null; pintarVars3D(); calc();
+}
+function selVar3D(b){
+  document.querySelectorAll('#p3vars .pbtn').forEach(function(x){x.classList.remove('active');});
+  b.classList.add('active'); p3key=b.dataset.k; pintarVars3D(); calc();
+}
+function chg3D(d){var i=g('q3Input'); i.value=Math.max(1,(parseInt(i.value)||1)+d); calc();}
+function setQ3(n,b){document.querySelectorAll('#p3presets .preset').forEach(function(x){x.classList.remove('active');});
+  if(b)b.classList.add('active'); g('q3Input').value=n; calc();}
+
+function tablaVol3D(qActual){
+  var t=P.bbw3d.llaveros_por_volumen, nivel=BBW.nivelLlavero(P,qActual).nivel;
+  return '<table class="vol3d"><thead><tr><th>Cantidad</th><th style="text-align:right">Precio c/u</th></tr></thead><tbody>'+
+    t.map(function(n){return '<tr'+(n.cantidad===nivel?' class="on"':'')+'><td>'+n.cantidad+(n.cantidad===500?'+':'')+' unidades</td><td>$'+n.precio.toFixed(2)+'</td></tr>';}).join('')+
+    '</tbody></table>';
+}
+
+function calc3D(){
+  var q=Math.max(1,parseInt(g('q3Input').value)||1);
+  var gram=parseFloat(g('q3Gram').value)||0;
+  var prod=BBW.cat3D[p3key];
+  var cot=BBW.cot3D({items:[{producto:p3key,cantidad:q,gramos:gram}], envio:envioMonto(), itbms:false});
+  window._cot3d=cot;
+  var L=cot.lineas[0];
+
+  g('qtyDisplay').textContent=q;
+  g('priceUnit').textContent=L.unitario.toFixed(2);
+  g('priceTotal').textContent=cot.total.toFixed(2);
+  g('bdTotal').textContent='$'+cot.total.toFixed(2);
+  g('p3Row').style.display='flex';
+  g('p3RowLbl').textContent='🖨️ '+prod.etiqueta;
+  g('p3RowVal').textContent='$'+L.unitario.toFixed(2)+' / u';
+  g('xxlRow').style.display='none';
+  g('shirtTypeLabel').parentElement.style.display='none';
+
+  g('effText').textContent = prod.modo==='volumen'
+      ? 'Nivel de '+L.nivel+' unidades · $'+L.unitario.toFixed(2)+' c/u'
+      : (prod.modo==='peso' ? (gram? gram+' g por pieza' : 'Indica el peso para afinar el precio') : prod.etiqueta);
+
+  g('p3tablaVol').innerHTML = prod.modo==='volumen' ? tablaVol3D(q) : '';
+
+  var mn=g('minNotice'), sr=g('surchargeRow');
+  mn.classList.remove('show'); sr.style.display='none';
+
+  /* sugerencia: el siguiente nivel de la tabla */
+  var tb=g('tipBox');
+  if(prod.modo==='volumen'){
+    var tabla=P.bbw3d.llaveros_por_volumen, sig=null;
+    for(var i=0;i<tabla.length;i++){ if(tabla[i].cantidad>q && tabla[i].precio<L.unitario){ sig=tabla[i]; break; } }
+    if(sig){
+      var extras=sig.cantidad-q, dif=(sig.precio*sig.cantidad)-(L.unitario*q);
+      tb.innerHTML='<div class="tip-head">Te conviene saber</div>Con <b>'+sig.cantidad+' llaveros</b> el precio baja a <b>$'+sig.precio.toFixed(2)+' c/u</b>. '+
+        'Los '+extras+' extra te salen a <b>$'+(dif/extras).toFixed(2)+' cada uno</b>.';
+      tb.classList.add('show');
+    } else tb.classList.remove('show');
+  } else tb.classList.remove('show');
+}
+
 function calc(){
+  if(LINEA==='3d'){ calc3D(); return; }
+  g('p3Row').style.display='none';
+  g('shirtTypeLabel').parentElement.style.display='flex';
   var q=parseInt(g('qtyInput').value)||1; if(q<1)q=1;
   _qty=q;
   g('qtyDisplay').textContent=q;
@@ -691,6 +865,7 @@ function sendOrder(){
   var shirtLabel=(curShirtModel?curShirtModel+' — ':'')+(curShirt==='over'?'Oversize ($12.75/u)':curShirt==='hoodie'?'Hoodie ($12.00/u)':'Regular ($4.50/u)');
   var tot=0;['S','M','L','XL','XXL'].forEach(function(s){tot+=sizes[s];});
   var sl='';if(tot>0){['S','M','L','XL','XXL'].forEach(function(s){if(sizes[s]>0)sl+='  '+s+': '+sizes[s]+' pcs\n';});}else{sl='  (no especificadas)\n';}
+  if(LINEA==='3d'){ return enviarPedido3D(name,email,phone,notes); }
   var cot=window._cot||BBW.cot({modo:'estandar',fit:curShirt,impresion:curPrint,tallas:mezclaTallas(q),envio:envioMonto()});
   var yl=hojasTexto(curPrint,q);
   var mat=BBW.material(curPrint,q);
@@ -774,6 +949,76 @@ function sendOrder(){
   if(btn){btn.textContent='✅ COTIZACION ENVIADA';btn.style.background='#00C566';btn.style.color='#fff';}
 }
 
+/* ---------------------------------------------------------------------
+   Pedido BBW3D. Mismo correo, mismo formulario, mismos archivos: solo
+   cambian los campos del producto.
+   --------------------------------------------------------------------- */
+function enviarPedido3D(name,email,phone,notes){
+  var q=Math.max(1,parseInt(g('q3Input').value)||1);
+  var gram=parseFloat(g('q3Gram').value)||0;
+  var prod=BBW.cat3D[p3key];
+  var cot=window._cot3d||BBW.cot3D({items:[{producto:p3key,cantidad:q,gramos:gram}],envio:envioMonto(),itbms:false});
+  var L=cot.lineas[0], a3=cot.auditoria;
+  var abono=cot.total*(P.abono.porcentaje/100);
+
+  var linksSection='';
+  if(uploadedLinks.length>0){
+    linksSection='\n--- ARCHIVOS ---\n';
+    uploadedLinks.forEach(function(l,i){linksSection+=(i+1)+'. '+l.name+'\n   Descargar: '+l.url+'\n';});
+  } else if(files.length>0){
+    linksSection='\nArchivos mencionados (sin subir): '+files.map(function(f){return f.name;}).join(', ')+'\n';
+  }
+
+  var lines=[];
+  lines.push('=== COTIZACION BBW3D ===');
+  lines.push('Cliente  : '+name);
+  lines.push('Email    : '+email);
+  lines.push('Telefono : '+phone);
+  lines.push('');
+  lines.push('Producto : '+prod.etiqueta);
+  lines.push('Cantidad : '+q+' u');
+  if(prod.modo==='volumen') lines.push('Nivel    : '+L.nivel+' unidades');
+  if(gram) lines.push('Peso     : '+gram+' g por pieza ('+(gram*q)+' g en total)');
+  lines.push('Precio/u : $'+L.unitario.toFixed(2)+' | Subtotal: $'+cot.subtotal.toFixed(2));
+  lines.push('Envio    : '+envioTexto());
+  lines.push('TOTAL    : $'+cot.total.toFixed(2)+'  (sin ITBMS — se suma al facturar)');
+  if(notes){lines.push('');lines.push('Notas: '+notes);}
+  lines.push(linksSection);
+  lines.push('--- PRODUCCION ---');
+  lines.push('Filamento: $'+a3.costoFilamento.toFixed(2)+' (a $'+a3.costoPorGramo+'/g)');
+  lines.push('Margen sobre filamento: $'+a3.margenSobreFilamento.toFixed(2));
+  lines.push('Motor de precios v'+BBW.version);
+  (a3.alertas||[]).forEach(function(x){lines.push('AVISO: '+x);});
+  lines.push('ABONO '+P.abono.porcentaje+'%: $'+abono.toFixed(2));
+
+  var btn=document.querySelector('.cta');
+  if(btn){btn.disabled=true;btn.textContent='Enviando...';}
+  var form=document.createElement('form');
+  form.action='https://formsubmit.co/impresiones246@outlook.com';
+  form.method='POST'; form.style.display='none';
+  function addHidden(n,v){var i=document.createElement('input');i.type='hidden';i.name=n;i.value=v;form.appendChild(i);}
+  addHidden('_subject','[BBW3D] '+q+' x '+prod.etiqueta+' — '+name);
+  addHidden('_captcha','false'); addHidden('_template','table'); addHidden('_next',window.location.href);
+  addHidden('1_Cliente',name); addHidden('2_Email',email); addHidden('3_Telefono',phone);
+  addHidden('4_Linea','BBW3D — impresion 3D');
+  addHidden('5_Producto',prod.etiqueta);
+  addHidden('6_Cantidad',q+' u');
+  addHidden('7_Peso', gram? gram+' g por pieza' : '(por definir)');
+  addHidden('8_Precio_unitario','$'+L.unitario.toFixed(2));
+  addHidden('9_Total','$'+cot.total.toFixed(2));
+  addHidden('10_Notas',notes||'sin notas');
+  if(uploadedLinks.length>0){
+    addHidden('11_Archivos',uploadedLinks.map(function(l,i){return (i+1)+'. '+l.name+': '+l.url;}).join('\n'));
+  } else {
+    addHidden('11_Archivos',files.length>0?files.map(function(f){return f.name;}).join(', '):'(sin archivos)');
+  }
+  addHidden('12_Reporte_Produccion',lines.join('\n'));
+  document.body.appendChild(form);
+  form.submit();
+  showToast('✅ Cotizacion 3D enviada! Te contactamos en max. 72 horas.','ok');
+  if(btn){btn.textContent='✅ COTIZACION ENVIADA';btn.style.background='#00C566';btn.style.color='#fff';}
+}
+
 (function(){
   var SC={black:'#444444',white:'#F5F5F0',blue:'#3B82F6',navy:'#1E3A5F',cream:'#F5E6C8',red:'#CC2222',pink:'#E879A0'};
   var SB={white:'2px solid #aaa',cream:'2px solid #d4c8a8'};
@@ -782,6 +1027,11 @@ function sendOrder(){
     if(c&&sw){sw.style.cssText='background:'+c+';border-radius:50%;width:100%;height:100%;display:block;box-sizing:border-box;'+(SB[btn.dataset.color]?'border:'+SB[btn.dataset.color]+';':'');}
   });
 })();
+/* Chrome restaura los valores de los inputs al refrescar, pero el objeto
+   sizes vuelve a cero: quedaban desincronizados y el + parecia roto.
+   Leemos las tallas del DOM antes del primer calculo. */
+['S','M','L','XL','XXL'].forEach(function(z){sizes[z]=Math.max(0,parseInt(g('sz_'+z).value)||0);});
+updateSizeHint();
 llenarZonas();calc();applyMockup();applyColor();
 </script>
 
