@@ -77,6 +77,20 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
         letter-spacing:.02em; transition:all .18s; }
 .lbtn:hover { border-color:rgba(255,198,41,.5); color:#eee; }
 .lbtn.active { background:var(--yellow); border-color:var(--yellow); color:#111; box-shadow:0 0 16px rgba(255,198,41,.35); }
+.tam-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.tbtn3 { background:rgba(255,255,255,.04); border:1px solid rgba(154,154,154,.35); color:var(--gray);
+         border-radius:14px; padding:16px 10px; cursor:pointer; font-family:inherit; text-align:center; transition:all .18s; }
+.tbtn3:hover { border-color:rgba(255,198,41,.5); color:#eee; }
+.tbtn3.active { background:rgba(255,198,41,.14); border-color:var(--yellow); color:#fff; }
+.tbtn3 .tdot { font-size:22px; display:block; margin-bottom:5px; }
+.tbtn3 .tnom { font-size:13px; font-weight:800; letter-spacing:.02em; }
+.tbtn3.active .tnom { color:var(--yellow); }
+.tbtn3 .tcm { font-size:11px; font-weight:700; margin-top:3px; opacity:.8; }
+.tbtn3 .tg { font-size:10px; margin-top:2px; opacity:.6; }
+.tbtn3 .trec { display:inline-block; margin-top:6px; font-size:8.5px; letter-spacing:1.2px; font-weight:800;
+               background:var(--yellow); color:#111; border-radius:20px; padding:2px 7px; }
+.est-note { margin-top:12px; padding:10px 13px; border-radius:10px; background:rgba(154,154,154,.1);
+            border:1px solid rgba(154,154,154,.28); font-size:11.5px; line-height:1.55; color:#cfcfcf; }
 .vol3d { width:100%; border-collapse:collapse; margin-top:10px; font-size:12px; }
 .vol3d th { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray); text-align:left;
             padding:6px 8px; border-bottom:1px solid rgba(154,154,154,.25); font-weight:700; }
@@ -388,8 +402,15 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
       <div class="prints" id="p3vars"></div>
     </div>
 
+    <div class="card" id="p3tamCard">
+      <div class="ctitle"><span>📐</span> 3. Tamaño</div>
+      <div class="slabel">Medidas de referencia — el tamaño final se adapta al diseño</div>
+      <div class="tam-grid" id="p3tams"></div>
+      <div class="est-note" id="p3estNote" style="display:none"></div>
+    </div>
+
     <div class="card">
-      <div class="ctitle"><span>📦</span> 3. Cantidad</div>
+      <div class="ctitle"><span>📦</span> 4. Cantidad</div>
       <div class="slabel">Mientras más piezas, menor el precio por unidad</div>
       <div class="qty-wrap">
         <button class="qbtn" onclick="chg3D(-1)">−</button>
@@ -401,8 +422,8 @@ body { background: var(--black); color: var(--white); font-family: 'Montserrat',
     </div>
 
     <div class="card" id="p3pesoCard" style="display:none">
-      <div class="ctitle"><span>⚖️</span> 4. Peso estimado</div>
-      <div class="slabel">Si no lo sabes, lo calculamos nosotros al revisar el archivo</div>
+      <div class="ctitle"><span>⚖️</span> 5. Peso exacto (opcional)</div>
+      <div class="slabel">Si ya tienes el archivo y sabes el peso, ponlo aquí y afinamos el precio</div>
       <div class="g3d-wrap"><input type="number" id="q3Gram" min="0" placeholder="Gramos de la pieza" oninput="calc()"></div>
     </div>
   </div>
@@ -700,7 +721,26 @@ var P3_GRUPOS=[
   {id:'peso',   icono:'⚙️', nombre:'Pieza por peso',  sub:'Según gramos',        keys:['pieza_peso']},
   {id:'figura', icono:'🗿', nombre:'Figura',          sub:'Personalizada',       keys:['figura_personalizada']}
 ];
-var p3grupo='topper', p3key='topper_sencillo';
+var p3grupo='topper', p3key='topper_sencillo', p3tam='M';
+var TAM_ICONO={S:'🟢',M:'🔵',L:'🟣'};
+function pintarTams(){
+  var tm=BBW.tamDe(p3key,'M');
+  g('p3tamCard').style.display = tm ? 'block' : 'none';
+  if(!tm){ g('p3tams').innerHTML=''; return; }
+  g('p3tams').innerHTML=['S','M','L'].map(function(k){
+    var x=BBW.tamDe(p3key,k);
+    return '<button class="tbtn3'+(k===p3tam?' active':'')+'" data-t="'+k+'" onclick="selTam3(this)">'+
+      '<span class="tdot">'+TAM_ICONO[k]+'</span>'+
+      '<div class="tnom">'+x.etiqueta+'</div>'+
+      '<div class="tcm">'+x.cm+'</div>'+
+      '<div class="tg">peso estimado ~'+x.gramos+' g</div>'+
+      (x.recomendado?'<span class="trec">RECOMENDADO</span>':'')+'</button>';
+  }).join('');
+}
+function selTam3(b){
+  document.querySelectorAll('#p3tams .tbtn3').forEach(function(x){x.classList.remove('active');});
+  b.classList.add('active'); p3tam=b.dataset.t; calc();
+}
 
 function motor3Dok(){ return !!(window.BBW && BBW.cot3D && BBW.cat3D && BBW.P && BBW.P.bbw3d); }
 function avisarMotorViejo(){
@@ -745,6 +785,7 @@ function pintarVars3D(){
   }).join('');
   var modo=BBW.cat3D[p3key].modo;
   g('p3pesoCard').style.display = modo==='peso'?'block':'none';
+  pintarTams();
   g('p3presets').innerHTML = (modo==='volumen'
       ? [1,6,12,20,50,100,250,500] : [1,2,3,5,10,25])
       .map(function(n){return '<button class="preset" onclick="setQ3('+n+',this)">'+n+' u</button>';}).join('');
@@ -772,7 +813,7 @@ function calc3D(){
   var q=Math.max(1,parseInt(g('q3Input').value)||1);
   var gram=parseFloat(g('q3Gram').value)||0;
   var prod=BBW.cat3D[p3key];
-  var cot=BBW.cot3D({items:[{producto:p3key,cantidad:q,gramos:gram}], envio:envioMonto(), itbms:false});
+  var cot=BBW.cot3D({items:[{producto:p3key,cantidad:q,gramos:gram,tamano:p3tam}], envio:envioMonto(), itbms:false});
   window._cot3d=cot;
   var L=cot.lineas[0];
 
@@ -786,9 +827,20 @@ function calc3D(){
   g('xxlRow').style.display='none';
   g('shirtTypeLabel').parentElement.style.display='none';
 
+  var tTxt = L.tamano ? L.tamano.etiqueta+' · '+L.tamano.cm : '';
   g('effText').textContent = prod.modo==='volumen'
-      ? 'Nivel de '+L.nivel+' unidades · $'+L.unitario.toFixed(2)+' c/u'
-      : (prod.modo==='peso' ? (gram? gram+' g por pieza' : 'Indica el peso para afinar el precio') : prod.etiqueta);
+      ? (tTxt? tTxt+' · ' : '')+'nivel de '+L.nivel+' unidades a $'+L.unitario.toFixed(2)+' c/u'
+      : (tTxt || prod.etiqueta)+(L.gramos? ' · ~'+L.gramos+' g' : '');
+
+  /* leyenda de precio estimado: solo cuando el peso sale del tamaño */
+  var en=g('p3estNote');
+  if(L.pesoEstimado&&prod.modo==='peso'){
+    en.innerHTML='<b>Precio estimado.</b> '+P.bbw3d.tamanos.leyenda_estimado.replace('Precio estimado. ','');
+    en.style.display='block';
+  } else if(L.pesoEstimado){
+    en.innerHTML='El peso es una referencia del tamaño elegido. El precio de este producto no cambia con el peso.';
+    en.style.display='block';
+  } else en.style.display='none';
 
   g('p3tablaVol').innerHTML = prod.modo==='volumen' ? tablaVol3D(q) : '';
 
@@ -988,6 +1040,7 @@ function enviarPedido3D(name,email,phone,notes){
   lines.push('');
   lines.push('Producto : '+prod.etiqueta);
   lines.push('Cantidad : '+q+' u');
+  if(L.tamano) lines.push('Tamano   : '+L.tamano.etiqueta+' — '+L.tamano.cm+(L.pesoEstimado?' (~'+L.gramos+' g estimados)':''));
   if(prod.modo==='volumen') lines.push('Nivel    : '+L.nivel+' unidades');
   if(gram) lines.push('Peso     : '+gram+' g por pieza ('+(gram*q)+' g en total)');
   lines.push('Precio/u : $'+L.unitario.toFixed(2)+' | Subtotal: $'+cot.subtotal.toFixed(2));
@@ -1014,16 +1067,17 @@ function enviarPedido3D(name,email,phone,notes){
   addHidden('4_Linea','BBW3D — impresion 3D');
   addHidden('5_Producto',prod.etiqueta);
   addHidden('6_Cantidad',q+' u');
-  addHidden('7_Peso', gram? gram+' g por pieza' : '(por definir)');
-  addHidden('8_Precio_unitario','$'+L.unitario.toFixed(2));
-  addHidden('9_Total','$'+cot.total.toFixed(2));
-  addHidden('10_Notas',notes||'sin notas');
+  addHidden('7_Tamano', L.tamano? (L.tamano.etiqueta+' — '+L.tamano.cm) : '(no aplica)');
+  addHidden('8_Peso', gram? gram+' g por pieza (dato del cliente)' : (L.gramos? '~'+L.gramos+' g estimado por tamaño' : '(por definir)'));
+  addHidden('9_Precio_unitario','$'+L.unitario.toFixed(2)+(L.pesoEstimado&&prod.modo==='peso'?' (estimado)':''));
+  addHidden('10_Total','$'+cot.total.toFixed(2));
+  addHidden('11_Notas',notes||'sin notas');
   if(uploadedLinks.length>0){
-    addHidden('11_Archivos',uploadedLinks.map(function(l,i){return (i+1)+'. '+l.name+': '+l.url;}).join('\n'));
+    addHidden('12_Archivos',uploadedLinks.map(function(l,i){return (i+1)+'. '+l.name+': '+l.url;}).join('\n'));
   } else {
-    addHidden('11_Archivos',files.length>0?files.map(function(f){return f.name;}).join(', '):'(sin archivos)');
+    addHidden('12_Archivos',files.length>0?files.map(function(f){return f.name;}).join(', '):'(sin archivos)');
   }
-  addHidden('12_Reporte_Produccion',lines.join('\n'));
+  addHidden('13_Reporte_Produccion',lines.join('\n'));
   document.body.appendChild(form);
   form.submit();
   showToast('✅ Cotizacion 3D enviada! Te contactamos en max. 72 horas.','ok');

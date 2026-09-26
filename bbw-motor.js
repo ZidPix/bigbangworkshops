@@ -71,12 +71,33 @@ window.BBW_PRECIOS = {
       "_formula": "Math.max(4, 2 + gramos * 0.10), luego redondeo comercial al siguiente $0.50",
       "_uso": "SOLO para piezas sin precio comercial definido. Nunca para toppers ni llaveros."
     },
-    "_pendiente": "Descuentos por volumen en toppers: no definidos aún. Hoy el precio fijo es plano en cualquier cantidad."
+    "_pendiente": "Descuentos por volumen en toppers: no definidos aún. Hoy el precio fijo es plano en cualquier cantidad.",
+
+    "tamanos": {
+      "_uso": "El cliente piensa en tamaños, no en gramos. Flujo: tamaño → escala en cm → peso estimado → precio.",
+      "_regla_precio": "EL TAMAÑO ES REFERENCIA (Zid, 26 sep 2026). NO cambia el precio de un producto que ya tiene precio comercial (llavero por tabla de volumen, topper, placa, nombre 3D). Solo alimenta la fórmula por peso en 'pieza_peso' y 'figura_personalizada'.",
+      "_medidas": "Puntos de partida comerciales dados por Zid, no estándares rígidos: el tamaño real se adapta al diseño, la proporción y el número de letras.",
+      "_pesos_confirmados": false,
+      "_como_calibrar": "Los gramos son ESTIMADOS (PLA, pared normal, relleno 15-20%), escalados desde el único dato real que dio Zid: llavero de 60 mm = 18 g. Pesar 3 o 4 piezas reales de cada grupo y corregir aquí; el precio de los productos con precio comercial no cambia al hacerlo, solo la lectura de rentabilidad.",
+      "etiquetas": { "S": "Pequeño", "M": "Mediano", "L": "Grande" },
+      "grupos": {
+        "llavero":    { "S": { "cm": "4–5 cm",   "gramos": 10 },  "M": { "cm": "6 cm",     "gramos": 18,  "recomendado": true }, "L": { "cm": "7–8 cm",   "gramos": 32 } },
+        "topper":     { "S": { "cm": "10 cm",    "gramos": 13 },  "M": { "cm": "15 cm",    "gramos": 30,  "recomendado": true }, "L": { "cm": "18–20 cm", "gramos": 48 } },
+        "figura":     { "S": { "cm": "5–8 cm",   "gramos": 25 },  "M": { "cm": "10–15 cm", "gramos": 70,  "recomendado": true }, "L": { "cm": "18–20 cm", "gramos": 200 } },
+        "nombre":     { "S": { "cm": "10 cm",    "gramos": 15 },  "M": { "cm": "15 cm",    "gramos": 30,  "recomendado": true }, "L": { "cm": "20–25 cm", "gramos": 60 },
+                        "_ojo": "El peso de un nombre depende del número de letras. Estos gramos asumen 5–6 letras." },
+        "placa":      { "S": { "cm": "10 cm",    "gramos": 20 },  "M": { "cm": "15 cm",    "gramos": 45,  "recomendado": true }, "L": { "cm": "20–25 cm", "gramos": 95 } },
+        "placa_auto": { "S": { "cm": "10–15 cm", "gramos": 35 },  "M": { "cm": "20 cm",    "gramos": 70,  "recomendado": true }, "L": { "cm": "25–30 cm", "gramos": 130 } },
+        "peso":       { "S": { "cm": "5–8 cm",   "gramos": 25 },  "M": { "cm": "10–15 cm", "gramos": 70,  "recomendado": true }, "L": { "cm": "18–20 cm", "gramos": 200 } }
+      },
+      "leyenda_estimado": "Precio estimado. El precio final se confirma según el peso del modelo preparado para impresión."
+    }
   },
 
   "_meta": {
-    "version": "2.1.0",
+    "version": "2.2.0",
     "fecha": "2026-09-26",
+    "_cambio_2_2_0": "Selector de tamaño BBW3D (Pequeño/Mediano/Grande) con cm y peso estimado. Es REFERENCIA: no mueve el precio de productos con precio comercial; solo alimenta la fórmula por peso en figura y pieza genérica (decisión de Zid, 26 sep 2026).",
     "_cambio_2_1_0": "Se añade la línea BBW3D (impresión 3D) y el bloque ITBMS. Nada del textil cambia: unitarioEstandar, precioProporcional, unitarioLegacy y cotizar() quedan idénticos.",
     "descripcion": "Único lugar donde viven los números del precio de BBW. Ni Tyler ni ningún modelo calcula precios: los lee de aquí y los pasa por calculo.js.",
     "fuentes": {
@@ -913,6 +934,22 @@ window.BBW_PRECIOS = {
     return { unitario: redondearCliente(P, precio), bruto: r2(bruto), minimoAplicado: minimoAplicado, gramos: gr };
   }
 
+  /* Tamaño → cm + peso estimado. Referencia para el cliente; en productos
+     sin precio comercial también alimenta la fórmula por peso. */
+  function grupoTamano(key, prod) {
+    if (key === 'placa_auto') return 'placa_auto';
+    if (prod && prod.grupo === 'peso') return 'peso';
+    return prod ? prod.grupo : key;
+  }
+  function tamano3D(P, grupo, size) {
+    var t = P.bbw3d.tamanos, g3 = t.grupos[grupo];
+    if (!g3) return null;
+    var k = (size || 'M').toUpperCase();
+    if (!g3[k]) k = 'M';
+    return { size: k, etiqueta: t.etiquetas[k], cm: g3[k].cm, gramos: g3[k].gramos,
+             recomendado: !!g3[k].recomendado, estimado: !t._pesos_confirmados };
+  }
+
   function precio3D(P, item) {
     var key = item.producto;
     var prod = P.bbw3d.catalogo[key];
@@ -925,10 +962,17 @@ window.BBW_PRECIOS = {
       out.unitario = n.unitario; out.nivel = n.nivel;
       if (!n.exacto) out.avisos.push('Cantidad ' + q + ': se cobra al nivel de ' + n.nivel + ' unidades ($' + n.unitario.toFixed(2) + ' c/u), como manda la tabla.');
     } else if (prod.modo === 'peso') {
-      var pw = precioPorPeso(P, item.gramos);
+      /* sin peso escrito a mano, el tamaño da el estimado */
+      var gr = item.gramos;
+      if (!gr && item.tamano) {
+        var tm = tamano3D(P, grupoTamano(key, prod), item.tamano);
+        if (tm) { gr = tm.gramos; out.pesoEstimado = true; out.tamano = tm; }
+      }
+      var pw = precioPorPeso(P, gr);
       out.unitario = pw.unitario; out.gramos = pw.gramos;
+      if (out.pesoEstimado) out.avisos.push('Precio estimado a partir del tamaño ' + out.tamano.etiqueta.toLowerCase() + ' (' + out.tamano.cm + ', ~' + out.tamano.gramos + ' g). Se confirma con el peso del modelo listo para imprimir.');
       if (pw.minimoAplicado) out.avisos.push('Pieza de ' + pw.gramos + ' g: se aplica el precio mínimo de $' + P.bbw3d.por_peso.minimo.toFixed(2) + '.');
-      if (!item.gramos) out.avisos.push('Falta el peso estimado: el precio sale al mínimo.');
+      if (!gr) out.avisos.push('Falta el peso estimado: el precio sale al mínimo.');
     } else if (prod.modo === 'manual') {
       var pm = parseFloat(item.precioManual);
       if (isNaN(pm) || pm <= 0) { out.unitario = 0; out.avisos.push('Este producto necesita un precio puesto a mano.'); }
@@ -936,6 +980,17 @@ window.BBW_PRECIOS = {
     } else {
       out.unitario = prod.precio;
       if (item.gramos) out.gramos = item.gramos;
+    }
+
+    /* El tamaño viaja siempre como referencia, aunque no toque el precio.
+       En productos con precio comercial solo sirve para mostrar cm/gramos
+       al cliente y para leer la rentabilidad por dentro. */
+    if (item.tamano && !out.tamano) {
+      var tRef = tamano3D(P, grupoTamano(key, prod), item.tamano);
+      if (tRef) {
+        out.tamano = tRef;
+        if (!out.gramos) { out.gramos = tRef.gramos; out.pesoEstimado = true; }
+      }
     }
 
     out.subtotal = r2(out.unitario * q);
@@ -994,6 +1049,8 @@ window.BBW_PRECIOS = {
   }
 
   return {
+    tamano3D: tamano3D,
+    grupoTamano: grupoTamano,
     itbmsDe: itbmsDe,
     nivelLlavero: nivelLlavero,
     precioPorPeso: precioPorPeso,
@@ -1030,6 +1087,9 @@ window.BBW_PRECIOS = {
     diseno: function (ctx) { return api.servicioDiseno(P, ctx); },
     cot3D: function (pedido) { return api.cotizar3D(P, pedido); },
     cat3D: P.bbw3d.catalogo,
+    tam3D: function (grupo, size) { return api.tamano3D(P, grupo, size); },
+    tamDe: function (key, size) { var pr = P.bbw3d.catalogo[key]; return pr ? api.tamano3D(P, api.grupoTamano(key, pr), size) : null; },
+    tamGrupos: P.bbw3d.tamanos.grupos,
     itbms: function (base, incluir) { return api.itbmsDe(P, base, incluir); }
   };
   Object.keys(api).forEach(function (k) { if (!(k in window.BBW)) window.BBW[k] = api[k]; });
