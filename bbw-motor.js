@@ -95,8 +95,9 @@ window.BBW_PRECIOS = {
   },
 
   "_meta": {
-    "version": "2.2.0",
+    "version": "2.2.1",
     "fecha": "2026-09-26",
+    "_cambio_2_2_1": "cmSugerido(): el tamaño sugerido de cada variante, para mostrarlo bajo los botones de Tipo. Es texto informativo, no toca el precio.",
     "_cambio_2_2_0": "Selector de tamaño BBW3D (Pequeño/Mediano/Grande) con cm y peso estimado. Es REFERENCIA: no mueve el precio de productos con precio comercial; solo alimenta la fórmula por peso en figura y pieza genérica (decisión de Zid, 26 sep 2026).",
     "_cambio_2_1_0": "Se añade la línea BBW3D (impresión 3D) y el bloque ITBMS. Nada del textil cambia: unitarioEstandar, precioProporcional, unitarioLegacy y cotizar() quedan idénticos.",
     "descripcion": "Único lugar donde viven los números del precio de BBW. Ni Tyler ni ningún modelo calcula precios: los lee de aquí y los pasa por calculo.js.",
@@ -950,6 +951,18 @@ window.BBW_PRECIOS = {
              recomendado: !!g3[k].recomendado, estimado: !t._pesos_confirmados };
   }
 
+  /* Tamaño sugerido de UNA variante, para pintarlo bajo su botón.
+     Las variantes de Nombre 3D sí son tamaños; el resto muestra la medida
+     típica (Mediano) de su grupo. Informativo: no entra en ningún cálculo. */
+  function cmSugerido(P, key) {
+    var pr = P.bbw3d.catalogo[key];
+    if (!pr) return null;
+    var m = /^nombre_3d_(pequeno|mediano|grande)$/.exec(key);
+    var size = m ? { pequeno: 'S', mediano: 'M', grande: 'L' }[m[1]] : 'M';
+    var t = tamano3D(P, grupoTamano(key, pr), size);
+    return t ? t.cm : null;
+  }
+
   function precio3D(P, item) {
     var key = item.producto;
     var prod = P.bbw3d.catalogo[key];
@@ -1050,6 +1063,7 @@ window.BBW_PRECIOS = {
 
   return {
     tamano3D: tamano3D,
+    cmSugerido: cmSugerido,
     grupoTamano: grupoTamano,
     itbmsDe: itbmsDe,
     nivelLlavero: nivelLlavero,
@@ -1088,6 +1102,7 @@ window.BBW_PRECIOS = {
     cot3D: function (pedido) { return api.cotizar3D(P, pedido); },
     cat3D: P.bbw3d.catalogo,
     tam3D: function (grupo, size) { return api.tamano3D(P, grupo, size); },
+    cmDe: function (key) { return api.cmSugerido(P, key); },
     tamDe: function (key, size) { var pr = P.bbw3d.catalogo[key]; return pr ? api.tamano3D(P, api.grupoTamano(key, pr), size) : null; },
     tamGrupos: P.bbw3d.tamanos.grupos,
     itbms: function (base, incluir) { return api.itbmsDe(P, base, incluir); }
