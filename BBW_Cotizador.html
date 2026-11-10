@@ -561,7 +561,7 @@ function renderTshirt(){
   if(abonoPct>0)rowsTot+='<div class="dep"><span>Abono para iniciar producción ('+abonoPct+'%)</span><b>'+money(abono)+'</b></div>';
 
   var nota=g('nota').value.trim();
-  if(hayRecargo&&!nota) nota='Las tallas XXL en adelante llevan un recargo de '+money(P.recargo_talla.monto)+' por pieza: la prenda y el estampado son más grandes.';
+  if(hayRecargo&&!nota) nota='Las tallas L en adelante llevan un recargo de '+money(P.recargo_talla.monto)+' por pieza: la prenda y el estampado son más grandes.';
   var sub=esc(g('blank').value)+' · '+PR.t+' '+PR.d+' · '+(dis.monto?'diseño desarrollado por BBW':'arte suministrado por el cliente')+(pct>0?' · <b style="color:#111">precio especial –'+pct+'%</b>':'');
 
   g('sheet').innerHTML=

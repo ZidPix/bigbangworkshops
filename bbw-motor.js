@@ -1,6 +1,6 @@
 /* =========================================================================
    bbw-motor.js — el motor de precios de Big Bang Workshops, en un archivo.
-   GENERADO por construir.js el 2026-09-20. No editar a mano.
+   GENERADO por construir.js el 2026-11-10. No editar a mano.
 
    Lo cargan la calculadora del sitio y el cotizador del Master Console.
    Mientras los dos carguen ESTE archivo, no se pueden desalinear.
@@ -9,25 +9,19 @@
    ========================================================================= */
 
 window.BBW_PRECIOS = {
-
-  /* ===================================================================
-     ITBMS — impuesto. Un solo lugar, se aplica UNA sola vez.
-     Por defecto apagado en textil para no mover ningún precio vigente.
-     =================================================================== */
   "itbms": {
     "tasa": 0.07,
     "etiqueta": "ITBMS 7%",
     "base": "subtotal + diseño - descuento",
     "incluye_envio": false,
-    "aplicar_por_defecto": { "estandar": false, "proporcional": false, "legacy": false, "bbw3d": true },
+    "aplicar_por_defecto": {
+      "estandar": false,
+      "proporcional": false,
+      "legacy": false,
+      "bbw3d": true
+    },
     "_regla": "Se calcula con itbmsDe(). Ninguna otra función lo suma: si aparece dos veces, es un bug."
   },
-
-  /* ===================================================================
-     BBW3D — línea de impresión 3D. Añadida 26 sep 2026.
-     Manda el PRECIO COMERCIAL. El filamento solo sirve para auditar
-     rentabilidad, nunca para construir el precio que ve el cliente.
-     =================================================================== */
   "bbw3d": {
     "_uso": "Productos fabricados con impresión 3D. Catálogo con precio de venta fijo + dos modos de excepción: tabla de volumen (llaveros) y precio por peso (piezas sin precio definido).",
     "filamento": {
@@ -36,67 +30,291 @@ window.BBW_PRECIOS = {
       "_uso": "Solo auditoría interna. No entra en el precio al cliente."
     },
     "diseno_personalizado": {
-      "monto": 5.00,
+      "monto": 5,
       "_regla": "Se cobra UNA vez por cotización, no por pieza — igual que el servicio de diseño del textil."
     },
     "catalogo": {
-      "topper_sencillo":       { "etiqueta": "Topper de cumpleaños",              "modo": "fijo",    "precio": 5.00,  "rango": [4, 5],   "grupo": "topper" },
-      "topper_personalizado":  { "etiqueta": "Topper personalizado con nombre",   "modo": "fijo",    "precio": 7.00,  "rango": [6, 8],   "grupo": "topper" },
-      "topper_complejo":       { "etiqueta": "Topper complejo / multicapa",       "modo": "fijo",    "precio": 10.00, "rango": [8, 12],  "grupo": "topper" },
-      "placa_decorativa":      { "etiqueta": "Placa decorativa pequeña",          "modo": "fijo",    "precio": 9.00,  "rango": [8, 10],  "grupo": "placa" },
-      "placa_auto":            { "etiqueta": "Placa personalizada para auto",     "modo": "fijo",    "precio": 15.00, "rango": [12, 18], "grupo": "placa" },
-      "nombre_3d_pequeno":     { "etiqueta": "Nombre 3D — pequeño",               "modo": "fijo",    "precio": 6.00,  "rango": [6, 12],  "grupo": "nombre" },
-      "nombre_3d_mediano":     { "etiqueta": "Nombre 3D — mediano",               "modo": "fijo",    "precio": 9.00,  "rango": [6, 12],  "grupo": "nombre" },
-      "nombre_3d_grande":      { "etiqueta": "Nombre 3D — grande",                "modo": "fijo",    "precio": 12.00, "rango": [6, 12],  "grupo": "nombre" },
-      "llavero":               { "etiqueta": "Llavero personalizado",             "modo": "volumen", "grupo": "llavero" },
-      "pieza_peso":            { "etiqueta": "Pieza 3D por peso",                 "modo": "peso",    "grupo": "peso" },
-      "figura_personalizada":  { "etiqueta": "Figura / pieza 3D personalizada",   "modo": "peso",    "grupo": "peso" },
-      "otro":                  { "etiqueta": "Otro producto 3D",                  "modo": "manual",  "grupo": "otro" }
+      "topper_sencillo": {
+        "etiqueta": "Topper de cumpleaños",
+        "modo": "fijo",
+        "precio": 5,
+        "rango": [
+          4,
+          5
+        ],
+        "grupo": "topper"
+      },
+      "topper_personalizado": {
+        "etiqueta": "Topper personalizado con nombre",
+        "modo": "fijo",
+        "precio": 7,
+        "rango": [
+          6,
+          8
+        ],
+        "grupo": "topper"
+      },
+      "topper_complejo": {
+        "etiqueta": "Topper complejo / multicapa",
+        "modo": "fijo",
+        "precio": 10,
+        "rango": [
+          8,
+          12
+        ],
+        "grupo": "topper"
+      },
+      "placa_decorativa": {
+        "etiqueta": "Placa decorativa pequeña",
+        "modo": "fijo",
+        "precio": 9,
+        "rango": [
+          8,
+          10
+        ],
+        "grupo": "placa"
+      },
+      "placa_auto": {
+        "etiqueta": "Placa personalizada para auto",
+        "modo": "fijo",
+        "precio": 15,
+        "rango": [
+          12,
+          18
+        ],
+        "grupo": "placa"
+      },
+      "nombre_3d_pequeno": {
+        "etiqueta": "Nombre 3D — pequeño",
+        "modo": "fijo",
+        "precio": 6,
+        "rango": [
+          6,
+          12
+        ],
+        "grupo": "nombre"
+      },
+      "nombre_3d_mediano": {
+        "etiqueta": "Nombre 3D — mediano",
+        "modo": "fijo",
+        "precio": 9,
+        "rango": [
+          6,
+          12
+        ],
+        "grupo": "nombre"
+      },
+      "nombre_3d_grande": {
+        "etiqueta": "Nombre 3D — grande",
+        "modo": "fijo",
+        "precio": 12,
+        "rango": [
+          6,
+          12
+        ],
+        "grupo": "nombre"
+      },
+      "llavero": {
+        "etiqueta": "Llavero personalizado",
+        "modo": "volumen",
+        "grupo": "llavero"
+      },
+      "pieza_peso": {
+        "etiqueta": "Pieza 3D por peso",
+        "modo": "peso",
+        "grupo": "peso"
+      },
+      "figura_personalizada": {
+        "etiqueta": "Figura / pieza 3D personalizada",
+        "modo": "peso",
+        "grupo": "peso"
+      },
+      "otro": {
+        "etiqueta": "Otro producto 3D",
+        "modo": "manual",
+        "grupo": "otro"
+      }
     },
     "llaveros_por_volumen": [
-      { "cantidad": 1,   "precio": 8.00 },
-      { "cantidad": 6,   "precio": 5.00 },
-      { "cantidad": 12,  "precio": 4.00 },
-      { "cantidad": 20,  "precio": 3.50 },
-      { "cantidad": 50,  "precio": 3.00 },
-      { "cantidad": 100, "precio": 2.75 },
-      { "cantidad": 250, "precio": 2.50 },
-      { "cantidad": 500, "precio": 2.25 }
+      {
+        "cantidad": 1,
+        "precio": 8
+      },
+      {
+        "cantidad": 6,
+        "precio": 5
+      },
+      {
+        "cantidad": 12,
+        "precio": 4
+      },
+      {
+        "cantidad": 20,
+        "precio": 3.5
+      },
+      {
+        "cantidad": 50,
+        "precio": 3
+      },
+      {
+        "cantidad": 100,
+        "precio": 2.75
+      },
+      {
+        "cantidad": 250,
+        "precio": 2.5
+      },
+      {
+        "cantidad": 500,
+        "precio": 2.25
+      }
     ],
     "_regla_volumen": "Sin interpolar. Una cantidad que no cae exacto en un nivel usa el NIVEL SIGUIENTE (7 → nivel 12 = $4.00). Por encima de 500 se mantiene $2.25.",
     "por_peso": {
-      "base": 2.00,
-      "por_gramo": 0.10,
-      "minimo": 4.00,
+      "base": 2,
+      "por_gramo": 0.1,
+      "minimo": 4,
       "_formula": "Math.max(4, 2 + gramos * 0.10), luego redondeo comercial al siguiente $0.50",
       "_uso": "SOLO para piezas sin precio comercial definido. Nunca para toppers ni llaveros."
     },
     "_pendiente": "Descuentos por volumen en toppers: no definidos aún. Hoy el precio fijo es plano en cualquier cantidad.",
-
     "tamanos": {
       "_uso": "El cliente piensa en tamaños, no en gramos. Flujo: tamaño → escala en cm → peso estimado → precio.",
       "_regla_precio": "EL TAMAÑO ES REFERENCIA (Zid, 26 sep 2026). NO cambia el precio de un producto que ya tiene precio comercial (llavero por tabla de volumen, topper, placa, nombre 3D). Solo alimenta la fórmula por peso en 'pieza_peso' y 'figura_personalizada'.",
       "_medidas": "Puntos de partida comerciales dados por Zid, no estándares rígidos: el tamaño real se adapta al diseño, la proporción y el número de letras.",
       "_pesos_confirmados": false,
       "_como_calibrar": "Los gramos son ESTIMADOS (PLA, pared normal, relleno 15-20%), escalados desde el único dato real que dio Zid: llavero de 60 mm = 18 g. Pesar 3 o 4 piezas reales de cada grupo y corregir aquí; el precio de los productos con precio comercial no cambia al hacerlo, solo la lectura de rentabilidad.",
-      "etiquetas": { "S": "Pequeño", "M": "Mediano", "L": "Grande" },
+      "etiquetas": {
+        "S": "Pequeño",
+        "M": "Mediano",
+        "L": "Grande"
+      },
       "grupos": {
-        "llavero":    { "S": { "cm": "4–5 cm",   "gramos": 10 },  "M": { "cm": "6 cm",     "gramos": 18,  "recomendado": true }, "L": { "cm": "7–8 cm",   "gramos": 32 } },
-        "topper":     { "S": { "cm": "10 cm",    "gramos": 13 },  "M": { "cm": "15 cm",    "gramos": 30,  "recomendado": true }, "L": { "cm": "18–20 cm", "gramos": 48 } },
-        "figura":     { "S": { "cm": "5–8 cm",   "gramos": 25 },  "M": { "cm": "10–15 cm", "gramos": 70,  "recomendado": true }, "L": { "cm": "18–20 cm", "gramos": 200 } },
-        "nombre":     { "S": { "cm": "10 cm",    "gramos": 15 },  "M": { "cm": "15 cm",    "gramos": 30,  "recomendado": true }, "L": { "cm": "20–25 cm", "gramos": 60 },
-                        "_ojo": "El peso de un nombre depende del número de letras. Estos gramos asumen 5–6 letras." },
-        "placa":      { "S": { "cm": "10 cm",    "gramos": 20 },  "M": { "cm": "15 cm",    "gramos": 45,  "recomendado": true }, "L": { "cm": "20–25 cm", "gramos": 95 } },
-        "placa_auto": { "S": { "cm": "10–15 cm", "gramos": 35 },  "M": { "cm": "20 cm",    "gramos": 70,  "recomendado": true }, "L": { "cm": "25–30 cm", "gramos": 130 } },
-        "peso":       { "S": { "cm": "5–8 cm",   "gramos": 25 },  "M": { "cm": "10–15 cm", "gramos": 70,  "recomendado": true }, "L": { "cm": "18–20 cm", "gramos": 200 } }
+        "llavero": {
+          "S": {
+            "cm": "4–5 cm",
+            "gramos": 10
+          },
+          "M": {
+            "cm": "6 cm",
+            "gramos": 18,
+            "recomendado": true
+          },
+          "L": {
+            "cm": "7–8 cm",
+            "gramos": 32
+          }
+        },
+        "topper": {
+          "S": {
+            "cm": "10 cm",
+            "gramos": 13
+          },
+          "M": {
+            "cm": "15 cm",
+            "gramos": 30,
+            "recomendado": true
+          },
+          "L": {
+            "cm": "18–20 cm",
+            "gramos": 48
+          }
+        },
+        "figura": {
+          "S": {
+            "cm": "5–8 cm",
+            "gramos": 25
+          },
+          "M": {
+            "cm": "10–15 cm",
+            "gramos": 70,
+            "recomendado": true
+          },
+          "L": {
+            "cm": "18–20 cm",
+            "gramos": 200
+          }
+        },
+        "nombre": {
+          "S": {
+            "cm": "10 cm",
+            "gramos": 15
+          },
+          "M": {
+            "cm": "15 cm",
+            "gramos": 30,
+            "recomendado": true
+          },
+          "L": {
+            "cm": "20–25 cm",
+            "gramos": 60
+          },
+          "_ojo": "El peso de un nombre depende del número de letras. Estos gramos asumen 5–6 letras."
+        },
+        "placa": {
+          "S": {
+            "cm": "10 cm",
+            "gramos": 20
+          },
+          "M": {
+            "cm": "15 cm",
+            "gramos": 45,
+            "recomendado": true
+          },
+          "L": {
+            "cm": "20–25 cm",
+            "gramos": 95
+          }
+        },
+        "placa_auto": {
+          "S": {
+            "cm": "10–15 cm",
+            "gramos": 35
+          },
+          "M": {
+            "cm": "20 cm",
+            "gramos": 70,
+            "recomendado": true
+          },
+          "L": {
+            "cm": "25–30 cm",
+            "gramos": 130
+          }
+        },
+        "peso": {
+          "S": {
+            "cm": "5–8 cm",
+            "gramos": 25
+          },
+          "M": {
+            "cm": "10–15 cm",
+            "gramos": 70,
+            "recomendado": true
+          },
+          "L": {
+            "cm": "18–20 cm",
+            "gramos": 200
+          }
+        }
       },
       "leyenda_estimado": "Precio estimado. El precio final se confirma según el peso del modelo preparado para impresión."
+    },
+    "tiempo": {
+      "_uso": "Trabajos largos. El precio por peso no sirve cuando la maquina queda ocupada horas: un kit de 27 piezas y ~22 h de impresion salia en $15.",
+      "_regla": "Si el trabajo supera horas_umbral se cobra el MAYOR entre el precio normal y el precio por tiempo. Nunca se cobran los dos.",
+      "tarifa_maquina_hora": 5.0,
+      "tarifa_mano_obra_hora": 12.0,
+      "horas_umbral": 4,
+      "_origen_tarifa_maquina": "El costo real de tener la A1 mini imprimiendo es ~$0.36/h (desgaste + luz + filamento). Los $5 cubren sobre todo el LUCRO CESANTE: la impresora es una sola, y 22 h ocupadas son 40-50 llaveros que no se fabrican (a $3-4 c/u por la tabla de volumen = $120-200).",
+      "_origen_mano_obra": "Horas de persona: preparar y orientar archivos, quitar soportes, lijar, ensamblar y revisar. No incluye pintura, que es otro oficio y se cotiza aparte.",
+      "_que_no_incluye": "Pintura a mano o aerografo. Si el encargo la lleva, va como linea aparte."
     }
   },
-
   "_meta": {
-    "version": "2.2.1",
-    "fecha": "2026-09-26",
+    "version": "2.5.0",
+    "fecha": "2026-11-10",
+    "_cambio_2_5_0": "recargo_talla.aplica_desde pasa de XXL a L: el +$2.00 por pieza se cobra desde la talla Large en adelante (L, XL, XXL...). Decisión de Néstor, 10 nov 2026.",
+    "_cambio_2_4_0": "Modo estándar: el precio unitario se redondea al $0.05 más cercano (redondeo_estandar), después del tope PR-1. Proporcional (redondeo_cliente $0.50 arriba), legacy y BBW3D no cambian.",
     "_cambio_2_2_1": "cmSugerido(): el tamaño sugerido de cada variante, para mostrarlo bajo los botones de Tipo. Es texto informativo, no toca el precio.",
     "_cambio_2_2_0": "Selector de tamaño BBW3D (Pequeño/Mediano/Grande) con cm y peso estimado. Es REFERENCIA: no mueve el precio de productos con precio comercial; solo alimenta la fórmula por peso en figura y pieza genérica (decisión de Zid, 26 sep 2026).",
     "_cambio_2_1_0": "Se añade la línea BBW3D (impresión 3D) y el bloque ITBMS. Nada del textil cambia: unitarioEstandar, precioProporcional, unitarioLegacy y cotizar() quedan idénticos.",
@@ -114,7 +332,8 @@ window.BBW_PRECIOS = {
       "4_recargo_talla": "Se aplica en las herramientas (antes se hacía a mano).",
       "5_vigencia": "15 días por defecto en la página.",
       "6_diseno": "Se regala solo si el cliente es recurrente O si el arte no necesita ajustes del diseñador. Si necesita ajustes, el monto lo define el diseñador DESPUÉS de revisar el arte: es variable, no una tarifa fija."
-    }
+    },
+    "_cambio_2_3_0": "Precio por TIEMPO en BBW3D. La formula por peso no tenia termino de tiempo y cotizaba en $15 un trabajo de 22 h de maquina. Ahora, pasado el umbral de horas, se cobra el mayor entre peso y tiempo. Tambien se recupero la fuente: la linea BBW3D vivia solo dentro del archivo generado, asi que correr construir.js la habria borrado entera."
   },
   "insumos": {
     "prenda": {
@@ -128,7 +347,7 @@ window.BBW_PRECIOS = {
         "confirmado": true
       },
       "hoodie": {
-        "costo": 12.0,
+        "costo": 12,
         "confirmado": true
       },
       "_variantes_color": {
@@ -147,7 +366,7 @@ window.BBW_PRECIOS = {
       }
     },
     "mano_de_obra": {
-      "costo": 2.0,
+      "costo": 2,
       "entra_al_precio_publico": false,
       "entra_al_precio_interno": true,
       "_conflicto": "El motor público NO suma mano de obra al precio (la usa solo para la lectura interna). El motor interno (doc 11) SÍ la suma al costo directo. Los dos motores definen 'costo' distinto."
@@ -163,12 +382,12 @@ window.BBW_PRECIOS = {
     },
     "yarda": {
       "ancho": 58.5,
-      "alto": 90.0,
+      "alto": 90,
       "precio": 11.76,
       "confirmado": true
     },
     "super_yarda": {
-      "ancho": 114.0,
+      "ancho": 114,
       "alto": 96.5,
       "precio": 21.39,
       "confirmado": false,
@@ -319,37 +538,37 @@ window.BBW_PRECIOS = {
     "_nota": "Ganancia fija en dólares por pieza, no porcentaje. Es lo que queda DESPUÉS de prenda, material real y mano de obra.",
     "estandar": {
       "regular": 1.5,
-      "oversize": 5.0,
-      "hoodie": 5.0,
+      "oversize": 5,
+      "hoodie": 5,
       "_decidido": "Zid, 15 sep 2026. El $5.00 anterior era ficticio: se calculaba sobre un costo de material subestimado. Con el costo real, $1.50 deja los precios donde estaban."
     },
     "proporcional_por_tramo": [
       {
         "min": 1,
         "max": 11,
-        "regular": 6.0,
-        "oversize": 9.0
+        "regular": 6,
+        "oversize": 9
       },
       {
         "min": 12,
         "max": 25,
-        "regular": 5.0,
-        "oversize": 8.0
+        "regular": 5,
+        "oversize": 8
       },
       {
         "min": 26,
         "max": 999999,
-        "regular": 5.0,
-        "oversize": 8.0,
+        "regular": 5,
+        "oversize": 8,
         "confirmado": false,
         "_nota": "doc 11 §6.2 no documenta tramo sobre 25; asumido igual al 12-25"
       }
     ],
     "_pendiente": "Una camiseta estándar deja $1.50 y una de impresión proporcional deja $5.00-$6.00 por un trabajo parecido. El margen de la proporcional SÍ era real (se calculaba sobre acomodo de hoja), por eso no se tocó — pero la diferencia entre las dos líneas conviene revisarla.",
     "legacy_publico": {
-      "regular": 5.0,
-      "oversize": 8.0,
-      "hoodie": 8.0,
+      "regular": 5,
+      "oversize": 8,
+      "hoodie": 8,
       "_uso": "Margen del motor viejo. Era ficticio (se calculaba sobre material subestimado). Solo para reproducir cotizaciones anteriores al 15 sep 2026."
     }
   },
@@ -358,18 +577,18 @@ window.BBW_PRECIOS = {
     "tabla": [
       {
         "hasta": 2,
-        "recargo": 2.0
+        "recargo": 2
       },
       {
         "hasta": 5,
-        "recargo": 1.0
+        "recargo": 1
       }
     ]
   },
   "recargo_talla": {
-    "monto": 2.0,
-    "aplica_desde": "XXL",
-    "_regla": "Zid, 6 sep 2026 (doc 11 v1.6): la XL NO lleva recargo. Antes del 6 sep se aplicaba desde XL.",
+    "monto": 2,
+    "aplica_desde": "L",
+    "_regla": "Néstor, 10 nov 2026: el recargo va de la talla LARGE (L) en adelante: L, XL, XXL y mayores. Reemplaza la regla de Zid del 6 sep 2026 (doc 11 v1.6), que lo aplicaba solo desde XXL, y la anterior al 6 sep, que lo aplicaba desde XL.",
     "_explicacion_redistribucion": "En el motor público el recargo NO sube el total: mueve $2.00 desde las tallas base hacia las XXL manteniendo el total del pedido igual. Derivado de la cotización del 2 ago 2026 (25 pzs): unidad $13.64 -> $12.76 base / $14.76 XL+, total $341.00 en ambos casos.",
     "_doble_conteo": "doc 11 §5 dice que el +$2.00 ya incluye $1.00 de mano de obra. Si alguna vez se diferencia la mano de obra por talla, ese dólar se cuenta dos veces.",
     "modo": "suma",
@@ -398,7 +617,16 @@ window.BBW_PRECIOS = {
     "aplica_a": [
       "proporcional"
     ],
-    "_no_aplica_a_estandar": "El estándar sale exacto, como lo muestra el sitio hoy ($11.80). Si se redondeara hacia arriba, un precio de $11.76 saldría a $12.00 y rompería el tope PR-1."
+    "_no_aplica_a_estandar": "Este redondeo (hacia arriba, $0.50) NO se usa en el estándar: un precio de $11.76 saldría a $12.00 y rompería el tope PR-1. El estándar usa 'redondeo_estandar' (al $0.05 más cercano)."
+  },
+  "redondeo_estandar": {
+    "modo": "cercano",
+    "paso": 0.05,
+    "_decidido": "Néstor, 10 nov 2026: precios a múltiplos de $0.05 (17.48->17.50, 13.74->13.75, 25.49->25.50) para que la cotización por WhatsApp salga igual a la lámina del catálogo.",
+    "_por_que_cercano": "Al más cercano (no hacia arriba) y DESPUÉS del tope: $11.80 es múltiplo de 0.05, así que el tope PR-1 sigue valiendo y nunca se pasa.",
+    "aplica_a": [
+      "estandar"
+    ]
   },
   "envio": {
     "modo": "por_zona",
@@ -409,12 +637,12 @@ window.BBW_PRECIOS = {
       {
         "id": "retiro",
         "etiqueta": "Retiro en taller",
-        "monto": 0.0
+        "monto": 0
       },
       {
         "id": "norte",
         "etiqueta": "Panamá Norte · San Antonio · Villa Lucre",
-        "monto": 0.0,
+        "monto": 0,
         "nota": "envio gratis"
       },
       {
@@ -425,7 +653,7 @@ window.BBW_PRECIOS = {
       {
         "id": "centro",
         "etiqueta": "Panamá Centro · Punta Pacífica · Costa del Este",
-        "monto": 5.0
+        "monto": 5
       },
       {
         "id": "interior",
@@ -462,7 +690,7 @@ window.BBW_PRECIOS = {
   },
   "productos_sin_modelo": {
     "stickers_rascables": {
-      "precio_unitario": 1.0,
+      "precio_unitario": 1,
       "referencia": "Cotizacion_Stickers_Rascables_BBW.html, 80 uds, 3x4 pulgadas, diseño incluido",
       "costo_documentado": false,
       "_pendiente": "No existe estructura de costo para esta línea. El precio de $1.00 no se puede verificar ni recalcular."
@@ -637,6 +865,7 @@ window.BBW_PRECIOS = {
     if (esEstandar(P, fit, impresionKey) && q >= tope.cantidad_minima && u > tope.precio) {
       u = tope.precio; topeAplicado = true;
     }
+    u = redondearEstandar(P, u);   /* despues del tope: 11.80 es multiplo de 0.05, PR-1 sigue valiendo */
     return {
       unitario: r2(u), prenda: prenda, transfer: mat.porUnidad, hojas: mat.detalle,
       manoDeObra: labor, margen: margen, recargoCantidad: recargoQ,
@@ -753,6 +982,14 @@ window.BBW_PRECIOS = {
   /* ---------------------------------------------------------------------
      4. Redondeo al cliente
      --------------------------------------------------------------------- */
+  /* Estandar: al multiplo de $0.05 mas cercano (17.48->17.50, 13.74->13.75, 25.49->25.50). */
+  function redondearEstandar(P, n) {
+    var c = P.redondeo_estandar;
+    if (!c || !c.paso) return n;
+    var f = c.modo === 'arriba' ? Math.ceil : Math.round;
+    return r2(f(n / c.paso + 1e-9) * c.paso);
+  }
+
   function redondearCliente(P, n) {
     var paso = P.redondeo_cliente.paso;
     var f = P.redondeo_cliente.modo === 'arriba' ? Math.ceil : Math.round;
@@ -793,7 +1030,7 @@ window.BBW_PRECIOS = {
       var lineas = Object.keys(porTalla).map(function (t) {
         return {
           talla: t, cantidad: conteos[t], precio: porTalla[t],
-          precioCliente: porTalla[t],   /* el estándar no se redondea: rompería el tope PR-1 */
+          precioCliente: porTalla[t],   /* ya viene a multiplo de 0.05 (redondeo_estandar) y bajo el tope PR-1 */
           recargoTalla: llevaRecargo(P, t) ? P.recargo_talla.monto : 0,
           subtotal: r2(porTalla[t] * conteos[t])
         };
@@ -963,6 +1200,30 @@ window.BBW_PRECIOS = {
     return t ? t.cm : null;
   }
 
+  /* ---------------------------------------------------------------------
+     7bis. PRECIO POR TIEMPO — para trabajos largos.
+
+     El precio por peso no tiene termino de tiempo, asi que se rompe en cuanto
+     la maquina queda ocupada horas: un kit de 27 piezas y ~22 h de impresion
+     daba $15. La hora de maquina no se cobra por lo que cuesta (~$0.36) sino
+     por lo que bloquea: la A1 mini es una sola.
+     --------------------------------------------------------------------- */
+  function precioPorTiempo(P, horasMaquina, horasManoObra) {
+    var t = P.bbw3d.tiempo;
+    var hm = Math.max(0, parseFloat(horasMaquina) || 0);
+    var ho = Math.max(0, parseFloat(horasManoObra) || 0);
+    var maquina = r2(hm * t.tarifa_maquina_hora);
+    var mano = r2(ho * t.tarifa_mano_obra_hora);
+    return {
+      horasMaquina: hm,
+      horasManoObra: ho,
+      maquina: maquina,
+      manoObra: mano,
+      monto: r2(maquina + mano),
+      aplica: hm >= t.horas_umbral
+    };
+  }
+
   function precio3D(P, item) {
     var key = item.producto;
     var prod = P.bbw3d.catalogo[key];
@@ -993,6 +1254,26 @@ window.BBW_PRECIOS = {
     } else {
       out.unitario = prod.precio;
       if (item.gramos) out.gramos = item.gramos;
+    }
+
+    /* Trabajo largo: manda el tiempo, no el peso. Se cobra el MAYOR de los
+       dos, nunca la suma. Si no se pasan horas, nada de esto se activa y el
+       precio queda exactamente como antes. */
+    if (item.horasMaquina || item.horasManoObra) {
+      var pt = precioPorTiempo(P, item.horasMaquina, item.horasManoObra);
+      out.tiempo = pt;
+      if (pt.aplica && pt.monto > (out.unitario || 0) * q) {
+        out.unitarioSinTiempo = out.unitario;
+        out.unitario = r2(pt.monto / q);
+        out.porTiempo = true;
+        out.avisos.push('Trabajo de ' + pt.horasMaquina + ' h de maquina y ' +
+          pt.horasManoObra + ' h de trabajo: se cobra por TIEMPO ($' +
+          pt.monto.toFixed(2) + ') porque supera al precio por pieza ($' +
+          r2((out.unitarioSinTiempo || 0) * q).toFixed(2) + ').');
+      } else if (!pt.aplica && pt.horasMaquina > 0) {
+        out.avisos.push('Menos de ' + P.bbw3d.tiempo.horas_umbral +
+          ' h de maquina: se cobra al precio normal.');
+      }
     }
 
     /* El tamaño viaja siempre como referencia, aunque no toque el precio.
@@ -1068,6 +1349,7 @@ window.BBW_PRECIOS = {
     itbmsDe: itbmsDe,
     nivelLlavero: nivelLlavero,
     precioPorPeso: precioPorPeso,
+    precioPorTiempo: precioPorTiempo,
     precio3D: precio3D,
     cotizar3D: cotizar3D,
     auditar3D: auditar3D,
@@ -1083,6 +1365,7 @@ window.BBW_PRECIOS = {
     redistribuirPorTalla: redistribuirPorTalla,
     precioProporcional: precioProporcional,
     redondearCliente: redondearCliente,
+    redondearEstandar: redondearEstandar,
     margenPorTramo: margenPorTramo,
     cotizar: cotizar,
     auditar: auditar
@@ -1105,6 +1388,7 @@ window.BBW_PRECIOS = {
     cmDe: function (key) { return api.cmSugerido(P, key); },
     tamDe: function (key, size) { var pr = P.bbw3d.catalogo[key]; return pr ? api.tamano3D(P, api.grupoTamano(key, pr), size) : null; },
     tamGrupos: P.bbw3d.tamanos.grupos,
+    tiempo3D: function (horasMaquina, horasManoObra) { return api.precioPorTiempo(P, horasMaquina, horasManoObra); },
     itbms: function (base, incluir) { return api.itbmsDe(P, base, incluir); }
   };
   Object.keys(api).forEach(function (k) { if (!(k in window.BBW)) window.BBW[k] = api[k]; });
