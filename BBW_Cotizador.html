@@ -71,6 +71,9 @@ body{background:var(--surf);color:#E8E8E8;font-family:'Montserrat',system-ui,san
 .warnbox.show{display:block;}
 .stage{display:flex;justify-content:center;}
 .acts{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;justify-content:center;}
+.refprev{display:none;align-items:center;gap:10px;margin-top:8px;}
+.refprev img{width:64px;height:64px;object-fit:contain;border:1px solid var(--line);border-radius:6px;background:#101010;}
+.hint{font-size:10.5px;color:var(--steel);margin-top:5px;line-height:1.45;}
 </style>
 
 <style id="sheetCss">
@@ -108,8 +111,14 @@ body{background:var(--surf);color:#E8E8E8;font-family:'Montserrat',system-ui,san
 .sheet .items .desc .inc b{color:var(--ink);font-weight:600;}
 .sheet .note{margin:14px 40px 0;font-size:10.5px;color:var(--muted);line-height:1.6;border-left:3px solid var(--line);padding-left:12px;}
 .sheet .note b{color:var(--ink);font-weight:600;}
-.sheet .totwrap{display:flex;justify-content:flex-end;margin:16px 40px 0;}
-.sheet .tot{width:290px;}
+.sheet .totwrap{display:flex;align-items:flex-start;gap:24px;margin:16px 40px 0;}
+.sheet .tot{width:290px;flex:0 0 290px;margin-left:auto;}
+/* referencia del pedido: foto + medidas + detalles, a la izquierda del total. Sin foto ni texto no se dibuja nada. */
+.sheet .ref{flex:1 1 auto;min-width:0;display:flex;gap:16px;align-items:flex-start;break-inside:avoid;}
+.sheet .ref img{width:150px;height:150px;flex:0 0 150px;object-fit:contain;background:var(--soft);border:1px solid var(--line);border-radius:2px;}
+.sheet .ref .reft{min-width:0;flex:1 1 auto;}
+.sheet .ref .k{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:4px;}
+.sheet .ref .v{font-size:12px;font-weight:600;line-height:1.45;margin-bottom:10px;word-break:break-word;}
 .sheet .tot .row{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px solid var(--line);}
 .sheet .tot .row .lbl{color:var(--muted);}
 .sheet .tot .row.disc .lbl,.sheet .tot .row.disc .v2{color:#8a6d00;font-weight:700;}
@@ -262,7 +271,20 @@ body{background:var(--surf);color:#E8E8E8;font-family:'Montserrat',system-ui,san
     </div>
 
     <div class="sec">
-      <span class="rule">04 · Condiciones</span>
+      <span class="rule">04 · Referencia del pedido (opcional)</span>
+      <div class="f"><label>Foto de referencia</label>
+        <input type="file" id="refFoto" accept="image/*" onchange="cargarFoto(this.files[0])">
+        <div class="refprev" id="refPrev"><img id="refPrevImg" alt=""><button class="btn" type="button" onclick="quitarFoto()">Quitar foto</button></div>
+        <div class="hint">Sale a la izquierda del total. También puedes pegar una imagen con Ctrl+V. Sin foto ni texto, ese espacio queda en blanco.</div>
+      </div>
+      <div class="f" id="refMedidasWrap" style="display:none"><label>Medidas del pedido (BBW3D)</label>
+        <input id="refMedidas" placeholder="Ej. 12 × 8 × 5 cm (alto × ancho × fondo)" oninput="render()"></div>
+      <div class="f"><label>Detalles junto a la foto</label>
+        <textarea id="refDetalles" rows="2" oninput="render()" placeholder="Ej. Topper de cumpleaños · 2 capas · rosa y dorado"></textarea></div>
+    </div>
+
+    <div class="sec">
+      <span class="rule">05 · Condiciones</span>
       <div class="f"><label>Servicio de diseño</label>
         <select id="dis" onchange="render()">
           <option value="sin_ajustes" selected>El arte no necesita ajustes — sin cargo</option>
@@ -310,7 +332,7 @@ body{background:var(--surf);color:#E8E8E8;font-family:'Montserrat',system-ui,san
     </div>
 
     <div class="sec">
-      <span class="rule">05 · Lectura interna — nunca sale al cliente</span>
+      <span class="rule">06 · Lectura interna — nunca sale al cliente</span>
       <div class="intern" id="internTshirt">
         <div class="irow"><span>Precio unitario</span><span class="v" id="iUnit">—</span></div>
         <div class="irow"><span>Hojas de DTF (acomodo real)</span><span class="v" id="iYards">—</span></div>
@@ -425,6 +447,7 @@ function setCat(c){
   g('sec3D').style.display     = c==='3d'?'block':'none';
   g('internTshirt').style.display = c==='tshirt'?'block':'none';
   g('intern3D').style.display     = c==='3d'?'block':'none';
+  g('refMedidasWrap').style.display = c==='3d'?'block':'none';
   /* el ITBMS arranca como lo dice el motor para cada línea */
   g('itbms').value = P.itbms.aplicar_por_defecto[c==='3d'?'bbw3d':'estandar'] ? '1' : '0';
   if(c==='3d') grupo3DCambio(); else render();
@@ -455,6 +478,43 @@ function tablaVolumen(qActual){
   });
   return html+'</tbody></table>';
 }
+
+/* ---- referencia del pedido: foto + medidas + detalles, a la izquierda del total ---- */
+function refBloque(){
+  var foto=window._refFoto||'';
+  var med = CAT==='3d' ? (g('refMedidas').value||'').trim() : '';   /* medidas: solo BBW3D */
+  var det=(g('refDetalles').value||'').trim();
+  if(!foto && !med && !det) return '';                              /* nada que mostrar: el espacio queda en blanco */
+  var txt='';
+  if(med) txt+='<div class="k">Medidas</div><div class="v">'+esc(med)+'</div>';
+  if(det) txt+='<div class="k">Detalles</div><div class="v">'+esc(det).replace(/\n/g,'<br>')+'</div>';
+  return '<div class="ref">'+(foto?'<img src="'+foto+'" alt="Referencia del pedido">':'')+(txt?'<div class="reft">'+txt+'</div>':'')+'</div>';
+}
+/* La foto se reduce a 900 px y se guarda como JPEG en la propia hoja (data URL): así el HTML
+   descargado y el PDF no dependen de ningún archivo suelto. */
+function cargarFoto(file){
+  if(!file || !/^image\//.test(file.type)) return;
+  var fr=new FileReader();
+  fr.onload=function(){
+    var im=new Image();
+    im.onload=function(){
+      var k=Math.min(1,900/Math.max(im.width,im.height));
+      var c=document.createElement('canvas'); c.width=Math.max(1,Math.round(im.width*k)); c.height=Math.max(1,Math.round(im.height*k));
+      var cx=c.getContext('2d'); cx.fillStyle='#fff'; cx.fillRect(0,0,c.width,c.height); cx.drawImage(im,0,0,c.width,c.height);
+      window._refFoto=c.toDataURL('image/jpeg',0.85);
+      g('refPrevImg').src=window._refFoto; g('refPrev').style.display='flex';
+      render();
+    };
+    im.onerror=function(){ alert('No pude leer esa imagen. Prueba con JPG o PNG.'); };
+    im.src=fr.result;
+  };
+  fr.readAsDataURL(file);
+}
+function quitarFoto(){ window._refFoto=''; g('refFoto').value=''; g('refPrev').style.display='none'; render(); }
+document.addEventListener('paste',function(e){
+  var it=(e.clipboardData||{}).items||[];
+  for(var i=0;i<it.length;i++){ if(it[i].type.indexOf('image/')===0){ cargarFoto(it[i].getAsFile()); e.preventDefault(); return; } }
+});
 
 function render(){ if(CAT==='3d') render3D(); else renderTshirt(); }
 
@@ -574,7 +634,7 @@ function renderTshirt(){
 
   (nota?'<p class="note">'+esc(nota)+'</p>':'')+
 
-  '<div class="totwrap"><div class="tot">'+rowsTot+'</div></div>'+
+  '<div class="totwrap">'+refBloque()+'<div class="tot">'+rowsTot+'</div></div>'+
 
   '<section class="terms"><div><h3>Condiciones</h3><ul>'+
   (pct>0?'<li><b>Descuento del '+pct+'% aplicado a este pedido</b>, válido dentro de la vigencia de esta cotización.</li>':'')+
@@ -693,7 +753,7 @@ function render3D(){
   '<table class="items"><thead><tr><th style="width:56%">Descripción</th><th class="r" style="width:14%">Cant.</th>'+
   '<th class="r" style="width:15%">Precio u.</th><th class="r" style="width:15%">Total</th></tr></thead><tbody>'+filas+'</tbody></table>'+
   (nota?'<p class="note">'+esc(nota)+'</p>':'')+
-  '<div class="totwrap"><div class="tot">'+rowsTot+'</div></div>'+
+  '<div class="totwrap">'+refBloque()+'<div class="tot">'+rowsTot+'</div></div>'+
   '<section class="terms"><div><h3>Condiciones</h3><ul>'+
   (pct>0?'<li><b>Descuento del '+pct+'% aplicado a este pedido</b>, válido dentro de la vigencia de esta cotización.</li>':'')+
   (abonoPct>0?'<li>Abono del '+abonoPct+'% para confirmar e iniciar producción; saldo contra entrega.</li>':'<li>Pago completo al confirmar el pedido.</li>')+
